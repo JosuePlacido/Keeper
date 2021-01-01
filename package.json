@@ -10,6 +10,9 @@
 			"packages/*"
 		]
 	},
+	"scripts": {
+		"postinstall": "cd ./packages/mobile && expo-yarn-workspaces postinstall"
+	},
 	"husky": {
 		"hooks": {
 			"pre-commit": "lint-staged",
@@ -31,12 +34,14 @@
 		"commitizen": "^4.2.1",
 		"cross-env": "^7.0.2",
 		"eslint-plugin-import-helpers": "^1.1.0",
-		"husky": "^4.3.0",
 		"lint-staged": "^10.4.0"
 	},
 	"config": {
 		"commitizen": {
 			"path": "./node_modules/cz-conventional-changelog"
 		}
+	},
+	"dependencies": {
+		"husky": "^4.3.6"
 	}
 }

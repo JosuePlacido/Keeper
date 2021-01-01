@@ -1,24 +1,9 @@
-# MonoRepo template
+# Funcionalidades Web
 
-Monorepo configurado com eslint, import helpers e commit lint com app-expo
-
-## Estrutura
-
--   Monorepo
-
-## Ambiente de desenvolvimento
-
--   Commitlint
--   commitzen
--   lint-staged
--   eslint-import-helpers
--   eslint + prettier (airbnb)
--   Husky
--   typescript
--   cross-env
-
-## Projetos
-
--   React Native expo
-    -   STyled-components
--   Axios config
+1. Campeonato criar tudo
+1. Escopo
+1. Fases Grupo
+1. Times e cruzamentos
+1. Elencos
+1. Gerar confrontos
+1. Configurar Datas
