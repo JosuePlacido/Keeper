@@ -2,6 +2,7 @@
 	"files.exclude": {
 		"**/node_modules": true,
 		"**/bin": true,
+		".vs": true,
 		"**/obj": true
 	}
 }

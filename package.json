@@ -7,11 +7,11 @@
 	"license": "MIT",
 	"workspaces": {
 		"packages": [
-			"packages/*"
+			"projects/*"
 		]
 	},
 	"scripts": {
-		"postinstall": "cd ./packages/mobile && expo-yarn-workspaces postinstall"
+		"postinstall": "cd ./projects/mobile && expo-yarn-workspaces postinstall"
 	},
 	"husky": {
 		"hooks": {
