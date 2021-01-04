@@ -27,7 +27,6 @@ namespace Infrastructure.Migrations
                         .HasColumnName("Id");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("varchar(200)");
 
@@ -238,12 +237,8 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Models.PlayerSubscribe", b =>
                 {
                     b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)")
                         .HasColumnName("Id");
-
-                    b.Property<string>("ChampionshipId")
-                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("Games")
                         .HasColumnType("int");
@@ -267,8 +262,6 @@ namespace Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ChampionshipId");
 
                     b.HasIndex("PlayerId");
 
@@ -414,15 +407,35 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Models.TeamSubscribe", b =>
                 {
                     b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)")
                         .HasColumnName("Id");
 
                     b.Property<string>("ChampionshipId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("GroupId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Drowns")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Games")
+                        .HasColumnType("int");
+
+                    b.Property<int>("GoalsAgainst")
+                        .HasColumnType("int");
+
+                    b.Property<int>("GoalsDifference")
+                        .HasColumnType("int");
+
+                    b.Property<int>("GoalsScores")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Lost")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Position")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Reds")
+                        .HasColumnType("int");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -434,11 +447,15 @@ namespace Infrastructure.Migrations
                     b.Property<string>("TeamId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<int>("Won")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Yellows")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ChampionshipId");
-
-                    b.HasIndex("GroupId");
 
                     b.HasIndex("TeamId");
 
@@ -448,7 +465,6 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Models.Vacancy", b =>
                 {
                     b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)")
                         .HasColumnName("Id");
 
@@ -547,10 +563,6 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Models.PlayerSubscribe", b =>
                 {
-                    b.HasOne("Domain.Models.Championship", "Championship")
-                        .WithMany()
-                        .HasForeignKey("ChampionshipId");
-
                     b.HasOne("Domain.Models.Player", "Player")
                         .WithMany()
                         .HasForeignKey("PlayerId");
@@ -559,8 +571,6 @@ namespace Infrastructure.Migrations
                         .WithMany("Players")
                         .HasForeignKey("TeamSubscribeId")
                         .OnDelete(DeleteBehavior.Cascade);
-
-                    b.Navigation("Championship");
 
                     b.Navigation("Player");
 
@@ -585,9 +595,8 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("GroupId");
 
                     b.HasOne("Domain.Models.TeamSubscribe", "TeamSubscribe")
-                        .WithMany("Statistics")
-                        .HasForeignKey("TeamSubscribeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .WithMany()
+                        .HasForeignKey("TeamSubscribeId");
 
                     b.Navigation("Group");
 
@@ -597,12 +606,8 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Models.TeamSubscribe", b =>
                 {
                     b.HasOne("Domain.Models.Championship", "Championship")
-                        .WithMany()
-                        .HasForeignKey("ChampionshipId");
-
-                    b.HasOne("Domain.Models.Group", null)
                         .WithMany("Teams")
-                        .HasForeignKey("GroupId");
+                        .HasForeignKey("ChampionshipId");
 
                     b.HasOne("Domain.Models.Team", "Team")
                         .WithMany()
@@ -625,6 +630,8 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Models.Championship", b =>
                 {
                     b.Navigation("Stages");
+
+                    b.Navigation("Teams");
                 });
 
             modelBuilder.Entity("Domain.Models.Group", b =>
@@ -632,8 +639,6 @@ namespace Infrastructure.Migrations
                     b.Navigation("Matchs");
 
                     b.Navigation("Statistics");
-
-                    b.Navigation("Teams");
 
                     b.Navigation("Vacancys");
                 });
@@ -651,8 +656,6 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Models.TeamSubscribe", b =>
                 {
                     b.Navigation("Players");
-
-                    b.Navigation("Statistics");
                 });
 #pragma warning restore 612, 618
         }

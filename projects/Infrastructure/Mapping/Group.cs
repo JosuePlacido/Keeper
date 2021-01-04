@@ -20,7 +20,6 @@ namespace Infrastructure.Mapping
 				.WithOne(match => match.Group)
 				.HasForeignKey(match => match.GroupId)
 				.OnDelete(DeleteBehavior.Cascade);
-			builder.HasMany(group => group.Teams);
 			builder.HasMany(group => group.Statistics)
 				.WithOne(statistics => statistics.Group)
 				.HasForeignKey(statistics => statistics.GroupId);

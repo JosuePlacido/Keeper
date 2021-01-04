@@ -6,7 +6,9 @@ namespace Infrastructure.Data
 {
 	public sealed class ApplicationContext : DbContext
 	{
-		public ApplicationContext(DbContextOptions options) : base(options) { }
+		public ApplicationContext(DbContextOptions options) : base(options) {
+			this.ChangeTracker.LazyLoadingEnabled = false;
+		}
 
 		public DbSet<Championship> Championships { get; set; }
 		public DbSet<Category> Categorys { get; set; }

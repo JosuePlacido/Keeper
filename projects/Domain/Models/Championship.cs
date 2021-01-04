@@ -11,6 +11,7 @@ namespace Domain.Models
 		public virtual Category Category { get; set; }
 		public virtual string CategoryId { get; set; }
 		public virtual IEnumerable<Stage> Stages { get; set; }
+		public virtual IEnumerable<TeamSubscribe> Teams { get; set; }
 		public virtual string Status { get; set; }
 
 		public override string ToString()

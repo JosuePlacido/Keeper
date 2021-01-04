@@ -15,8 +15,6 @@ namespace Domain.Models
 		public virtual int YellowCard { get; set; }
 		public virtual int RedCard { get; set; }
 		public virtual int MVPs { get; set; }
-		public virtual string ChampionshipId { get; set; }
-		public virtual Championship Championship { get; set; }
 		public PlayerSubscribe() { }
 		public override string ToString()
 		{

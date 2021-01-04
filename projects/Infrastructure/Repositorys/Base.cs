@@ -30,7 +30,7 @@ namespace Infrastruture.Repositorys
 
 		public virtual async Task<TEntity[]> GetAll()
 		{
-			return await _context.Set<TEntity>().ToArrayAsync();
+			return await _context.Set<TEntity>().AsNoTracking().ToArrayAsync();
 		}
 
 		public virtual void Update(TEntity obj)

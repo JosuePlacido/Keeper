@@ -13,7 +13,7 @@ namespace Infrastructure.Migrations
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Name = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
-                    Description = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: false)
+                    Description = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -94,6 +94,42 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "tb_team_subscribe",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ChampionshipId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Status = table.Column<string>(type: "varchar(15)", maxLength: 15, nullable: false, defaultValue: "Criado"),
+                    TeamId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Games = table.Column<int>(type: "int", nullable: false),
+                    Won = table.Column<int>(type: "int", nullable: false),
+                    Drowns = table.Column<int>(type: "int", nullable: false),
+                    Lost = table.Column<int>(type: "int", nullable: false),
+                    GoalsScores = table.Column<int>(type: "int", nullable: false),
+                    Position = table.Column<int>(type: "int", nullable: false),
+                    GoalsAgainst = table.Column<int>(type: "int", nullable: false),
+                    GoalsDifference = table.Column<int>(type: "int", nullable: false),
+                    Yellows = table.Column<int>(type: "int", nullable: false),
+                    Reds = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_tb_team_subscribe", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_tb_team_subscribe_tb_championship_ChampionshipId",
+                        column: x => x.ChampionshipId,
+                        principalTable: "tb_championship",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_tb_team_subscribe_tb_team_TeamId",
+                        column: x => x.TeamId,
+                        principalTable: "tb_team",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "tb_group",
                 columns: table => new
                 {
@@ -113,61 +149,6 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "tb_team_subscribe",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ChampionshipId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    Status = table.Column<string>(type: "varchar(15)", maxLength: 15, nullable: false, defaultValue: "Criado"),
-                    TeamId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    GroupId = table.Column<string>(type: "nvarchar(450)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_tb_team_subscribe", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_tb_team_subscribe_tb_championship_ChampionshipId",
-                        column: x => x.ChampionshipId,
-                        principalTable: "tb_championship",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_tb_team_subscribe_tb_group_GroupId",
-                        column: x => x.GroupId,
-                        principalTable: "tb_group",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_tb_team_subscribe_tb_team_TeamId",
-                        column: x => x.TeamId,
-                        principalTable: "tb_team",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "tb_vacancy",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Description = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
-                    OcupationType = table.Column<int>(type: "int", nullable: false),
-                    FromGroupId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    FromPosition = table.Column<int>(type: "int", nullable: true),
-                    GroupId = table.Column<string>(type: "nvarchar(450)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_tb_vacancy", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_tb_vacancy_tb_group_GroupId",
-                        column: x => x.GroupId,
-                        principalTable: "tb_group",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "tb_player_subscribe",
                 columns: table => new
                 {
@@ -178,18 +159,11 @@ namespace Infrastructure.Migrations
                     Goals = table.Column<int>(type: "int", nullable: false),
                     YellowCard = table.Column<int>(type: "int", nullable: false),
                     RedCard = table.Column<int>(type: "int", nullable: false),
-                    MVPs = table.Column<int>(type: "int", nullable: false),
-                    ChampionshipId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    MVPs = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_tb_player_subscribe", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_tb_player_subscribe_tb_championship_ChampionshipId",
-                        column: x => x.ChampionshipId,
-                        principalTable: "tb_championship",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_tb_player_subscribe_tb_player_PlayerId",
                         column: x => x.PlayerId,
@@ -239,7 +213,29 @@ namespace Infrastructure.Migrations
                         column: x => x.TeamSubscribeId,
                         principalTable: "tb_team_subscribe",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "tb_vacancy",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Description = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
+                    OcupationType = table.Column<int>(type: "int", nullable: false),
+                    FromGroupId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FromPosition = table.Column<int>(type: "int", nullable: true),
+                    GroupId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_tb_vacancy", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_tb_vacancy_tb_group_GroupId",
+                        column: x => x.GroupId,
+                        principalTable: "tb_group",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -377,11 +373,6 @@ namespace Infrastructure.Migrations
                 column: "VacancyHomeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_tb_player_subscribe_ChampionshipId",
-                table: "tb_player_subscribe",
-                column: "ChampionshipId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_tb_player_subscribe_PlayerId",
                 table: "tb_player_subscribe",
                 column: "PlayerId");
@@ -410,11 +401,6 @@ namespace Infrastructure.Migrations
                 name: "IX_tb_team_subscribe_ChampionshipId",
                 table: "tb_team_subscribe",
                 column: "ChampionshipId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_tb_team_subscribe_GroupId",
-                table: "tb_team_subscribe",
-                column: "GroupId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_tb_team_subscribe_TeamId",
