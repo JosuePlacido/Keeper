@@ -94,7 +94,6 @@ namespace Test.UnitTest.Infra.Repositorys
 			using (var context = Fixture.CreateContext())
 			{
 				var repo = new RepositoryPlayer(context);
-				repo.Add(player);
 				var items = repo.GetAll().Result;
 				repo.Remove(player);
 				var result1 = repo.GetById(player.Id).Result;

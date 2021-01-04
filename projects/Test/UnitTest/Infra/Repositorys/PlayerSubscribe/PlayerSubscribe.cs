@@ -16,11 +16,11 @@ namespace Test.UnitTest.Infra.Repositorys
 		public SharedDatabaseFixture Fixture { get; }
 		private readonly ITestOutputHelper _output;
 		public PlayerSubscribeRepositoryTest(SharedDatabaseFixture fixture, ITestOutputHelper output)
-			=> (Fixture,_output) = (fixture,output);
+			=> (Fixture, _output) = (fixture, output);
 
 		private void Print(object item)
 		{
-			_output.WriteLine(JsonConvert.SerializeObject(item,Formatting.Indented));
+			_output.WriteLine(JsonConvert.SerializeObject(item, Formatting.Indented));
 		}
 
 		[Fact]
@@ -35,14 +35,14 @@ namespace Test.UnitTest.Infra.Repositorys
 				Assert.IsType<PlayerSubscribe[]>(items);
 			}
 		}
-		
+
 		[Fact]
 		public void GetByValidId()
 		{
 			using (var context = Fixture.CreateContext())
 			{
 				var repo = new RepositoryPlayerSubscribe(context);
-				var item = repo.GetAll().Result.Last(); 
+				var item = repo.GetAll().Result.Last();
 				var result = repo.GetById(item.Id).Result;
 				Assert.Equal(result, item);
 			}
@@ -66,10 +66,6 @@ namespace Test.UnitTest.Infra.Repositorys
 		{
 			using (var context = Fixture.CreateContext())
 			{
-				var repoChamp = new RepositoryChampionship(context);
-				var champ = ChampionshipDataExamples.GetValidBasic().First();
-				repoChamp.Add(champ);
-				player_subscribe.ChampionshipId = champ.Id;
 				var repo = new RepositoryPlayerSubscribe(context);
 				var beforeItemsCount = repo.GetAll().Result.Length;
 				repo.Add(player_subscribe);
@@ -99,7 +95,6 @@ namespace Test.UnitTest.Infra.Repositorys
 			using (var context = Fixture.CreateContext())
 			{
 				var repo = new RepositoryPlayerSubscribe(context);
-				repo.Add(player_subscribe);
 				var items = repo.GetAll().Result;
 				repo.Remove(player_subscribe);
 				var result1 = repo.GetById(player_subscribe.Id).Result;

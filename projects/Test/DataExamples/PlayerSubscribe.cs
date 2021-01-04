@@ -11,6 +11,7 @@ namespace Test.DataExamples
 	{
 		private static PlayerSubscribe[] Valid = new PlayerSubscribe[] {
 			new PlayerSubscribe() {
+				Id = "teste",
 				Games = -1
 			}
 		};

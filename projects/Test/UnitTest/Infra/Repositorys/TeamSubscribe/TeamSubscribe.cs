@@ -94,7 +94,6 @@ namespace Test.UnitTest.Infra.Repositorys
 			using (var context = Fixture.CreateContext())
 			{
 				var repo = new RepositoryTeamSubscribe(context);
-				repo.Add(team_subscribe);
 				var items = repo.GetAll().Result;
 				repo.Remove(team_subscribe);
 				var result1 = repo.GetById(team_subscribe.Id).Result;

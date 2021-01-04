@@ -11,6 +11,7 @@ namespace Test.DataExamples
 	{
 		private static Vacancy[] Valid = new Vacancy[] {
 			new Vacancy() {
+				Id = "teste",
 				Description = "Teste",
 			}
 		};

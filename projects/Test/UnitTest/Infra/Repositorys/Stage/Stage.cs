@@ -67,9 +67,7 @@ namespace Test.UnitTest.Infra.Repositorys
 			using (var context = Fixture.CreateContext())
 			{
 				var repoChamp = new RepositoryChampionship(context);
-				var champ = ChampionshipDataExamples.GetValidBasic().First();
-				repoChamp.Add(champ);
-				stage.ChampionshipId = champ.Id;
+				stage.ChampionshipId = repoChamp.GetAll().Result.First().Id;
 				var repo = new RepositoryStage(context);
 				var beforeItemsCount = repo.GetAll().Result.Length;
 				repo.Add(stage);
@@ -99,9 +97,7 @@ namespace Test.UnitTest.Infra.Repositorys
 			using (var context = Fixture.CreateContext())
 			{
 				var repoChamp = new RepositoryChampionship(context);
-				var champ = ChampionshipDataExamples.GetValidBasic().First();
-				repoChamp.Add(champ);
-				stage.ChampionshipId = champ.Id;
+				stage.ChampionshipId = repoChamp.GetAll().Result.First().Id;
 				var repo = new RepositoryStage(context);
 				repo.Add(stage);
 				var items = repo.GetAll().Result;

@@ -20,7 +20,7 @@ namespace Test
 				Category = new Category()
 				{
 					Name = "Profissional",
-					
+
 				},
 				Stages = new Stage[]
 				{
@@ -39,125 +39,13 @@ namespace Test
 							new Group
 							{
 								Name = "Final",
-								Teams = new TeamSubscribe[]
-								{
-									new TeamSubscribe
-									{
-										Players = new PlayerSubscribe[]{
-											new PlayerSubscribe
-											{
-												Games = 2,
-												YellowCard = 1,
-												Player = new Player
-												{
-													Name = "Palhinha"
-												}
-											},
-											new PlayerSubscribe
-											{
-												Games = 2,
-												YellowCard = 1,
-												Player = new Player
-												{
-													Name = "Gilmar"
-												}
-											},
-											new PlayerSubscribe
-											{
-												Games = 2,
-												YellowCard = 1,
-												Player = new Player
-												{
-													Name = "Guilherme"
-												}
-											},
-											new PlayerSubscribe
-											{
-												Games = 2,
-												YellowCard = 1,
-												Player = new Player
-												{
-													Name = "Dinho"
-												}
-											},
-										},
-										Statistics = new Statistics[]
-										{
-											new Statistics
-											{
-												Reds = 0,
-												Drowns = 2,
-												Games = 2,
-												GoalsAgainst = 0,
-												GoalsDifference = 0,
-												GoalsScores = 0,
-												Lastfive = "draw,draw",
-												Lost = 0,
-												Position = 1,
-												RankMovement = RankMovement.Stay,
-												Won = 0,
-												Points = 2,
-												Yellows = 4,
-
-											}
-										},
-										Status = Status.Champion,
-										Team = new Team
-										{
-											Name = "São Paulo"
-										}
-									},
-									new TeamSubscribe
-									{
-										Players = new PlayerSubscribe[]{
-											new PlayerSubscribe
-											{
-												Games = 2,
-												YellowCard = 1,
-												Player = new Player
-												{
-													Name = "Robson"
-												}
-											},
-											new PlayerSubscribe
-											{
-												Games = 2,
-												YellowCard = 1,
-												Player = new Player
-												{
-													Name = "Rogério Lage"
-												}
-											},
-										},
-										Statistics = new Statistics[]
-										{
-											new Statistics
-											{
-												Reds = 0,
-												Drowns = 2,
-												Games = 2,
-												GoalsAgainst = 0,
-												GoalsDifference = 0,
-												GoalsScores = 0,
-												Lastfive = "draw,draw",
-												Lost = 0,
-												Position = 2,
-												RankMovement = RankMovement.Stay,
-												Won = 0,
-												Points = 2,
-												Yellows = 2,
-											}
-										},
-										Status = Status.Eliminated,
-										Team = new Team
-										{
-											Name = "Cruzeiro"
-										}
-									},
-								},
 								Matchs = new Match[]{
 									new Match
 									{
+										VacancyAwayId = "10600747-5b0a-4929-925a-b6b13c1d08a3",
+										VacancyHomeId = "ed396baa-df8d-40bc-8710-82bc11206d7d",
+										AwayId = "63d211cc-ef0a-41bf-b592-254fcd45190b",
+										HomeId = "7008b863-ec07-48ba-9d42-bad88f96bb8a",
 										AggregateGame = true,
 										Local = "Morumbi - São Paulo/SP",
 										AggregateGoalsAway = 0,
@@ -176,33 +64,39 @@ namespace Test
 												Description = "Cartão Amarelo",
 												IsHomeEvent = true,
 												Order = 0,
-												Type = TypeEvent.YellowCard
+												Type = TypeEvent.YellowCard,
+												RegisterPlayerId = "1d964d8e-3413-4b55-a97c-ed8d155e62f1"
 											},new EventGame
 											{
 												Description = "Cartão Amarelo",
 												IsHomeEvent = true,
 												Order = 1,
-												Type = TypeEvent.YellowCard
+												Type = TypeEvent.YellowCard,
+												RegisterPlayerId = "fc719893-afb9-4aa6-ba05-287b5ac6d187"
 											},new EventGame
 											{
 												Description = "Cartão Amarelo",
 												IsHomeEvent = true,
 												Order = 2,
+												RegisterPlayerId = "df90fc6a-7442-4850-8b38-20aa0c3e2641",
 												Type = TypeEvent.YellowCard
 											},new EventGame
 											{
 												Description = "Cartão Amarelo",
 												IsHomeEvent = true,
 												Order = 3,
-												Type = TypeEvent.YellowCard
+												Type = TypeEvent.YellowCard,
+												RegisterPlayerId = "d6dd8f41-d549-41b5-a494-979857f43c4b"
 											},new EventGame
 											{
+												RegisterPlayerId = "66ffc64c-61fa-4b59-8477-724b6bc17d6f",
 												Description = "Cartão Amarelo",
 												IsHomeEvent = false,
 												Order = 4,
 												Type = TypeEvent.YellowCard
 											},new EventGame
 											{
+												RegisterPlayerId = "82eac818-3cae-4be4-bc16-890279599df8",
 												Description = "Cartão Amarelo",
 												IsHomeEvent = false,
 												Order = 5,
@@ -212,6 +106,10 @@ namespace Test
 									},
 									new Match()
 									{
+										VacancyHomeId = "10600747-5b0a-4929-925a-b6b13c1d08a3",
+										VacancyAwayId = "ed396baa-df8d-40bc-8710-82bc11206d7d",
+										HomeId = "63d211cc-ef0a-41bf-b592-254fcd45190b",
+										AwayId = "7008b863-ec07-48ba-9d42-bad88f96bb8a",
 										AggregateGame = true,
 										Local = "Mineirão - Belo Horizonte/MG",
 										AggregateGoalsAway = 0,
@@ -233,20 +131,161 @@ namespace Test
 								{
 									new Vacancy
 									{
+										Id = "ed396baa-df8d-40bc-8710-82bc11206d7d",
 										Description = "Campeão da Libertadores 1993",
-										OcupationType = Classifieds.Configured
+										OcupationType = Classifieds.Configured,
 									},
 									new Vacancy
 									{
+										Id = "10600747-5b0a-4929-925a-b6b13c1d08a3",
 										Description = "Campeão da Supercopa 1993",
 										OcupationType = Classifieds.Configured
 									}
-								}
+								},
+								Statistics = new Statistics[]
+								{
+									new Statistics
+									{
+										Reds = 0,
+										Drowns = 2,
+										Games = 2,
+										GoalsAgainst = 0,
+										GoalsDifference = 0,
+										GoalsScores = 0,
+										Lost = 0,
+										Won = 0,
+										Yellows = 4,
+										Position = 1,
+										Lastfive = "draw,draw",
+										RankMovement = RankMovement.Stay,
+										Points = 2,
+										TeamSubscribeId = "7008b863-ec07-48ba-9d42-bad88f96bb8a"
+									},
+									new Statistics
+									{
+										Reds = 0,
+										Drowns = 2,
+										Games = 2,
+										GoalsAgainst = 0,
+										GoalsDifference = 0,
+										GoalsScores = 0,
+										Lost = 0,
+										Won = 0,
+										Yellows = 2,
+										Position = 2,
+										Lastfive = "draw,draw",
+										RankMovement = RankMovement.Stay,
+										Points = 2,
+										TeamSubscribeId = "63d211cc-ef0a-41bf-b592-254fcd45190b"
+									}
+								},
 							}
 						}
 					}
-				}
-
+				},
+				Teams = new TeamSubscribe[]
+				{
+					new TeamSubscribe
+					{
+						Id = "7008b863-ec07-48ba-9d42-bad88f96bb8a",
+						Players = new PlayerSubscribe[]{
+							new PlayerSubscribe
+							{
+								Id = "1d964d8e-3413-4b55-a97c-ed8d155e62f1",
+								Games = 2,
+								YellowCard = 1,
+								Player = new Player
+								{
+									Name = "Palhinha"
+								}
+							},
+							new PlayerSubscribe
+							{
+								Id = "fc719893-afb9-4aa6-ba05-287b5ac6d187",
+								Games = 2,
+								YellowCard = 1,
+								Player = new Player
+								{
+									Name = "Gilmar"
+								}
+							},
+							new PlayerSubscribe
+							{
+								Id = "df90fc6a-7442-4850-8b38-20aa0c3e2641",
+								Games = 2,
+								YellowCard = 1,
+								Player = new Player
+								{
+									Name = "Guilherme"
+								}
+							},
+							new PlayerSubscribe
+							{
+								Id = "d6dd8f41-d549-41b5-a494-979857f43c4b",
+								Games = 2,
+								YellowCard = 1,
+								Player = new Player
+								{
+									Name = "Dinho"
+								}
+							},
+						},
+						Reds = 0,
+						Drowns = 2,
+						Games = 2,
+						GoalsAgainst = 0,
+						GoalsDifference = 0,
+						GoalsScores = 0,
+						Lost = 0,
+						Won = 0,
+						Yellows = 4,
+						Status = Status.Champion,
+						Team = new Team
+						{
+							Name = "São Paulo"
+						}
+					},
+					new TeamSubscribe
+					{
+						Id = "63d211cc-ef0a-41bf-b592-254fcd45190b",
+						Players = new PlayerSubscribe[]{
+							new PlayerSubscribe
+							{
+								Id = "66ffc64c-61fa-4b59-8477-724b6bc17d6f",
+								Games = 2,
+								YellowCard = 1,
+								Player = new Player
+								{
+									Name = "Robson"
+								}
+							},
+							new PlayerSubscribe
+							{
+								Id = "82eac818-3cae-4be4-bc16-890279599df8",
+								Games = 2,
+								YellowCard = 1,
+								Player = new Player
+								{
+									Name = "Rogério Lage"
+								}
+							},
+						},
+						Reds = 0,
+						Drowns = 2,
+						Games = 2,
+						GoalsAgainst = 0,
+						GoalsDifference = 0,
+						GoalsScores = 0,
+						Lost = 0,
+						Won = 0,
+						Yellows = 2,
+						Status = Status.Eliminated,
+						Team = new Team
+						{
+							Name = "Cruzeiro"
+						}
+					},
+				},
 			};
 		}
 	}

@@ -11,6 +11,7 @@ namespace Test.DataExamples
 	{
 		private static TeamSubscribe[] Valid = new TeamSubscribe[] {
 			new TeamSubscribe() {
+				Id = "TEste",
 				Status = "TESTE"
 			}
 		};

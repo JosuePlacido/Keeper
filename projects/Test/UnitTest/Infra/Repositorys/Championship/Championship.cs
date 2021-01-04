@@ -62,7 +62,7 @@ namespace Test.UnitTest.Infra.Repositorys
 				var result = repo.GetById(id).Result;
 				Assert.Null(result);
 			}
-		}
+		}/*
 		[Fact]
 		public void Recopa()
 		{
@@ -79,7 +79,7 @@ namespace Test.UnitTest.Infra.Repositorys
 				Assert.NotNull(Championship.Id);
 				Assert.True(beforeItemsCount < afterItemsCount);
 			}
-		}
+		}*/
 		[Theory]
 		[ClassData(typeof(ValidChampionshipSetup))]
 		public void AddValidChampionship(Championship Championship)
@@ -114,8 +114,9 @@ namespace Test.UnitTest.Infra.Repositorys
 		{
 			using (var context = Fixture.CreateContext())
 			{
+				//championship.Id = null;
 				var repo = new RepositoryChampionship(context);
-				repo.Add(championship);
+				//repo.Add(championship);
 				var items = repo.GetAll().Result;
 				repo.Remove(championship);
 				var result1 = repo.GetById(championship.Id).Result;
