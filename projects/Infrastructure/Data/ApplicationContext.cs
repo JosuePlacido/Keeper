@@ -8,7 +8,18 @@ namespace Infrastructure.Data
 	{
 		public ApplicationContext(DbContextOptions options) : base(options) { }
 
+		public DbSet<Championship> Championships { get; set; }
+		public DbSet<Category> Categorys { get; set; }
+		public DbSet<Stage> Stages { get; set; }
+		public DbSet<Group> Groups { get; set; }
+		public DbSet<Match> Matchs { get; set; }
+		public DbSet<Player> Players { get; set; }
+		public DbSet<TeamSubscribe> TeamSubscribes { get; set; }
+		public DbSet<PlayerSubscribe> PlayerSubscribe { get; set; }
 		public DbSet<Team> Teams { get; set; }
+		public DbSet<EventGame> EventGames { get; set; }
+		public DbSet<Statistics> Statistics { get; set; }
+		public DbSet<Vacancy> Vacancys { get; set; }
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			if (modelBuilder is null)

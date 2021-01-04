@@ -1,0 +1,6 @@
+{
+	"name": "models",
+	"version": "0.0.1",
+	"license": "MIT",
+	"main": "./TS/Entities/category"
+}
