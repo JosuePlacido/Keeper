@@ -10,7 +10,8 @@ namespace Infrastructure.Mapping
 		{
 			builder.ToTable("tb_group");
 			builder.Property(group => group.Id)
-				.HasColumnName("Id").ValueGeneratedOnAdd();
+				.HasColumnName("Id")
+				.IsRequired();
 			builder.Property(group => group.Name)
 				.HasColumnType("varchar(50)")
 				.HasMaxLength(50)
