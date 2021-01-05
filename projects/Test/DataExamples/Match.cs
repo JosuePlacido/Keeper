@@ -10,9 +10,7 @@ namespace Test.DataExamples
 	public static class MatchDataExamples
 	{
 		private static Match[] Valid = new Match[] {
-			new Match() {
-				Name = "Teste",
-			}
+			new Match(1,"teste","teste")
 		};
 
 		public static Match[] GetValidBasic()

@@ -15,11 +15,11 @@ namespace Test.UnitTest.Infra.Repositorys
 		public SharedDatabaseFixture Fixture { get; }
 		private readonly ITestOutputHelper _output;
 		public GroupRepositoryTest(SharedDatabaseFixture fixture, ITestOutputHelper output)
-			=> (Fixture,_output) = (fixture,output);
+			=> (Fixture, _output) = (fixture, output);
 
 		private void Print(object item)
 		{
-			_output.WriteLine(JsonConvert.SerializeObject(item,Formatting.Indented));
+			_output.WriteLine(JsonConvert.SerializeObject(item, Formatting.Indented));
 		}
 
 		[Fact]
@@ -34,14 +34,14 @@ namespace Test.UnitTest.Infra.Repositorys
 				Assert.IsType<Group[]>(items);
 			}
 		}
-		
+
 		[Fact]
 		public void GetByValidId()
 		{
 			using (var context = Fixture.CreateContext())
 			{
 				var repo = new RepositoryGroup(context);
-				var item = repo.GetAll().Result.Last(); 
+				var item = repo.GetAll().Result.Last();
 				var result = repo.GetById(item.Id).Result;
 				Assert.Equal(result, item);
 			}
@@ -81,7 +81,7 @@ namespace Test.UnitTest.Infra.Repositorys
 			{
 				var repo = new RepositoryGroup(context);
 				var group = repo.GetAll().Result.First();
-				string old = ""+ group.Name;
+				string old = "" + group.Name;
 				group.Name = "Teste";
 				repo.Update(group);
 				Assert.NotEqual(old, group.Name);
@@ -94,7 +94,6 @@ namespace Test.UnitTest.Infra.Repositorys
 			using (var context = Fixture.CreateContext())
 			{
 				var repo = new RepositoryGroup(context);
-				repo.Add(group);
 				var items = repo.GetAll().Result;
 				repo.Remove(group);
 				var result1 = repo.GetById(group.Id).Result;

@@ -11,6 +11,7 @@ namespace Test.DataExamples
 	{
 		private static Group[] Valid = new Group[] {
 			new Group() {
+				Id = "teste",
 				Name = "TESTE",
 			}
 		};

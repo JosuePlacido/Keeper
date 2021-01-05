@@ -12,53 +12,15 @@ namespace Test
 	{
 		public static Championship GetChampionship()
 		{
-			return new Championship()
+			var First = new Match(1, name: "Final Ida", status: Status.Finish
+				, date: new DateTime(1993, 9, 26, 21, 00, 00), address: "Morumbi - São Paulo/SP",
+				knockout: true)
 			{
-				Name = "Recopa Sulamericana",
-				Edition = "1993",
-				Status = Status.Finish,
-				Category = new Category()
-				{
-					Name = "Profissional",
-
-				},
-				Stages = new Stage[]
-				{
-					new Stage()
-					{
-						Criterias = "0,1,2,3,4,5,6,7",
-						IsDoubleTurn = true,
-						Name = "Final",
-						Order = 0,
-						SpotsNextStage = 0,
-						TypeStage = TypeStage.Knockout,
-						Regulation = Classifieds.Configured,
-						Teams = 2,
-						Groups = new Group[]
-						{
-							new Group
-							{
-								Name = "Final",
-								Matchs = new Match[]{
-									new Match
-									{
-										VacancyAwayId = "10600747-5b0a-4929-925a-b6b13c1d08a3",
-										VacancyHomeId = "ed396baa-df8d-40bc-8710-82bc11206d7d",
-										AwayId = "63d211cc-ef0a-41bf-b592-254fcd45190b",
-										HomeId = "7008b863-ec07-48ba-9d42-bad88f96bb8a",
-										AggregateGame = true,
-										Local = "Morumbi - São Paulo/SP",
-										AggregateGoalsAway = 0,
-										AggregateGoalsHome = 0,
-										Date = new DateTime(1993,9,26,21,00,00),
-										Name = "Final Ida",
-										GoalsAway = 0,
-										FinalGame = false,
-										GoalsHome = 0,
-										Penalty = false,
-										Round = 1,
-										Status = Status.Finish,
-										EventGames = new EventGame[] {
+				VacancyAwayId = "10600747-5b0a-4929-925a-b6b13c1d08a3",
+				VacancyHomeId = "ed396baa-df8d-40bc-8710-82bc11206d7d",
+				AwayId = "63d211cc-ef0a-41bf-b592-254fcd45190b",
+				HomeId = "7008b863-ec07-48ba-9d42-bad88f96bb8a",
+				EventGames = new EventGame[] {
 											new EventGame
 											{
 												Description = "Cartão Amarelo",
@@ -103,30 +65,48 @@ namespace Test
 												Type = TypeEvent.YellowCard
 											}
 									}
-									},
-									new Match()
-									{
-										VacancyHomeId = "10600747-5b0a-4929-925a-b6b13c1d08a3",
-										VacancyAwayId = "ed396baa-df8d-40bc-8710-82bc11206d7d",
-										HomeId = "63d211cc-ef0a-41bf-b592-254fcd45190b",
-										AwayId = "7008b863-ec07-48ba-9d42-bad88f96bb8a",
-										AggregateGame = true,
-										Local = "Mineirão - Belo Horizonte/MG",
-										AggregateGoalsAway = 0,
-										AggregateGoalsHome = 0,
-										Date = new DateTime(1993,9,29,21,00,00),
-										Name = "Final Volta",
-										GoalsAway = 0,
-										FinalGame = true,
-										GoalsHome = 0,
-										Penalty = true,
-										Round = 1,
-										Status = Status.Finish,
-										GoalsPenaltyHome = 2,
-										GoalsPenaltyVisitante = 4,
-										EventGames = new EventGame[0]
-									}
-								},
+			};
+			First.RegisterResult(0, 0);
+			var Second = new Match(2, name: "Final volta", status: Status.Finish
+				, date: new DateTime(1993, 9, 29, 21, 00, 00), address: "Mineirão - Belo Horizonte/MG",
+				knockout: true, finalGame: true, penalty: true)
+			{
+				VacancyHomeId = "10600747-5b0a-4929-925a-b6b13c1d08a3",
+				VacancyAwayId = "ed396baa-df8d-40bc-8710-82bc11206d7d",
+				HomeId = "63d211cc-ef0a-41bf-b592-254fcd45190b",
+				AwayId = "7008b863-ec07-48ba-9d42-bad88f96bb8a",
+				EventGames = new EventGame[0]
+			};
+			Second.RegisterResult(0, 0, 2, 4);
+			return new Championship()
+			{
+				Name = "Recopa Sulamericana",
+				Edition = "1993",
+				Status = Status.Finish,
+				Category = new Category()
+				{
+					Name = "Profissional",
+
+				},
+				Stages = new Stage[]
+				{
+					new Stage()
+					{
+						Criterias = "0,1,2,3,4,5,6,7",
+						IsDoubleTurn = true,
+						Name = "Final",
+						Order = 0,
+						SpotsNextStage = 0,
+						TypeStage = TypeStage.Knockout,
+						Regulation = Classifieds.Configured,
+						Teams = 2,
+						Groups = new Group[]
+						{
+							new Group
+							{
+								Id = "8ea2bb9f-2698-4faf-92c6-c0165ce110fc",
+								Name = "Final",
+								Matchs = new Match[]{First,Second},
 								Vacancys = new Vacancy[]
 								{
 									new Vacancy

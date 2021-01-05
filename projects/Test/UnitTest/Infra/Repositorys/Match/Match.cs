@@ -15,11 +15,11 @@ namespace Test.UnitTest.Infra.Repositorys
 		public SharedDatabaseFixture Fixture { get; }
 		private readonly ITestOutputHelper _output;
 		public MatchRepositoryTest(SharedDatabaseFixture fixture, ITestOutputHelper output)
-			=> (Fixture,_output) = (fixture,output);
+			=> (Fixture, _output) = (fixture, output);
 
 		private void Print(object item)
 		{
-			_output.WriteLine(JsonConvert.SerializeObject(item,Formatting.Indented));
+			_output.WriteLine(JsonConvert.SerializeObject(item, Formatting.Indented));
 		}
 
 		[Fact]
@@ -34,14 +34,14 @@ namespace Test.UnitTest.Infra.Repositorys
 				Assert.IsType<Match[]>(items);
 			}
 		}
-		
+
 		[Fact]
 		public void GetByValidId()
 		{
 			using (var context = Fixture.CreateContext())
 			{
 				var repo = new RepositoryMatch(context);
-				var item = repo.GetAll().Result.Last(); 
+				var item = repo.GetAll().Result.Last();
 				var result = repo.GetById(item.Id).Result;
 				Assert.Equal(result, item);
 			}
@@ -81,8 +81,8 @@ namespace Test.UnitTest.Infra.Repositorys
 			{
 				var repo = new RepositoryMatch(context);
 				var Match = repo.GetAll().Result.First();
-				string old = ""+Match.Name;
-				Match.Name = "Teste";
+				string old = "" + Match.Name;
+				Match.EditMatchDetails(name: "Teste");
 				repo.Update(Match);
 				Assert.NotEqual(old, Match.Name);
 			}
