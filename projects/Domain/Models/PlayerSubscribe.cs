@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -16,6 +16,13 @@ namespace Domain.Models
 		public virtual int RedCard { get; set; }
 		public virtual int MVPs { get; set; }
 		public PlayerSubscribe() { }
+
+		public PlayerSubscribe(string playerId)
+		{
+			Id = System.Guid.NewGuid().ToString();
+			PlayerId = playerId;
+		}
+
 		public override string ToString()
 		{
 			return Id;

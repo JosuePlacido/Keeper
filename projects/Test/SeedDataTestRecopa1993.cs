@@ -93,13 +93,10 @@ namespace Test
 					new Stage()
 					{
 						Criterias = "0,1,2,3,4,5,6,7",
-						IsDoubleTurn = true,
 						Name = "Final",
 						Order = 0,
-						SpotsNextStage = 0,
 						TypeStage = TypeStage.Knockout,
 						Regulation = Classifieds.Configured,
-						Teams = 2,
 						Groups = new Group[]
 						{
 							new Group

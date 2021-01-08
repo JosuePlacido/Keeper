@@ -1,4 +1,4 @@
-﻿using Domain.Enum;
+using Domain.Enum;
 using Domain.Models;
 using System;
 using System.Collections.Generic;
@@ -13,10 +13,7 @@ namespace Domain.Models
 		public virtual string Name { get; set; }
 		public virtual Championship Championship { get; set; }
 		public virtual string ChampionshipId { get; set; }
-		public virtual int Teams { get; set; }
-		public virtual int SpotsNextStage { get; set; }
 		public virtual TypeStage TypeStage { get; set; }
-		public virtual bool IsDoubleTurn { get; set; }
 		public virtual string Criterias { get; set; }
 		public virtual Classifieds Regulation { get; set; }
 		public virtual IEnumerable<Group> Groups { get; set; }

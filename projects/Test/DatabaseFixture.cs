@@ -47,8 +47,25 @@ namespace Test
                         context.Database.EnsureCreated();
 												
                         context.Set<Championship>().Add(SeedData.GetChampionship());
-
-                        context.SaveChanges();
+						context.Set<Team>().AddRange(new Team[] {
+							new Team
+							{
+								Name = "Palmeiras"
+							},new Team
+							{
+								Name = "Flamengo"
+							},
+						});
+						context.Set<Player>().AddRange(new Player[] {
+							new Player
+							{
+								Name = "NAda"
+							},new Player
+							{
+								Name = "Ninguem"
+							},
+						});
+						context.SaveChanges();
                     }
 
                     _databaseInitialized = true;

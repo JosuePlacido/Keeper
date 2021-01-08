@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Domain.Enum;
 
 namespace Domain.Models
@@ -13,6 +14,17 @@ namespace Domain.Models
 		public virtual IEnumerable<Stage> Stages { get; set; }
 		public virtual IEnumerable<TeamSubscribe> Teams { get; set; }
 		public virtual string Status { get; set; }
+		public Championship(string name, string edition, string categoryId, string status)
+		{
+			Name = name;
+			Edition = edition;
+			CategoryId = categoryId;
+			Status = status;
+		}
+
+		public Championship()
+		{
+		}
 
 		public override string ToString()
 		{

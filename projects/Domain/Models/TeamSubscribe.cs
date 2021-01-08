@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Domain.Enum;
@@ -25,6 +26,11 @@ namespace Domain.Models
 		public virtual IEnumerable<PlayerSubscribe> Players { get; set; }
 
 		public TeamSubscribe() { }
+		public TeamSubscribe(string team) {
+			Id = Guid.NewGuid().ToString();
+			TeamId = team;
+			Status = Enum.Status.Matching;
+		}
 
 		public override string ToString()
 		{

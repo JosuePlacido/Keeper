@@ -20,6 +20,12 @@ namespace Domain.Models
 		public virtual IList<Match> Matchs { get; set; }
 		public Group() { }
 
+		public Group(string name)
+		{
+			Id = Guid.NewGuid().ToString();
+			Name = name;
+		}
+
 		public IEnumerable<Match> RoundRobinMatches(bool duplicateTurn = false, bool mirrorTurn = false)
 		{
 			Matchs = new List<Match>();
