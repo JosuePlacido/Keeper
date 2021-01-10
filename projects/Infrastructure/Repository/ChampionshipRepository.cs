@@ -30,22 +30,22 @@ namespace Infrastructure.Repository
 
 		public Task<Championship[]> GetAll()
 		{
-			throw new System.NotImplementedException();
+			return _dao.GetAll();
 		}
 
 		public Task<Championship> GetById(string id)
 		{
-			throw new System.NotImplementedException();
+			return _dao.GetById(id);
 		}
 
 		public void Remove(Championship obj)
 		{
-			throw new System.NotImplementedException();
+			_dao.Remove(obj);
 		}
 
 		public void Update(Championship obj)
 		{
-			throw new System.NotImplementedException();
+			_dao.Update(obj);
 		}
 
 		public string[] VerifyCreatedIds(Championship championship)

@@ -22,12 +22,14 @@ namespace Domain.Models
 		public Group(string name) : base(Guid.NewGuid().ToString())
 		{
 			Name = name;
+			Statistics = new List<Statistic>();
+			Vacancys = new List<Vacancy>();
 		}
 		public Group(string name, Statistic[] stats = null, Vacancy[] vacancys = null) : base(Guid.NewGuid().ToString())
 		{
 			Name = name;
-			Statistics = new List<Statistic>(stats);
-			Vacancys = new List<Vacancy>(vacancys);
+			Statistics = stats != null ? new List<Statistic>(stats) : new List<Statistic>();
+			Vacancys = vacancys != null ? new List<Vacancy>(vacancys) : new List<Vacancy>();
 		}
 		public Group AddMatches(Match[] matches)
 		{
