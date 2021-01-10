@@ -5,14 +5,14 @@ using Xunit;
 
 namespace Test.Application.Mapping
 {
-	internal class CreateChampionshipSetup : TheoryData<ChampionshipCreateDTOModelTest>
+	internal class CreateChampionshipSetup : TheoryData<ChampionshipCreateDTO>
 	{
 		public CreateChampionshipSetup()
-		{
+		{/*
 			foreach (var dto in ChampionshipCreateDTODataExamples.GetValid())
 			{
 				Add(dto);
-			}
+			}*/
 		}
 	}
 }

@@ -1,6 +1,6 @@
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
-using Infrastruture.Repositorys;
+using Infrastructure.Repository;
 using Xunit;
 using Domain.Models;
 using System.Collections.Generic;
@@ -15,37 +15,34 @@ namespace Test.UnitTest.Infra.Repositorys
 		public SharedDatabaseFixture Fixture { get; }
 		private readonly ITestOutputHelper _output;
 		public ChampionshipRepositoryTest(SharedDatabaseFixture fixture, ITestOutputHelper output)
-			=> (Fixture,_output) = (fixture,output);
+			=> (Fixture, _output) = (fixture, output);
 
-		private void Print(object item)
-		{
-			_output.WriteLine(JsonConvert.SerializeObject(item,Formatting.Indented,
+		private void Print(object item) => _output.WriteLine(JsonConvert.SerializeObject(item, Formatting.Indented,
 				new JsonSerializerSettings
 				{
 					ReferenceLoopHandling = ReferenceLoopHandling.Ignore
 				}));
-		}
 
 		[Fact]
 		public void GetAllChampionships()
 		{
 			using (var context = Fixture.CreateContext())
 			{
-				var repo = new RepositoryChampionship(context);
+				var repo = new ChampionshipRepository(context);
 				Championship[] items = repo.GetAll().Result;
 				Assert.NotNull(items);
 				Assert.NotEmpty(items);
 				Assert.IsType<Championship[]>(items);
 			}
 		}
-		
+
 		[Fact]
 		public void GetByValidId()
 		{
 			using (var context = Fixture.CreateContext())
 			{
-				var repo = new RepositoryChampionship(context);
-				var item = repo.GetAll().Result.Last(); 
+				var repo = new ChampionshipRepository(context);
+				var item = repo.GetAll().Result.Last();
 				var result = repo.GetById(item.Id).Result;
 				Assert.Equal(result, item);
 			}
@@ -58,35 +55,18 @@ namespace Test.UnitTest.Infra.Repositorys
 		{
 			using (var context = Fixture.CreateContext())
 			{
-				var repo = new RepositoryChampionship(context);
+				var repo = new ChampionshipRepository(context);
 				var result = repo.GetById(id).Result;
 				Assert.Null(result);
 			}
-		}/*
-		[Fact]
-		public void Recopa()
-		{
-			var Championship = SeedData.GetChampionship();
-			using (var context = Fixture.CreateContext())
-			{
-				var repo = new RepositoryChampionship(context);
-				var beforeItemsCount = repo.GetAll().Result.Length;
-				repo.Add(Championship);
-				Print(Championship);
-				var afterItemsCount = repo.GetAll().Result.Length;
-				var items = repo.GetAll().Result;
-
-				Assert.NotNull(Championship.Id);
-				Assert.True(beforeItemsCount < afterItemsCount);
-			}
-		}*/
+		}
 		[Theory]
 		[ClassData(typeof(ValidChampionshipSetup))]
 		public void AddValidChampionship(Championship Championship)
 		{
 			using (var context = Fixture.CreateContext())
 			{
-				var repo = new RepositoryChampionship(context);
+				var repo = new ChampionshipRepository(context);
 				var beforeItemsCount = repo.GetAll().Result.Length;
 				repo.Add(Championship);
 				var afterItemsCount = repo.GetAll().Result.Length;
@@ -100,29 +80,26 @@ namespace Test.UnitTest.Infra.Repositorys
 		{
 			using (var context = Fixture.CreateContext())
 			{
-				var repo = new RepositoryChampionship(context);
+				var repo = new ChampionshipRepository(context);
 				var Championship = repo.GetAll().Result.First();
-				string old = ""+Championship.Name;
-				Championship.Name = "Teste";
+				string old = "" + Championship.Name;
+				Championship.EditScope("UPDATE");
 				repo.Update(Championship);
 				Assert.NotEqual(old, Championship.Name);
 			}
 		}
-		[Theory]
-		[ClassData(typeof(ValidChampionshipSetup))]
-		public void RemoveChampionship(Championship championship)
+		[Fact]
+		public void RemoveChampionship()
 		{
 			using (var context = Fixture.CreateContext())
 			{
-				//championship.Id = null;
-				var repo = new RepositoryChampionship(context);
-				//repo.Add(championship);
-				var items = repo.GetAll().Result;
+				var repo = new ChampionshipRepository(context);
+				var championship = repo.GetAll().Result.Where(c => c.Name == "remove" || c.Name == "UPDATE").FirstOrDefault();
 				repo.Remove(championship);
 				var result1 = repo.GetById(championship.Id).Result;
 				var count = repo.GetAll().Result.Length;
 				Assert.Null(result1);
-				Assert.True(items.Length > count);
+				Assert.DoesNotContain(championship, repo.GetAll().Result);
 			}
 		}
 	}

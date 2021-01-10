@@ -1,3 +1,5 @@
+using System.Linq;
+using Domain.Enum;
 using Domain.Models;
 using Test.DataExamples;
 using Xunit;
@@ -8,10 +10,7 @@ namespace Test.UnitTest.Infra.Repositorys
 	{
 		public ValidChampionshipSetup()
 		{
-			foreach (var Championship in ChampionshipDataExamples.GetValidBasic())
-			{
-				Add(Championship);
-			}
+			Add(new Championship("test", "edition", SeedData.Categorys.First().Id, Status.Created));
 		}
 	}
 }

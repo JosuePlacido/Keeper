@@ -1,3 +1,4 @@
+using Domain.Enum;
 using Domain.Models;
 using Xunit;
 
@@ -7,121 +8,61 @@ namespace Test.Domain
 	{
 		public RoundRobinSetup()
 		{
-			var TeamPair = new Group()
-			{
-				Statistics = new Statistics[]{
-					new Statistics{
-						TeamSubscribeId = "AAA",
-					},
-					new Statistics{
-						TeamSubscribeId = "BBB",
-					},
+			var TeamPair = new Group("TeamPair", new Statistic[]{
+					new Statistic("AAA"),
+					new Statistic("BBB")
+				});
+			var TeamNotPair = new Group("TeamNotPair", new Statistic[]{
+					new Statistic("AAA"),
+					new Statistic("BBB"),
+					new Statistic("CCC"),
+				});
+			var VacancyPair = new Group("VacancyPair", new Statistic[0],
+				new Vacancy[]{
+					new Vacancy("ZZZ", Classifieds.BestVsWorst),
+					new Vacancy("XXX", Classifieds.BestVsWorst),
+					new Vacancy("YYY", Classifieds.BestVsWorst),
+					new Vacancy("WWW", Classifieds.BestVsWorst),
 				}
-			};
-			var TeamNotPair = new Group()
-			{
-				Statistics = new Statistics[]{
-					new Statistics{
-						TeamSubscribeId = "AAA",
-					},
-					new Statistics{
-						TeamSubscribeId = "BBB",
-					},
-					new Statistics{
-						TeamSubscribeId = "CCC",
-					},
+			);
+			var VacancyNotPair = new Group("VacancyNotPair", new Statistic[0],
+				new Vacancy[]{
+					new Vacancy("ZZZ", Classifieds.BestVsWorst),
+					new Vacancy("XXX", Classifieds.BestVsWorst),
+					new Vacancy("YYY", Classifieds.BestVsWorst),
+					new Vacancy("WWW", Classifieds.BestVsWorst),
+					new Vacancy("VVV", Classifieds.BestVsWorst),
 				}
-			};
-			var VacancyPair = new Group()
-			{
-				Vacancys = new Vacancy[]{
-					new Vacancy{
-						Id = "ZZZ"
-					},
-					new Vacancy{
-						Id = "XXX"
-					},
-					new Vacancy{
-						Id = "YYY"
-					},
-					new Vacancy{
-						Id = "WWW"
-					},
-				}
-			};
-			var VacancyNotPair = new Group()
-			{
-				Vacancys = new Vacancy[]{
-					new Vacancy{
-						Id = "ZZZ"
-					},
-					new Vacancy{
-						Id = "XXX"
-					},
-					new Vacancy{
-						Id = "YYY"
-					},
-					new Vacancy{
-						Id = "WWW"
-					},
-					new Vacancy{
-						Id = "VVV"
-					},
-				}
-			};
-			var HybridPair = new Group()
-			{
-				Statistics = new Statistics[]{
-					new Statistics{
-						TeamSubscribeId = "AAA",
-					},
-					new Statistics{
-						TeamSubscribeId = "BBB",
-					},
-					new Statistics{
-						TeamSubscribeId = "CCC",
-					},
-					new Statistics{
-						TeamSubscribeId = "DDD",
-					},
+			);
+			var HybridPair = new Group("HybridPair",
+				new Statistic[]{
+					new Statistic("AAA"),
+					new Statistic("BBB"),
+					new Statistic("CCC"),
+					new Statistic("DDD"),
 				},
-				Vacancys = new Vacancy[]{
-					new Vacancy{
-						Id = "ZZZ"
-					},
-					new Vacancy{
-						Id = "XXX"
-					},
-					new Vacancy{
-						Id = "YYY"
-					},
-					new Vacancy{
-						Id = "WWW"
-					},
+				new Vacancy[]{
+					new Vacancy("ZZZ", Classifieds.BestVsWorst),
+					new Vacancy("XXX", Classifieds.BestVsWorst),
+					new Vacancy("YYY", Classifieds.BestVsWorst),
+					new Vacancy("WWW", Classifieds.BestVsWorst),
 				}
-			};
-			var HybridNotPair = new Group()
-			{
-				Statistics = new Statistics[]{
-					new Statistics{
-						TeamSubscribeId = "AAA",
-					},
-					new Statistics{
-						TeamSubscribeId = "BBB",
-					},
-					new Statistics{
-						TeamSubscribeId = "CCC",
-					},
+			);
+			var HybridNotPair = new Group("HybridNotPair",
+				new Statistic[]{
+					new Statistic("AAA"),
+					new Statistic("BBB"),
+					new Statistic("CCC"),
+					new Statistic("DDD"),
+					new Statistic("EEE"),
 				},
-				Vacancys = new Vacancy[]{
-					new Vacancy{
-						Id = "YYY"
-					},
-					new Vacancy{
-						Id = "WWW"
-					},
+				new Vacancy[]{
+					new Vacancy("ZZZ", Classifieds.BestVsWorst),
+					new Vacancy("XXX", Classifieds.BestVsWorst),
+					new Vacancy("YYY", Classifieds.BestVsWorst),
+					new Vacancy("WWW", Classifieds.BestVsWorst),
 				}
-			};
+			);
 
 			//Quantidade par com times
 			Add(TeamPair, false, false);
