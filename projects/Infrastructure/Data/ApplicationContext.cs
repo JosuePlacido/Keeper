@@ -6,7 +6,8 @@ namespace Infrastructure.Data
 {
 	public sealed class ApplicationContext : DbContext
 	{
-		public ApplicationContext(DbContextOptions options) : base(options) {
+		public ApplicationContext(DbContextOptions options) : base(options)
+		{
 			this.ChangeTracker.LazyLoadingEnabled = false;
 		}
 
@@ -20,7 +21,7 @@ namespace Infrastructure.Data
 		public DbSet<PlayerSubscribe> PlayerSubscribe { get; set; }
 		public DbSet<Team> Teams { get; set; }
 		public DbSet<EventGame> EventGames { get; set; }
-		public DbSet<Statistics> Statistics { get; set; }
+		public DbSet<Statistic> Statistics { get; set; }
 		public DbSet<Vacancy> Vacancys { get; set; }
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
@@ -30,7 +31,6 @@ namespace Infrastructure.Data
 			}
 
 			modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationContext).Assembly);
-			//SeedData.Seed(modelBuilder);
 		}
 	}
 }

@@ -4,28 +4,50 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Models
 {
-	public class PlayerSubscribe : Base
+	public class PlayerSubscribe : Entity
 	{
-		public virtual string TeamSubscribeId { get; set; }
-		public virtual TeamSubscribe TeamSubscribe { get; set; }
-		public virtual string PlayerId { get; set; }
-		public virtual Player Player { get; set; }
-		public virtual int Games { get; set; }
-		public virtual int Goals { get; set; }
-		public virtual int YellowCard { get; set; }
-		public virtual int RedCard { get; set; }
-		public virtual int MVPs { get; set; }
-		public PlayerSubscribe() { }
+		public string TeamSubscribeId { get; private set; }
+		public TeamSubscribe TeamSubscribe { get; private set; }
+		public string PlayerId { get; private set; }
+		public Player Player { get; private set; }
+		public int Games { get; private set; }
+		public int Goals { get; private set; }
+		public int YellowCard { get; private set; }
+		public int RedCard { get; private set; }
+		public int MVPs { get; private set; }
 
-		public PlayerSubscribe(string playerId)
+		private PlayerSubscribe() { }
+		public PlayerSubscribe(string player) : base(Guid.NewGuid().ToString())
 		{
-			Id = System.Guid.NewGuid().ToString();
+			PlayerId = player;
+		}
+
+		public PlayerSubscribe(string teamSubscribeId, TeamSubscribe teamSubscribe, string playerId, Player player, int games, int goals, int yellowCard, int redCard, int mVPs)
+		{
+			TeamSubscribeId = teamSubscribeId;
+			TeamSubscribe = teamSubscribe;
 			PlayerId = playerId;
+			Player = player;
+			Games = games;
+			Goals = goals;
+			YellowCard = yellowCard;
+			RedCard = redCard;
+			MVPs = mVPs;
+		}
+		public PlayerSubscribe UpdateNumbers(int games, int goals, int yellowCard,
+			int redCard, int mVPs)
+		{
+			Games = games;
+			Goals = goals;
+			YellowCard = yellowCard;
+			RedCard = redCard;
+			MVPs = mVPs;
+			return this;
 		}
 
 		public override string ToString()
 		{
-			return Id;
+			return (Player == null) ? base.ToString() : $"{Player.Name}";
 		}
 	}
 }

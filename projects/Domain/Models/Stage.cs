@@ -7,17 +7,33 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Models
 {
-	public class Stage : Base
+	public class Stage : Entity
 	{
-		public virtual int Order { get; set; }
-		public virtual string Name { get; set; }
-		public virtual Championship Championship { get; set; }
-		public virtual string ChampionshipId { get; set; }
-		public virtual TypeStage TypeStage { get; set; }
-		public virtual string Criterias { get; set; }
-		public virtual Classifieds Regulation { get; set; }
-		public virtual IEnumerable<Group> Groups { get; set; }
-		public Stage() { }
+		public int Order { get; private set; }
+		public string Name { get; private set; }
+		public bool DuplicateTurn { get; set; }
+		public bool MirrorTurn { get; set; }
+		public TypeStage TypeStage { get; private set; }
+		public string Criterias { get; private set; }
+		public Classifieds Regulation { get; private set; }
+		public Championship Championship { get; private set; }
+		public string ChampionshipId { get; private set; }
+		public IList<Group> Groups { get; private set; }
+		private Stage() { }
+
+		public Stage(int order, string name, bool duplicateTurn, bool mirrorTurn,
+			TypeStage typeStage, string criterias, Classifieds regulation, IList<Group> groups)
+		{
+			Order = order;
+			Name = name;
+			DuplicateTurn = duplicateTurn;
+			MirrorTurn = mirrorTurn;
+			TypeStage = typeStage;
+			Criterias = criterias;
+			Regulation = regulation;
+			Groups = groups;
+		}
+
 		public override string ToString()
 		{
 			return Name;

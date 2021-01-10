@@ -53,7 +53,10 @@ namespace Application.DTO
 	public class TeamDTO
 	{
 		public string TeamId { get; set; }
+		public string Name { get; set; }
 		public string[] Players { get; set; }
+		public int InitStageOrder { get; set; }
+		public int InitGroupIndex { get; set; }
 		public TeamDTO() { }
 	}
 }

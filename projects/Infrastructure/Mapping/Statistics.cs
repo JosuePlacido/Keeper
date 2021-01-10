@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Mapping
 {
-	public class StatisticsMap : IEntityTypeConfiguration<Statistics>
+	public class StatisticsMap : IEntityTypeConfiguration<Statistic>
 	{
-		public void Configure(EntityTypeBuilder<Statistics> builder)
+		public void Configure(EntityTypeBuilder<Statistic> builder)
 		{
 			builder.ToTable("tb_statistics");
 			builder.Property(statistics => statistics.Id)

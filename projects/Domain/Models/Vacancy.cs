@@ -5,28 +5,34 @@ using Domain.Enum;
 
 namespace Domain.Models
 {
-	public class Vacancy : Base
+	public class Vacancy : Entity
 	{
-		public virtual string Description { get; set; }
-		public virtual Classifieds OcupationType { get; set; }
-		public virtual string FromGroupId { set; get; }
-		public virtual int FromStageOrder { set; get; } 
-		public virtual int? FromPosition { get; set; }
-		public virtual string GroupId { set; get; }
-		public virtual Group Group { set; get; }
-		public Vacancy() { }
-		public Vacancy(string description, Classifieds ocupationType, string fromGroupId, int fromStageOrder, int? fromPosition)
+		public string Description { get; private set; }
+		public Classifieds OcupationType { get; private set; }
+		public string FromGroupId { get; private set; }
+		public int? FromStageOrder { get; private set; }
+		public int? FromPosition { get; private set; }
+		public string GroupId { get; private set; }
+		public Group Group { get; private set; }
+		private Vacancy() { }
+
+		public Vacancy(string description, Classifieds ocupationType,
+			int? fromStageOrder = null, int? fromPosition = null) : base(Guid.NewGuid().ToString())
 		{
-			Id = Guid.NewGuid().ToString();
 			Description = description;
 			OcupationType = ocupationType;
-			FromGroupId = fromGroupId;
 			FromStageOrder = fromStageOrder;
 			FromPosition = fromPosition;
 		}
+
 		public override string ToString()
 		{
 			return Description;
+		}
+
+		public void AddReferenceFromGroup(string fromGroup)
+		{
+			FromGroupId = fromGroup;
 		}
 	}
 }

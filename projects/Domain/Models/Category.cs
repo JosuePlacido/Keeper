@@ -4,11 +4,16 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Models
 {
-	public class Category : Base
+	public sealed class Category : Entity
 	{
-		public virtual string Name { get; set; }
-		public virtual string Description { get; set; }
-		public Category() { }
+		public string Name { get; private set; }
+		public string Description { get; private set; }
+		private Category() { }
+		public Category(string name, string description = null)
+		{
+			Name = name;
+			Description = description;
+		}
 		public override string ToString()
 		{
 			return Name;

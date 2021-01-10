@@ -4,11 +4,15 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Models
 {
-	public class Player : Base
+	public class Player : Entity
 	{
+		public string Name { get; private set; }
+		private Player() { }
 
-		public virtual string Name { get; set; }
-		public Player() { }
+		public Player(string name)
+		{
+			Name = name;
+		}
 
 		public override string ToString()
 		{

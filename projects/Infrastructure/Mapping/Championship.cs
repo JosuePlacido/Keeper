@@ -1,8 +1,9 @@
 using System.Threading.Tasks.Dataflow;
-using Microsoft.EntityFrameworkCore;
-using Domain.Models;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Domain.Enum;
+using Domain.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
 
 namespace Infrastructure.Mapping
 {
@@ -11,8 +12,6 @@ namespace Infrastructure.Mapping
 		public void Configure(EntityTypeBuilder<Championship> builder)
 		{
 			builder.ToTable("tb_championship");
-
-
 			builder.Property(c => c.Id)
 				.HasColumnName("Id").ValueGeneratedOnAdd();
 
@@ -23,14 +22,14 @@ namespace Infrastructure.Mapping
 
 			builder.Property(c => c.Edition)
 				.HasConversion(value => value, value => value)
-				.HasColumnType("varchar(100)")
-				.HasMaxLength(100)
+				.HasColumnType("varchar(50)")
+				.HasMaxLength(50)
 				.IsRequired();
 
 			builder.Property(c => c.Status)
 				.HasConversion(value => value, value => value)
 				.HasColumnType("varchar(15)")
-				.HasMaxLength(100)
+				.HasMaxLength(15)
 				.HasDefaultValue(Status.Created)
 				.IsRequired();
 

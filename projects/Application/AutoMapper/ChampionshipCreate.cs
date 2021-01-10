@@ -30,26 +30,26 @@ namespace Application.AutoMapper
 				.ForMember(dest => dest.Id, opts => opts.Ignore())
 				.ForMember(dest => dest.Championship, opts => opts.Ignore())
 				.ForMember(dest => dest.ChampionshipId, opts => opts.Ignore())
-				.ForMember(dest => dest.Criterias, opts => opts.MapFrom(src => string.Join(",",src.Criterias)));
+				.ForMember(dest => dest.Criterias, opts => opts.MapFrom(src => string.Join(",", src.Criterias)));
 			CreateMap<GroupDTO, Group>()
 				.ConstructUsing(src => new Group(src.Name))
 				.ForMember(dest => dest.Id, opts => opts.Ignore())
 				.ForMember(dest => dest.Stage, opts => opts.Ignore())
 				.ForMember(dest => dest.StageId, opts => opts.Ignore())
 				.ForMember(dest => dest.Matchs, opts => opts.Ignore())
-				.ForMember(dest => dest.Statistics, opts => opts.MapFrom(src => src.Teams.Select(team => new Statistics {
-					TeamSubscribeId = team
-				})));
+				.ForMember(dest => dest.Statistics, opts => opts.Ignore());
 			CreateMap<VacancyDTO, Vacancy>()
-				.ConstructUsing( src => new Vacancy(src.Description,src.OcupationType,null,src.FromStageIndex,src.FromPosition))
+				.ConstructUsing(src => new Vacancy(src.Description, src.OcupationType,
+					src.FromStageIndex, src.FromPosition))
 				.ForMember(dest => dest.Id, opts => opts.Ignore())
 				.ForMember(dest => dest.Group, opts => opts.Ignore())
 				.ForMember(dest => dest.GroupId, opts => opts.Ignore())
-				.ForMember(dest => dest.FromStageOrder, opts => opts.MapFrom( src => src.FromStageIndex))
+				.ForMember(dest => dest.FromStageOrder, opts => opts.MapFrom(src => src.FromStageIndex))
 				.ForMember(dest => dest.FromGroupId, opts => opts.Ignore());
 			CreateMap<TeamDTO, TeamSubscribe>()
-				.ConstructUsing((src, dest) => new TeamSubscribe(src.TeamId))
-				.ForMember(dest => dest.Players, opts => opts.MapFrom(src => src.Players.Select(str => new PlayerSubscribe(str))))
+				.ConstructUsing(src => new TeamSubscribe(src.TeamId))
+				.ForMember(dest => dest.Players, opts =>
+					opts.MapFrom(src => src.Players.Select(str => new PlayerSubscribe(str))))
 				.ForAllOtherMembers(opt => opt.Ignore());
 		}
 	}

@@ -10,31 +10,42 @@ using Domain.Enum;
 
 namespace Domain.Models
 {
-	public class Group : Base
+	public class Group : Entity
 	{
-		public virtual string Name { get; set; }
-		public virtual string StageId { get; set; }
-		public virtual Stage Stage { get; set; }
-		public virtual IEnumerable<Vacancy> Vacancys { get; set; }
-		public virtual IEnumerable<Statistics> Statistics { get; set; }
-		public virtual IList<Match> Matchs { get; set; }
-		public Group() { }
-
-		public Group(string name)
+		public string Name { get; private set; }
+		public string StageId { get; private set; }
+		public Stage Stage { get; private set; }
+		public IList<Match> Matchs { get; private set; }
+		public IList<Vacancy> Vacancys { get; private set; }
+		public IList<Statistic> Statistics { get; private set; }
+		private Group() { }
+		public Group(string name) : base(Guid.NewGuid().ToString())
 		{
-			Id = Guid.NewGuid().ToString();
 			Name = name;
 		}
-
-		public IEnumerable<Match> RoundRobinMatches(bool duplicateTurn = false, bool mirrorTurn = false)
+		public Group(string name, Statistic[] stats = null, Vacancy[] vacancys = null) : base(Guid.NewGuid().ToString())
+		{
+			Name = name;
+			Statistics = new List<Statistic>(stats);
+			Vacancys = new List<Vacancy>(vacancys);
+		}
+		public Group AddMatches(Match[] matches)
+		{
+			foreach (var match in matches)
+			{
+				Matchs.Add(match);
+			}
+			return this;
+		}
+		public IList<Match> RoundRobinMatches(bool duplicateTurn = false, bool mirrorTurn = false)
 		{
 			Matchs = new List<Match>();
 			IDictionary<string, bool> teams = new Dictionary<string, bool>();
 			if (Statistics != null)
 			{
-				foreach (var stats in Statistics)
+				foreach (var team in Statistics)
 				{
-					teams.Add(stats.TeamSubscribeId, false);
+					teams.Add(team.TeamSubscribeId, false);
 				}
 			}
 			if (Vacancys != null)
@@ -49,7 +60,7 @@ namespace Domain.Models
 			int gamesPerRound = totalTeams / 2;
 			int roundReturn = 0;
 			if (duplicateTurn)
-				roundReturn = mirrorTurn ? -totalRound*2-1 : totalRound;
+				roundReturn = mirrorTurn ? -totalRound * 2 - 1 : totalRound;
 			List<string> teamsA = new List<string>(teams.Keys.Take(gamesPerRound));
 			List<string> teamsB = new List<string>();
 			if (teams.Count % 2 != 0)
@@ -95,28 +106,33 @@ namespace Domain.Models
 			return Matchs;
 		}
 
-		public void AddMatch(int round, int game, string home, string away, bool homeVacancy, bool awayVacancy)
+		public void AddTeam(string teamId)
+		{
+			Statistics.Add(new Statistic(teamId));
+		}
+
+		private void AddMatch(int round, int game, string home, string away, bool homeVacancy, bool awayVacancy)
 		{
 			if (homeVacancy == awayVacancy)
 			{
 				if (homeVacancy)
 				{
-					Matchs.Add(new Match(round, Status.Created, $"Rodada {round} - Jogo {game+1}", vacancyHome: home, vacancyAway: away));
+					Matchs.Add(new Match(round, Status.Created, $"Rodada {round} - Jogo {game + 1}", vacancyHome: home, vacancyAway: away));
 				}
 				else
 				{
-					Matchs.Add(new Match(round, Status.Created, $"Rodada {round} - Jogo {game+1}", home, away));
+					Matchs.Add(new Match(round, Status.Created, $"Rodada {round} - Jogo {game + 1}", home, away));
 				}
 			}
 			else
 			{
 				if (homeVacancy)
 				{
-					Matchs.Add(new Match(round, Status.Created, $"Rodada {round} - Jogo {game+1}", vacancyHome: home, away: away));
+					Matchs.Add(new Match(round, Status.Created, $"Rodada {round} - Jogo {game + 1}", vacancyHome: home, away: away));
 				}
 				else
 				{
-					Matchs.Add(new Match(round, Status.Created, $"Rodada {round} - Jogo {game+1}", home, vacancyAway: away));
+					Matchs.Add(new Match(round, Status.Created, $"Rodada {round} - Jogo {game + 1}", home, vacancyAway: away));
 				}
 			}
 		}

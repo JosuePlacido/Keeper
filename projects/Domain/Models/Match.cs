@@ -6,34 +6,34 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Models
 {
-	public class Match : Base
+	public class Match : Entity
 	{
-		public virtual string Name { get; private set; }
-		public virtual string Address { get; private set; }
-		public virtual DateTime? Date { get; private set; }
-		public virtual string GroupId { get; init; }
-		public virtual Group Group { get; set; }
-		public virtual Vacancy VacancyHome { get; set; }
-		public virtual string VacancyHomeId { get; init; }
-		public virtual Vacancy VacancyAway { get; set; }
-		public virtual string VacancyAwayId { get; init; }
-		public virtual string HomeId { get; init; }
-		public virtual TeamSubscribe Home { get; private set; }
-		public virtual string AwayId { get; init; }
-		public virtual TeamSubscribe Away { get; private set; }
-		public virtual int Round { get; init; }
-		public virtual int? GoalsHome { get; private set; }
-		public virtual int? GoalsAway { get; private set; }
-		public virtual int? GoalsPenaltyHome { get; private set; }
-		public virtual int? GoalsPenaltyAway { get; private set; }
-		public virtual bool FinalGame { get; init; }
-		public virtual bool AggregateGame { get; init; }
-		public virtual bool Penalty { get; init; }
-		public virtual int? AggregateGoalsAway { get; private set; }
-		public virtual int? AggregateGoalsHome { get; private set; }
-		public virtual string Status { get; private set; }
-		public virtual IEnumerable<EventGame> EventGames { get; set; }
-		public Match() { }
+		public string Name { get; private set; }
+		public string Address { get; private set; }
+		public DateTime? Date { get; private set; }
+		public Vacancy VacancyHome { get; private set; }
+		public string VacancyHomeId { get; private set; }
+		public Vacancy VacancyAway { get; private set; }
+		public string VacancyAwayId { get; private set; }
+		public string HomeId { get; private set; }
+		public TeamSubscribe Home { get; private set; }
+		public string AwayId { get; private set; }
+		public TeamSubscribe Away { get; private set; }
+		public int Round { get; private set; }
+		public int? GoalsHome { get; private set; }
+		public int? GoalsAway { get; private set; }
+		public int? GoalsPenaltyHome { get; private set; }
+		public int? GoalsPenaltyAway { get; private set; }
+		public bool FinalGame { get; private set; }
+		public bool AggregateGame { get; private set; }
+		public bool Penalty { get; private set; }
+		public int? AggregateGoalsAway { get; private set; }
+		public int? AggregateGoalsHome { get; private set; }
+		public string Status { get; private set; }
+		public string GroupId { get; private set; }
+		public Group Group { get; private set; }
+		public IList<EventGame> EventGames { get; set; }
+		private Match() { }
 		public Match(int round, string status, string name, string home = null, string away = null,
 			string vacancyHome = null, string vacancyAway = null, DateTime? date = null,
 			string address = "", bool knockout = false, bool finalGame = false, bool penalty = false)
@@ -54,45 +54,34 @@ namespace Domain.Models
 			{
 				AggregateGoalsHome = AggregateGoalsAway = 0;
 			}
+			EventGames = new List<EventGame>();
 		}
 
-		public void EditMatchDetails(string name = null, string status = null, string address = null,
-			 DateTime? date = null)
-		{
-			if (string.IsNullOrEmpty(name))
-			{
-				Name = name;
-			}
-			if (string.IsNullOrEmpty(status))
-			{
-				Status = status;
-			}
-			if (string.IsNullOrEmpty(address))
-			{
-				Address = address;
-			}
-			if (date != null)
-			{
-				Date = date;
-			}
-		}
-		public override string ToString()
-		{
-			return Name;
-		}
+
 
 		public void RegisterResult(int homeGoals, int awayGoals,
-			int? homeGoalsPenalty = null, int? awayGoalsPenalty = null)
+			int? homePenalties = null, int? awayPenalties = null, EventGame[] events = null)
 		{
+			Status = Enum.Status.Finish;
 			GoalsHome = homeGoals;
 			GoalsAway = awayGoals;
-			GoalsPenaltyHome = homeGoalsPenalty;
-			GoalsPenaltyAway = awayGoalsPenalty;
 			if (AggregateGame)
 			{
-				AggregateGoalsHome += homeGoals;
-				AggregateGoalsAway += awayGoals;
+				AggregateGoalsHome += GoalsHome;
+				AggregateGoalsAway += GoalsAway;
 			}
+			if (Penalty && FinalGame &&
+				((AggregateGame && AggregateGoalsAway == AggregateGoalsHome) ||
+				GoalsPenaltyHome == GoalsPenaltyAway))
+			{
+				GoalsPenaltyHome = homePenalties;
+				GoalsPenaltyAway = awayPenalties;
+			}
+			if (events != null)
+				foreach (var eg in events)
+				{
+					EventGames.Add(eg);
+				}
 		}
 	}
 }
