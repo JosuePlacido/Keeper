@@ -24,7 +24,7 @@ namespace Test.Integration.Application
 		[Fact]
 		public void TestCreateChampionship()
 		{
-			MatchEditsScope[] result = null;
+			MatchEditsScope result = null;
 			using (var context = Fixture.CreateContext())
 			{
 				var repo = new ChampionshipRepository(context);
@@ -39,7 +39,8 @@ namespace Test.Integration.Application
 			}
 			var jsonResult = JsonConvert.SerializeObject(result, Formatting.Indented);
 			Assert.NotNull(result);
-			Assert.True(result.SelectMany(dto => dto.Groups.SelectMany(grp => grp.Matchs)).Count() == 6);
+			Assert.True(result.Stages.
+				SelectMany(dto => dto.Groups.SelectMany(grp => grp.Matchs)).Count() == 6);
 		}
 	}
 }
