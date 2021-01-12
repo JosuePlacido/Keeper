@@ -7,7 +7,6 @@ namespace Domain.Models
 	public class PlayerSubscribe : Entity
 	{
 		public string TeamSubscribeId { get; private set; }
-		public TeamSubscribe TeamSubscribe { get; private set; }
 		public string PlayerId { get; private set; }
 		public Player Player { get; private set; }
 		public int Games { get; private set; }
@@ -20,19 +19,6 @@ namespace Domain.Models
 		public PlayerSubscribe(string player) : base(Guid.NewGuid().ToString())
 		{
 			PlayerId = player;
-		}
-
-		public PlayerSubscribe(string teamSubscribeId, TeamSubscribe teamSubscribe, string playerId, Player player, int games, int goals, int yellowCard, int redCard, int mVPs)
-		{
-			TeamSubscribeId = teamSubscribeId;
-			TeamSubscribe = teamSubscribe;
-			PlayerId = playerId;
-			Player = player;
-			Games = games;
-			Goals = goals;
-			YellowCard = yellowCard;
-			RedCard = redCard;
-			MVPs = mVPs;
 		}
 		public PlayerSubscribe UpdateNumbers(int games, int goals, int yellowCard,
 			int redCard, int mVPs)

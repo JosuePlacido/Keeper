@@ -16,7 +16,6 @@ namespace Domain.Models
 		public TypeStage TypeStage { get; private set; }
 		public string Criterias { get; private set; }
 		public Classifieds Regulation { get; private set; }
-		public Championship Championship { get; private set; }
 		public string ChampionshipId { get; private set; }
 		public IList<Group> Groups { get; private set; }
 		private Stage() { }

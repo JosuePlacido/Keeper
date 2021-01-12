@@ -10,7 +10,6 @@ namespace Domain.Models
 	public class Statistic : Entity
 	{
 		public string GroupId { get; private set; }
-		public Group Group { get; private set; }
 		public string TeamSubscribeId { get; private set; }
 		public TeamSubscribe TeamSubscribe { get; private set; }
 		public int Games { get; private set; }

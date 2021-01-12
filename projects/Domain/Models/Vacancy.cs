@@ -13,7 +13,6 @@ namespace Domain.Models
 		public int? FromStageOrder { get; private set; }
 		public int? FromPosition { get; private set; }
 		public string GroupId { get; private set; }
-		public Group Group { get; private set; }
 		private Vacancy() { }
 
 		public Vacancy(string description, Classifieds ocupationType,

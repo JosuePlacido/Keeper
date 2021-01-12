@@ -22,7 +22,7 @@ namespace Infrastructure.Mapping
 				.HasMaxLength(15)
 				.IsRequired();
 			builder.HasMany(stage => stage.Groups)
-				.WithOne(group => group.Stage)
+				.WithOne()
 				.HasForeignKey(group => group.StageId)
 				.OnDelete(DeleteBehavior.Cascade);
 		}

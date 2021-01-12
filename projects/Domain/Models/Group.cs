@@ -14,7 +14,6 @@ namespace Domain.Models
 	{
 		public string Name { get; private set; }
 		public string StageId { get; private set; }
-		public Stage Stage { get; private set; }
 		public IList<Match> Matchs { get; private set; }
 		public IList<Vacancy> Vacancys { get; private set; }
 		public IList<Statistic> Statistics { get; private set; }
@@ -24,12 +23,14 @@ namespace Domain.Models
 			Name = name;
 			Statistics = new List<Statistic>();
 			Vacancys = new List<Vacancy>();
+			Matchs = new List<Match>();
 		}
 		public Group(string name, Statistic[] stats = null, Vacancy[] vacancys = null) : base(Guid.NewGuid().ToString())
 		{
 			Name = name;
 			Statistics = stats != null ? new List<Statistic>(stats) : new List<Statistic>();
 			Vacancys = vacancys != null ? new List<Vacancy>(vacancys) : new List<Vacancy>();
+			Matchs = new List<Match>();
 		}
 		public Group AddMatches(Match[] matches)
 		{

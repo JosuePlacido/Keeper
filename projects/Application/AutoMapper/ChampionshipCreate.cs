@@ -28,13 +28,11 @@ namespace Application.AutoMapper
 				.ForMember(dest => dest.Status, opts => opts.MapFrom(src => Status.Created));
 			CreateMap<StageDTO, Stage>()
 				.ForMember(dest => dest.Id, opts => opts.Ignore())
-				.ForMember(dest => dest.Championship, opts => opts.Ignore())
 				.ForMember(dest => dest.ChampionshipId, opts => opts.Ignore())
 				.ForMember(dest => dest.Criterias, opts => opts.MapFrom(src => string.Join(",", src.Criterias)));
 			CreateMap<GroupDTO, Group>()
 				.ConstructUsing(src => new Group(src.Name))
 				.ForMember(dest => dest.Id, opts => opts.Ignore())
-				.ForMember(dest => dest.Stage, opts => opts.Ignore())
 				.ForMember(dest => dest.StageId, opts => opts.Ignore())
 				.ForMember(dest => dest.Matchs, opts => opts.Ignore())
 				.ForMember(dest => dest.Statistics, opts => opts.Ignore());
@@ -42,7 +40,6 @@ namespace Application.AutoMapper
 				.ConstructUsing(src => new Vacancy(src.Description, src.OcupationType,
 					src.FromStageIndex, src.FromPosition))
 				.ForMember(dest => dest.Id, opts => opts.Ignore())
-				.ForMember(dest => dest.Group, opts => opts.Ignore())
 				.ForMember(dest => dest.GroupId, opts => opts.Ignore())
 				.ForMember(dest => dest.FromStageOrder, opts => opts.MapFrom(src => src.FromStageIndex))
 				.ForMember(dest => dest.FromGroupId, opts => opts.Ignore());

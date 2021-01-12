@@ -16,10 +16,11 @@ namespace Infrastructure.DAO
 			_context = Context;
 		}
 
-		public virtual void Add(TEntity obj)
+		public virtual TEntity Add(TEntity obj)
 		{
 			_context.Set<TEntity>().Add(obj);
 			_context.SaveChanges();
+			return obj;
 		}
 
 		public virtual async Task<TEntity> GetById(string id)

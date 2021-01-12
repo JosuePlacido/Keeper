@@ -31,7 +31,6 @@ namespace Domain.Models
 		public int? AggregateGoalsHome { get; private set; }
 		public string Status { get; private set; }
 		public string GroupId { get; private set; }
-		public Group Group { get; private set; }
 		public IList<EventGame> EventGames { get; set; }
 		private Match() { }
 		public Match(int round, string status, string name, string home = null, string away = null,

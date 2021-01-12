@@ -20,11 +20,8 @@ namespace Infrastructure.Mapping
 				.HasDefaultValue(Status.Created)
 				.IsRequired();
 
-			builder.HasOne(teamSubscribe => teamSubscribe.Championship);
-			builder.HasOne(teamSubscribe => teamSubscribe.Team);
-
 			builder.HasMany(teamSubscribe => teamSubscribe.Players)
-				.WithOne(player => player.TeamSubscribe)
+				.WithOne()
 				.HasForeignKey(player => player.TeamSubscribeId)
 				.OnDelete(DeleteBehavior.Cascade);
 

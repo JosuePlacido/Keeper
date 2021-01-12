@@ -18,14 +18,14 @@ namespace Infrastructure.Mapping
 				.IsRequired();
 
 			builder.HasMany(group => group.Matchs)
-				.WithOne(match => match.Group)
+				.WithOne()
 				.HasForeignKey(match => match.GroupId)
 				.OnDelete(DeleteBehavior.Cascade);
 			builder.HasMany(group => group.Statistics)
-				.WithOne(statistics => statistics.Group)
+				.WithOne()
 				.HasForeignKey(statistics => statistics.GroupId);
 			builder.HasMany(group => group.Vacancys)
-				.WithOne(vacancy => vacancy.Group)
+				.WithOne()
 				.HasForeignKey(vacancy => vacancy.GroupId);
 
 		}

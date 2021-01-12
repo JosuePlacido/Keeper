@@ -20,7 +20,7 @@ namespace Application.Services
 			_mapper = mapper;
 			_repoChamp = repoChamp;
 		}
-		public Championship Create(ChampionshipCreateDTO dto)
+		public async Task<MatchEditsScope[]> Create(ChampionshipCreateDTO dto)
 		{
 			var championship = _mapper.Map<Championship>(dto);
 			championship = UpdatadeReferences(championship, dto);
@@ -32,7 +32,8 @@ namespace Application.Services
 				}
 			}
 			_repoChamp.Add(championship);
-			return championship;
+			var list = championship.Stages.ToArray();
+			return _mapper.Map<MatchEditsScope[]>(list);
 		}
 
 		private Championship UpdatadeReferences(Championship championship, ChampionshipCreateDTO dto)

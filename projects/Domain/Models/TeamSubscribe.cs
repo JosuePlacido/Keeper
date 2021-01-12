@@ -9,7 +9,6 @@ namespace Domain.Models
 	public class TeamSubscribe : Entity
 	{
 		public string ChampionshipId { get; private set; }
-		public Championship Championship { get; private set; }
 		public string Status { get; private set; }
 		public string TeamId { get; private set; }
 		public Team Team { get; private set; }

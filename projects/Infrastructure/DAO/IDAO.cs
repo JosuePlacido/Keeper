@@ -5,7 +5,7 @@ namespace Infrastructure.DAO
 {
 	public interface IDAO<TEntity> where TEntity : class
 	{
-		void Add(TEntity obj);
+		TEntity Add(TEntity obj);
 
 		Task<TEntity> GetById(string id);
 

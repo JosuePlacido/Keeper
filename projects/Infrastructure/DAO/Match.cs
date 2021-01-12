@@ -1,8 +1,11 @@
 using Infrastructure.DAO;
 using Infrastructure.Data;
 using Domain.Models;
+using System;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
-namespace Infrastruture.DAO
+namespace Infrastructure.DAO
 {
 	public class DAOMatch : DAOBase<Match>
 	{
@@ -11,6 +14,16 @@ namespace Infrastruture.DAO
 			: base(Context)
 		{
 			_context = Context;
+		}
+
+		internal Match[] GetByGroupWithTeams(string group)
+		{
+			return _context.Matchs.Where(mtc => mtc.GroupId == group)
+				.Include(mtc => mtc.Home).ThenInclude(ts => ts.Team)
+				.Include(mtc => mtc.Away).ThenInclude(ts => ts.Team)
+				.Include(mtc => mtc.VacancyHome)
+				.Include(mtc => mtc.VacancyAway)
+				.OrderBy(mtc => mtc.Round).ToArray();
 		}
 	}
 }

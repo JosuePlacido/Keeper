@@ -36,7 +36,7 @@ namespace Infrastructure.Mapping
 			builder.HasOne(c => c.Category);
 
 			builder.HasMany(c => c.Stages)
-				.WithOne(s => s.Championship)
+				.WithOne()
 				.HasForeignKey(s => s.ChampionshipId)
 				.IsRequired()
 				.OnDelete(DeleteBehavior.Cascade);
