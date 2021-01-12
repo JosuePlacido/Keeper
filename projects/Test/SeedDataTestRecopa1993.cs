@@ -213,7 +213,9 @@ namespace Test
 										points: 2
 									),
 								}
-							)
+							).AddMatches(new Match[]{
+								First,Second
+							})
 						}
 					)
 				},
