@@ -14,11 +14,16 @@ namespace Application.AutoMapper
 	{
 		public MatchEditProfile()
 		{
-			CreateMap<Match, MatchItemDTO>()
+			CreateMap<Championship, MatchEditsScope>()
 				.ForMember(dest => dest.Errors, opt => opt.Ignore());
-			CreateMap<Stage, MatchEditsScope>();
+			CreateMap<Match, MatchItemDTO>()
+				.ForMember(dest => dest.HasError, opt => opt.MapFrom(src => false));
+			CreateMap<Stage, MatchStageEdit>();
 			CreateMap<Group, MatchGroupEdit>()
 				.AfterMap((src, dest) => dest.Matchs = dest.Matchs.OrderBy(m => m.Round).ToArray());
+			CreateMap<Vacancy, MatchEditVacancy>();
+			CreateMap<TeamSubscribe, MatchEditTeam>()
+			.ForMember(dest => dest.Team, opt => opt.MapFrom(src => src.Team.Name));
 		}
 	}
 }
