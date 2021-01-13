@@ -13,7 +13,5 @@ namespace Infrastructure.DAO
 		public DAOPlayerSubscribe(ApplicationContext Context)
 			: base(Context) => _context = Context;
 
-		public string[] VerifyId(string[] players) => _context.PlayerSubscribe.Where(player => players.Contains(player.Id))
-				.Select(player => player.Id).ToArray();
 	}
 }

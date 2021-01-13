@@ -12,8 +12,5 @@ namespace Infrastructure.DAO
 		private readonly ApplicationContext _context;
 		public DAOGroup(ApplicationContext Context)
 			: base(Context) => _context = Context;
-
-		public string[] VerifyId(string[] groups) => _context.Groups.Where(group => groups.Contains(group.Id))
-				.Select(group => group.Id).ToArray();
 	}
 }

@@ -1,3 +1,4 @@
+using Domain.Repository;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -5,13 +6,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Infrastructure.DAO
+namespace Infrastructure.Repository
 {
-	public abstract class DAOBase<TEntity> : IDisposable, IDAO<TEntity> where TEntity : class
+	public abstract class RepositoryBase<TEntity> : IDisposable, IRepositoryBase<TEntity> where TEntity : class
 	{
-		private readonly ApplicationContext _context;
+		protected readonly ApplicationContext _context;
 
-		public DAOBase(ApplicationContext Context)
+		public RepositoryBase(ApplicationContext Context)
 		{
 			_context = Context;
 		}

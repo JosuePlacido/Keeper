@@ -12,8 +12,5 @@ namespace Infrastructure.DAO
 		private readonly ApplicationContext _context;
 		public DAOVacancy(ApplicationContext Context)
 			: base(Context) => _context = Context;
-
-		public string[] VerifyId(string[] vacancys) => _context.Vacancys.Where(vacancy => vacancys.Contains(vacancy.Id))
-				.Select(vacancy => vacancy.Id).ToArray();
 	}
 }
