@@ -98,7 +98,7 @@ namespace Test
 			var teams = new TeamSubscribe[]
 				{
 					new TeamSubscribe(Teams[4].Id)
-						.AddPlayers(players.Skip(4).Take(4).ToArray())
+						.AddPlayers(players.Take(4).ToArray())
 						.UpdateNumbers(
 							reds: 0,
 							drowns: 2,
@@ -111,7 +111,7 @@ namespace Test
 							yellows: 4,
 							status: Status.Champion),
 					new TeamSubscribe(Teams[5].Id)
-						.AddPlayers(players.Skip(8).ToArray())
+						.AddPlayers(players.Skip(4).ToArray())
 						.UpdateNumbers(
 							reds: 0,
 							drowns: 2,
@@ -122,7 +122,7 @@ namespace Test
 							lost: 0,
 							won: 0,
 							yellows: 2,
-							status: Status.Champion)
+							status: Status.Eliminated)
 				};
 			var vacancys = new Vacancy[] {
 				new Vacancy("Campeão da Libertadores 1993",Classifieds.Configured),

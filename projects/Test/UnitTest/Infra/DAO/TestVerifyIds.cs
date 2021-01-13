@@ -1,5 +1,7 @@
 using System.Linq;
+using Domain.Models;
 using Infrastructure.DAO;
+using Microsoft.EntityFrameworkCore;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -12,95 +14,32 @@ namespace Test.Infra.DAO
 		public TestVerifyIds(SharedDatabaseFixture fixture, ITestOutputHelper output)
 			=> (Fixture, _output) = (fixture, output);
 		[Fact]
-		public void VeryfiValidIdOfGroup()
+		public void TestValidIds()
 		{
 			using (var context = Fixture.CreateContext())
 			{
-				var dao = new DAOGroup(context);
-				var idsInvalids = dao.VerifyId(new string[] { "inedito" });
+				var dao = new DAOChampionship(context);
+				var idsInvalids = dao.VerifyCreatedIds(SeedData.GetChampionship());
 				Assert.Empty(idsInvalids);
 			}
 		}
 		[Fact]
-		public void VeryfiInvalidIdOfGroup()
+		public void TestInvalidIds()
 		{
 			using (var context = Fixture.CreateContext())
 			{
-				var dao = new DAOGroup(context);
-				var ids = dao.GetAll().Result.OrderBy(g => g.Id).Take(3)
-					.Select(g => g.Id).ToArray();
-				var idsInvalids = dao.VerifyId(ids);
+				var dao = new DAOChampionship(context);
+				Championship championship = context.Championships.Where(chp =>
+				chp.Name == "Recopa Sulamericana")
+				.Include(chp => chp.Stages)
+					.ThenInclude(stg => ((Stage)stg).Groups)
+						.ThenInclude(grp => ((Group)grp).Vacancys)
+				.Include(chp => chp.Teams)
+						.ThenInclude(ts => ((TeamSubscribe)ts).Players)
+				.FirstOrDefault();
+				var idsInvalids = dao.VerifyCreatedIds(championship);
 				Assert.NotEmpty(idsInvalids);
-				Assert.Equal(ids, idsInvalids);
-			}
-		}
-		[Fact]
-		public void VeryfiValidIdOfVacancy()
-		{
-			using (var context = Fixture.CreateContext())
-			{
-				var dao = new DAOVacancy(context);
-				var idsInvalids = dao.VerifyId(new string[] { "inedito" });
-				Assert.Empty(idsInvalids);
-			}
-		}
-		[Fact]
-		public void VeryfiInvalidIdOfVacancy()
-		{
-			using (var context = Fixture.CreateContext())
-			{
-				var dao = new DAOVacancy(context);
-				var ids = dao.GetAll().Result.OrderBy(g => g.Id).Take(3)
-					.Select(g => g.Id).ToArray();
-				var idsInvalids = dao.VerifyId(ids);
-				Assert.NotEmpty(idsInvalids);
-				Assert.Equal(ids, idsInvalids);
-			}
-		}
-		[Fact]
-		public void VeryfiValidIdOfPlayerSubscribe()
-		{
-			using (var context = Fixture.CreateContext())
-			{
-				var dao = new DAOPlayerSubscribe(context);
-				var idsInvalids = dao.VerifyId(new string[] { "inedito" });
-				Assert.Empty(idsInvalids);
-			}
-		}
-		[Fact]
-		public void VeryfiInvalidIdOfPlayerSubscribe()
-		{
-			using (var context = Fixture.CreateContext())
-			{
-				var dao = new DAOPlayerSubscribe(context);
-				var ids = dao.GetAll().Result.OrderBy(g => g.Id).Take(3)
-					.Select(g => g.Id).ToArray();
-				var idsInvalids = dao.VerifyId(ids);
-				Assert.NotEmpty(idsInvalids);
-				Assert.Equal(ids, idsInvalids);
-			}
-		}
-		[Fact]
-		public void VeryfiValidIdOfTeamSubscribe()
-		{
-			using (var context = Fixture.CreateContext())
-			{
-				var dao = new DAOTeamSubscribe(context);
-				var idsInvalids = dao.VerifyId(new string[] { "inedito" });
-				Assert.Empty(idsInvalids);
-			}
-		}
-		[Fact]
-		public void VeryfiInvalidIdOfTeamSubscribe()
-		{
-			using (var context = Fixture.CreateContext())
-			{
-				var dao = new DAOTeamSubscribe(context);
-				var ids = dao.GetAll().Result.OrderBy(g => g.Id).Take(3)
-					.Select(g => g.Id).ToArray();
-				var idsInvalids = dao.VerifyId(ids);
-				Assert.NotEmpty(idsInvalids);
-				Assert.Equal(ids, idsInvalids);
+				Assert.True(idsInvalids.Length == 11);
 			}
 		}
 	}
