@@ -20,8 +20,9 @@ namespace Test
 							new Team("time2"),
 							new Team("time3"),
 							new Team("time4"),
-							new Team("São Paulo"),
+							new Team("São Paulo","SAO","https://i.pinimg.com/originals/e2/76/12/e27612d24ece4b8e5f2fc4f61e2e5938.jpg"),
 							new Team("Cruzeiro"),
+							new Team("Delete"),
 		};
 
 		public static Player[] Players = new Player[] {
