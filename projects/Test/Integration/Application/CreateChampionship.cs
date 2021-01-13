@@ -2,15 +2,15 @@ using Xunit;
 using Xunit.Abstractions;
 using AutoMapper;
 using AutoMapper.Internal;
-using Application.AutoMapper;
 using Domain.Models;
-using Application.DTO;
 using Newtonsoft.Json;
 using Test.DataExamples;
 using System.Linq;
 using Application.Services;
 using Infrastructure.Repository;
 using Domain.Enum;
+using Infrastructure.CrossCutting.DTO;
+using Infrastructure.CrossCutting.Adapter;
 
 namespace Test.Integration.Application
 {

@@ -62,13 +62,13 @@ namespace Test.UnitTest.Infra.Repositorys
 		}
 		[Theory]
 		[ClassData(typeof(ValidChampionshipSetup))]
-		public void AddValidChampionship(Championship Championship)
+		public async void AddValidChampionship(Championship Championship)
 		{
 			using (var context = Fixture.CreateContext())
 			{
 				var repo = new ChampionshipRepository(context);
 				var beforeItemsCount = repo.GetAll().Result.Length;
-				repo.Add(Championship);
+				await repo.Add(Championship);
 				var afterItemsCount = repo.GetAll().Result.Length;
 				var items = repo.GetAll().Result;
 				Assert.NotNull(Championship.Id);
@@ -76,7 +76,7 @@ namespace Test.UnitTest.Infra.Repositorys
 			}
 		}
 		[Fact]
-		public void UpdateValidChampionship()
+		public async void UpdateValidChampionship()
 		{
 			using (var context = Fixture.CreateContext())
 			{
@@ -84,18 +84,18 @@ namespace Test.UnitTest.Infra.Repositorys
 				var Championship = repo.GetAll().Result.First();
 				string old = "" + Championship.Name;
 				Championship.EditScope("UPDATE");
-				repo.Update(Championship);
+				await repo.Update(Championship);
 				Assert.NotEqual(old, Championship.Name);
 			}
 		}
 		[Fact]
-		public void RemoveChampionship()
+		public async void RemoveChampionship()
 		{
 			using (var context = Fixture.CreateContext())
 			{
 				var repo = new ChampionshipRepository(context);
 				var championship = repo.GetAll().Result.Where(c => c.Name == "remove" || c.Name == "UPDATE").FirstOrDefault();
-				repo.Remove(championship);
+				await repo.Remove(championship);
 				var result1 = repo.GetById(championship.Id).Result;
 				var count = repo.GetAll().Result.Length;
 				Assert.Null(result1);

@@ -1,6 +1,6 @@
 
-using Application.DTO;
 using Domain.Models;
+using Infrastructure.CrossCutting.DTO;
 using Xunit;
 
 namespace Test.UnitTest.Application.Service
@@ -18,7 +18,7 @@ namespace Test.UnitTest.Application.Service
 		{
 			Add(new AuditoryMatchesTestModel
 			{
-				ExpectedErrorsCount = 2,
+				ExpectedErrorsCount = 4,
 				ExpectedIdsMatchesWithError = new string[] { "1", "2" },
 				Case = new MatchEditsScope
 				{

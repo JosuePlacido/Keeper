@@ -1,7 +1,5 @@
 
 using System.Linq;
-using Application.AutoMapper;
-using Application.DTO;
 using Application.Services;
 using AutoMapper;
 using Xunit;

@@ -1,6 +1,6 @@
-using Application.DTO;
 using Domain.Enum;
 using Domain.Models;
+using Infrastructure.CrossCutting.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
