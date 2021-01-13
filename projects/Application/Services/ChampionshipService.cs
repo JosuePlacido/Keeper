@@ -1,4 +1,3 @@
-using Application.DTO;
 using Application.Interface;
 using AutoMapper;
 using FluentValidation.Results;
@@ -9,6 +8,7 @@ using System.Threading.Tasks;
 using Domain.Repository;
 using System.Linq;
 using System.Collections.Generic;
+using Infrastructure.CrossCutting.DTO;
 
 namespace Application.Services
 {
@@ -24,7 +24,7 @@ namespace Application.Services
 		public async Task<MatchEditsScope> Create(ChampionshipCreateDTO dto)
 		{
 			var championship = _mapper.Map<Championship>(dto);
-			championship = await UpdatadeReferences(championship, dto);
+			championship = UpdatadeReferences(championship, dto);
 			foreach (var stage in championship.Stages)
 			{
 				foreach (var group in stage.Groups)
@@ -32,7 +32,7 @@ namespace Application.Services
 					group.RoundRobinMatches(stage.DuplicateTurn, stage.MirrorTurn);
 				}
 			}
-			_repoChamp.Add(championship);
+			await _repoChamp.Add(championship);
 			return _mapper.Map<MatchEditsScope>(championship);
 		}
 		public async Task<MatchEditsScope> CheckMatches(MatchEditsScope dto)
@@ -109,7 +109,7 @@ namespace Application.Services
 			}
 			return dto;
 		}
-		private async Task<Championship> UpdatadeReferences(Championship championship, ChampionshipCreateDTO dto)
+		private Championship UpdatadeReferences(Championship championship, ChampionshipCreateDTO dto)
 		{
 			foreach (var team in dto.Teams)
 			{

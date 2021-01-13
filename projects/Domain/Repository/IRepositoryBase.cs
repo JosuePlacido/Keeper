@@ -6,15 +6,15 @@ namespace Domain.Repository
 {
 	public interface IRepositoryBase<TEntity> where TEntity : class
 	{
-		void Add(TEntity obj);
+		Task<TEntity> Add(TEntity obj);
 
 		Task<TEntity> GetById(string id);
 
 		Task<TEntity[]> GetAll();
 
-		void Update(TEntity obj);
+		Task<TEntity> Update(TEntity obj);
 
-		void Remove(TEntity obj);
+		Task<TEntity> Remove(TEntity obj);
 
 		void Dispose();
 	}
