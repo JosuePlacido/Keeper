@@ -1,11 +1,11 @@
 
 using System.Linq;
-using Application.Services;
+using Keeper.Application.Services;
 using AutoMapper;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Test.UnitTest.Application.Service
+namespace Keeper.Test.UnitTest.Application.Service
 {
 	public class TestAuditoryMatches
 	{
@@ -17,7 +17,7 @@ namespace Test.UnitTest.Application.Service
 		[ClassData(typeof(AuditoryMatchesSetup))]
 		public void TestAuditoryMatchesList(AuditoryMatchesTestModel test)
 		{
-			var result = new ChampionshipService(null, null).CheckMatches(test.Case).Result;
+			var result = new ChampionshipService(null, null).CheckMatches(test.Case);
 			Assert.True(test.ExpectedErrorsCount == result.Errors.Count);
 			var idsMatchesWithError = result.Stages.SelectMany(stg => stg.Groups.SelectMany(
 				grp => grp.Matchs.Where(MatchAuditoryContants => MatchAuditoryContants.HasError)

@@ -1,8 +1,8 @@
-using Domain.Enum;
-using Domain.Models;
+using Keeper.Domain.Enum;
+using Keeper.Domain.Models;
 using Xunit;
 
-namespace Test.Domain
+namespace Keeper.Test.Domain
 {
 	internal class RoundRobinSetup : TheoryData<Group, bool, bool>
 	{

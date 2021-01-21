@@ -1,14 +1,11 @@
 using System.Linq;
-using Microsoft.EntityFrameworkCore;
-using Infrastructure.Repository;
 using Xunit;
-using Domain.Models;
-using System.Collections.Generic;
-using System;
 using Newtonsoft.Json;
 using Xunit.Abstractions;
+using Keeper.Infrastructure.Repository;
+using Keeper.Domain.Models;
 
-namespace Test.UnitTest.Infra.Repositorys
+namespace Keeper.Test.UnitTest.Infra.Repositorys
 {
 	public class ChampionshipRepositoryTest : IClassFixture<SharedDatabaseFixture>
 	{

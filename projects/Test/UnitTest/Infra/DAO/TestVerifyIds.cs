@@ -1,11 +1,12 @@
 using System.Linq;
-using Domain.Models;
-using Infrastructure.DAO;
+using Keeper.Domain.Models;
+using Keeper.Infrastructure.DAO;
+using Keeper.Test;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Test.Infra.DAO
+namespace Keeper.Test.Infra.DAO
 {
 	public class TestVerifyIds : IClassFixture<SharedDatabaseFixture>
 	{

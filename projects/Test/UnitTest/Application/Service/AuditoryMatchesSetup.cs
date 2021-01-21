@@ -1,9 +1,7 @@
-
-using Domain.Models;
-using Infrastructure.CrossCutting.DTO;
+using Keeper.Infrastructure.CrossCutting.DTO;
 using Xunit;
 
-namespace Test.UnitTest.Application.Service
+namespace Keeper.Test.UnitTest.Application.Service
 {
 	public class AuditoryMatchesTestModel
 	{

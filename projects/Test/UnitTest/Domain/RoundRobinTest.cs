@@ -1,12 +1,12 @@
 using System;
 using System.Linq;
-using Domain.Models;
+using Keeper.Domain.Models;
+using Keeper.Test.Domain;
 using Newtonsoft.Json;
-using Test.Domain;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Domain
+namespace Keeper.Domain
 {
 	public class RoundRobinTest
 	{
@@ -67,7 +67,7 @@ namespace Domain
 				.Select(match => new MatchShortFormat(match)).ToArray();
 
 			var teams = NormalizeTeams(matchList);
-			var correctCount = teams.Length-1;
+			var correctCount = teams.Length - 1;
 			if (hasReturn)
 			{
 				correctCount *= 2;

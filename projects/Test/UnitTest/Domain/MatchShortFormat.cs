@@ -1,6 +1,6 @@
-using Domain.Models;
+using Keeper.Domain.Models;
 
-namespace Test.Domain
+namespace Keeper.Test.Domain
 {
 	public class MatchShortFormat
 	{

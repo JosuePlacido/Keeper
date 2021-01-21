@@ -1,15 +1,16 @@
 using System.Linq;
 using Application.Services;
 using AutoMapper;
-using Domain.Models;
-using Infrastructure.CrossCutting.Adapter;
-using Infrastructure.CrossCutting.DTO;
-using Infrastructure.Repository;
+using Keeper.Domain.Models;
+using Keeper.Infrastructure.CrossCutting.Adapter;
+using Keeper.Infrastructure.CrossCutting.DTO;
+using Keeper.Infrastructure.Repository;
+using Keeper.Test;
 using Test.DataExamples;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Test.Integration.Application
+namespace Keeper.Test.Integration.Application
 {
 	public class CRUDTeamTest : IClassFixture<SharedDatabaseFixture>
 	{

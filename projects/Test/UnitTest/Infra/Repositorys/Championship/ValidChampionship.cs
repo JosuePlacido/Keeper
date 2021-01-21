@@ -1,16 +1,16 @@
 using System.Linq;
-using Domain.Enum;
-using Domain.Models;
-using Test.DataExamples;
+using Keeper.Domain.Enum;
+using Keeper.Domain.Models;
+using Keeper.Test;
 using Xunit;
 
-namespace Test.UnitTest.Infra.Repositorys
+namespace Keeper.Test.UnitTest.Infra.Repositorys
 {
 	internal class ValidChampionshipSetup : TheoryData<Championship>
 	{
 		public ValidChampionshipSetup()
 		{
-			Add(new Championship("test", "edition", SeedData.Categorys.First().Id, Status.Created));
+			Add(new Championship("test", "edition", SeedData.Categorys.First(), Status.Created));
 		}
 	}
 }
