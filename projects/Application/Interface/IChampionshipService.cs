@@ -1,14 +1,14 @@
 using System;
 using System.Threading.Tasks;
-using Infrastructure.CrossCutting.DTO;
-using Domain.Models;
 using FluentValidation.Results;
+using Keeper.Application.Models;
+using Keeper.Infrastructure.CrossCutting.DTO;
 
-namespace Application.Interface
+namespace Keeper.Application.Interface
 {
 	public interface IChampionshipService : IDisposable
 	{
-		Task<MatchEditsScope> Create(ChampionshipCreateDTO dto);
-		Task<MatchEditsScope> CheckMatches(MatchEditsScope dto);
+		Task<CreateChampionshipResponse> Create(ChampionshipCreateDTO dto);
+		MatchEditsScope CheckMatches(MatchEditsScope dto);
 	}
 }

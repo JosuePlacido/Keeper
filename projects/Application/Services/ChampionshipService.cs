@@ -1,16 +1,17 @@
-using Application.Interface;
 using AutoMapper;
-using FluentValidation.Results;
 using System;
-using System.Text;
-using Domain.Models;
 using System.Threading.Tasks;
 using Domain.Repository;
 using System.Linq;
 using System.Collections.Generic;
-using Infrastructure.CrossCutting.DTO;
+using Keeper.Infrastructure.CrossCutting.DTO;
+using Keeper.Domain.Models;
+using Keeper.Application.Interface;
+using FluentValidation.Results;
+using Keeper.Application.Models;
+using Keeper.Infrastructure.DAO;
 
-namespace Application.Services
+namespace Keeper.Application.Services
 {
 	public class ChampionshipService : IChampionshipService
 	{
@@ -21,7 +22,7 @@ namespace Application.Services
 			_mapper = mapper;
 			_repoChamp = repoChamp;
 		}
-		public async Task<MatchEditsScope> Create(ChampionshipCreateDTO dto)
+		public async Task<CreateChampionshipResponse> Create(ChampionshipCreateDTO dto)
 		{
 			var championship = _mapper.Map<Championship>(dto);
 			championship = UpdatadeReferences(championship, dto);
@@ -32,10 +33,17 @@ namespace Application.Services
 					group.RoundRobinMatches(stage.DuplicateTurn, stage.MirrorTurn);
 				}
 			}
-			await _repoChamp.Add(championship);
-			return _mapper.Map<MatchEditsScope>(championship);
+			CreateChampionshipResponse validation = new CreateChampionshipResponse(new CreateChampionshipValidation()
+				.Validate(championship));
+			if (validation.ValidationResult.IsValid)
+			{
+				await _repoChamp.Add(championship);
+				validation.Matches = _mapper.Map<MatchEditsScope>(championship);
+			}
+			return validation;
 		}
-		public async Task<MatchEditsScope> CheckMatches(MatchEditsScope dto)
+
+		public MatchEditsScope CheckMatches(MatchEditsScope dto)
 		{
 			if (dto.Errors == null)
 			{
@@ -109,39 +117,7 @@ namespace Application.Services
 			}
 			return dto;
 		}
-		private Championship UpdatadeReferences(Championship championship, ChampionshipCreateDTO dto)
-		{
-			foreach (var team in dto.Teams)
-			{
-				var teamSubscribeId = championship.Teams.Where(t => t.TeamId == team.TeamId)
-					.FirstOrDefault().Id;
-				championship.Stages[team.InitStageOrder].Groups[team.InitGroupIndex]
-					.AddTeam(teamSubscribeId);
-			}
-			for (int s = 0; s < championship.Stages.Count(); s++)
-			{
-				var stage = championship.Stages[s];
-				for (int g = 0; g < stage.Groups.Count; g++)
-				{
-					var group = stage.Groups[g];
-					if (group.Vacancys != null)
-					{
-						for (int x = 0; x < group.Vacancys.Count; x++)
-						{
-							var vacancy = group.Vacancys[x];
-							if (vacancy.FromStageOrder != null)
-							{
-								var indexGroup = dto.Stages[s].Groups[g].Vacancys[x].FromGroupIndex;
-								var indexOfGroup = championship.Stages[(int)vacancy.FromStageOrder]
-									.Groups[indexGroup].Id;
-								vacancy.AddReferenceFromGroup(indexOfGroup);
-							}
-						}
-					}
-				}
-			}
-			return championship;
-		}
+
 		private Dictionary<string, AuditoryMatch> UpdateTeamAuditory(string mode, string key,
 			MatchItemDTO match, Dictionary<string, AuditoryMatch> dictionary,
 			int finalRound, int matchesPerTeam, out List<string> erros, out List<string> idMatches)
@@ -228,6 +204,39 @@ namespace Application.Services
 			return dictionary;
 		}
 
+		private Championship UpdatadeReferences(Championship championship, ChampionshipCreateDTO dto)
+		{
+			foreach (var team in dto.Teams)
+			{
+				var teamSubscribeId = championship.Teams.Where(t => t.TeamId == team.TeamId)
+					.FirstOrDefault().Id;
+				championship.Stages[team.InitStageOrder].Groups[team.InitGroupIndex]
+					.AddTeam(teamSubscribeId);
+			}
+			for (int s = 0; s < championship.Stages.Count(); s++)
+			{
+				var stage = championship.Stages[s];
+				for (int g = 0; g < stage.Groups.Count; g++)
+				{
+					var group = stage.Groups[g];
+					if (group.Vacancys != null)
+					{
+						for (int x = 0; x < group.Vacancys.Count; x++)
+						{
+							var vacancy = group.Vacancys[x];
+							if (vacancy.FromStageOrder != null)
+							{
+								var indexGroup = dto.Stages[s].Groups[g].Vacancys[x].FromGroupIndex;
+								var indexOfGroup = championship.Stages[(int)vacancy.FromStageOrder]
+									.Groups[indexGroup].Id;
+								vacancy.AddReferenceFromGroup(indexOfGroup);
+							}
+						}
+					}
+				}
+			}
+			return championship;
+		}
 		private string TeamOfMatch(MatchItemDTO match, string mode)
 		{
 			if (mode == "h")
