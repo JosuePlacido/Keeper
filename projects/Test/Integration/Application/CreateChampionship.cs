@@ -1,18 +1,16 @@
 using Xunit;
 using Xunit.Abstractions;
 using AutoMapper;
-using AutoMapper.Internal;
-using Domain.Models;
 using Newtonsoft.Json;
-using Test.DataExamples;
 using System.Linq;
-using Application.Services;
-using Infrastructure.Repository;
-using Domain.Enum;
-using Infrastructure.CrossCutting.DTO;
-using Infrastructure.CrossCutting.Adapter;
+using Keeper.Infrastructure.CrossCutting.DTO;
+using Keeper.Infrastructure.Repository;
+using Keeper.Infrastructure.CrossCutting.Adapter;
+using Keeper.Test.DataExamples;
+using Keeper.Application.Services;
+using FluentValidation.Results;
 
-namespace Test.Integration.Application
+namespace Keeper.Test.Integration.Application
 {
 	public class CreateChampionship : IClassFixture<SharedDatabaseFixture>
 	{
@@ -24,7 +22,7 @@ namespace Test.Integration.Application
 		[Fact]
 		public void TestCreateChampionship()
 		{
-			MatchEditsScope result = null;
+			ValidationResult result = null;
 			using (var context = Fixture.CreateContext())
 			{
 				var repo = new ChampionshipRepository(context);
@@ -39,8 +37,7 @@ namespace Test.Integration.Application
 			}
 			var jsonResult = JsonConvert.SerializeObject(result, Formatting.Indented);
 			Assert.NotNull(result);
-			Assert.True(result.Stages.
-				SelectMany(dto => dto.Groups.SelectMany(grp => grp.Matchs)).Count() == 6);
+			Assert.True(result.IsValid);
 		}
 	}
 }
