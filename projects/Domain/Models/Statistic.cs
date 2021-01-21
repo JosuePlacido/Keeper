@@ -1,11 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using Domain;
-using Domain.Enum;
+using Keeper.Domain.Core;
+using Keeper.Domain.Enum;
 
-namespace Domain.Models
+namespace Keeper.Domain.Models
 {
 	public class Statistic : Entity
 	{

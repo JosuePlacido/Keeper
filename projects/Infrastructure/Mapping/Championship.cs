@@ -1,11 +1,10 @@
-using System.Threading.Tasks.Dataflow;
-using Domain.Enum;
-using Domain.Models;
+using Keeper.Domain.Enum;
+using Keeper.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 
-namespace Infrastructure.Mapping
+namespace Keeper.Infrastructure.Mapping
 {
 	public class ChampionshipMap : IEntityTypeConfiguration<Championship>
 	{

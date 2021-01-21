@@ -1,14 +1,9 @@
 using AutoMapper;
-using Domain.Enum;
-using Domain.Models;
-using Infrastructure.CrossCutting.DTO;
-using System;
-using System.Collections.Generic;
+using Keeper.Domain.Models;
+using Keeper.Infrastructure.CrossCutting.DTO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Infrastructure.CrossCutting.Adapter
+namespace Keeper.Infrastructure.CrossCutting.Adapter
 {
 	public class MatchEditProfile : Profile
 	{

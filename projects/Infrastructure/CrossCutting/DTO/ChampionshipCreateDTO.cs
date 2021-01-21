@@ -1,19 +1,13 @@
-using Domain.Enum;
-using Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Infrastructure.CrossCutting.DTO
+using Keeper.Domain.Enum;
+
+namespace Keeper.Infrastructure.CrossCutting.DTO
 {
 	public class ChampionshipCreateDTO
 	{
 		public string Name { get; set; }
 		public string Edition { get; set; }
-		public string CategoryId { get; set; }
+		public string Category { get; set; }
 		public StageDTO[] Stages { get; set; }
 		public TeamDTO[] Teams { get; set; }
 	}

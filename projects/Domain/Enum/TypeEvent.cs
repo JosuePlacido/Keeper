@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-namespace Domain.Enum
+namespace Keeper.Domain.Enum
 {
 	public enum TypeEvent
 	{

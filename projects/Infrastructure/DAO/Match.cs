@@ -1,11 +1,9 @@
-using Infrastructure.DAO;
-using Infrastructure.Data;
-using Domain.Models;
-using System;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Keeper.Domain.Models;
+using Keeper.Infrastructure.Data;
 
-namespace Infrastructure.DAO
+namespace Keeper.Infrastructure.DAO
 {
 	public class DAOMatch : DAOBase<Match>
 	{

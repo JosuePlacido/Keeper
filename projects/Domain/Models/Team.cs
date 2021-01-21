@@ -1,10 +1,11 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Keeper.Domain.Core;
 
-namespace Domain.Models
+namespace Keeper.Domain.Models
 {
-	public class Team : Entity
+	public class Team : Entity, IAggregateRoot
 	{
 		private Team()
 		{

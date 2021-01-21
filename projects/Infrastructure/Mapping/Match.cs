@@ -1,10 +1,9 @@
-using System.Threading.Tasks.Dataflow;
-using Domain.Enum;
-using Domain.Models;
+using Keeper.Domain.Enum;
+using Keeper.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Infrastructure.Mapping
+namespace Keeper.Infrastructure.Mapping
 {
 	public class MatchMap : IEntityTypeConfiguration<Match>
 	{
@@ -21,7 +20,7 @@ namespace Infrastructure.Mapping
 				.HasColumnType("varchar(15)")
 				.HasMaxLength(15)
 				.HasDefaultValue(Status.Created)
-				.IsRequired();
+		  .IsRequired();
 
 			builder.HasOne(match => match.VacancyAway);
 			builder.HasOne(match => match.VacancyHome);

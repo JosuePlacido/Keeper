@@ -1,11 +1,8 @@
-using Domain.Enum;
-using Domain.Models;
-using System;
+using Keeper.Domain.Core;
+using Keeper.Domain.Enum;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Domain.Models
+namespace Keeper.Domain.Models
 {
 	public class Stage : Entity
 	{

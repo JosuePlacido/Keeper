@@ -1,10 +1,7 @@
-﻿using Domain.Enum;
+﻿using Keeper.Domain.Core;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace Domain.Models
+namespace Keeper.Domain.Models
 {
 	public class Match : Entity
 	{

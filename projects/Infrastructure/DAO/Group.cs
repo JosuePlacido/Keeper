@@ -1,11 +1,8 @@
-using Infrastructure.DAO;
-using Infrastructure.Data;
-using Domain.Models;
-using System.Collections.Generic;
-using System;
-using System.Linq;
+using Keeper.Infrastructure.DAO;
+using Keeper.Domain.Models;
+using Keeper.Infrastructure.Data;
 
-namespace Infrastructure.DAO
+namespace Keeper.Infrastructure.DAO
 {
 	public class DAOGroup : DAOBase<Group>
 	{

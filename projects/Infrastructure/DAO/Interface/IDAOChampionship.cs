@@ -1,6 +1,6 @@
-using Domain.Models;
+using Keeper.Domain.Models;
 
-namespace Infrastructure.DAO.Interface
+namespace Keeper.Infrastructure.DAO
 {
 	public interface IDAOChampionship
 	{

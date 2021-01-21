@@ -1,14 +1,10 @@
 using AutoMapper;
-using Domain.Enum;
-using Domain.Models;
-using Infrastructure.CrossCutting.DTO;
-using System;
-using System.Collections.Generic;
+using Keeper.Domain.Enum;
+using Keeper.Domain.Models;
+using Keeper.Infrastructure.CrossCutting.DTO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Infrastructure.CrossCutting.Adapter
+namespace Keeper.Infrastructure.CrossCutting.Adapter
 {
 	public class ChampionshipDTOToDomainProfile : Profile
 	{
@@ -24,7 +20,7 @@ namespace Infrastructure.CrossCutting.Adapter
 						});
 					})
 				.ForMember(dest => dest.Id, opts => opts.Ignore())
-				.ForMember(dest => dest.Category, opts => opts.Ignore())
+				.ForMember(dest => dest.Category, opts => opts.MapFrom(src => new Category(src.Category)))
 				.ForMember(dest => dest.Status, opts => opts.MapFrom(src => Status.Created));
 			CreateMap<StageDTO, Stage>()
 				.ForMember(dest => dest.Id, opts => opts.Ignore())

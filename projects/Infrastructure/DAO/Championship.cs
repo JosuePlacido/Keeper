@@ -1,13 +1,13 @@
-using Infrastructure.Data;
-using Domain.Models;
 using System;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using Infrastructure.DAO.Interface;
+using Keeper.Domain.Models;
+using Keeper.Infrastructure.DAO;
+using Keeper.Infrastructure.Data;
 
-namespace Infrastructure.DAO
+namespace Keeper.Infrastructure.DAO
 {
 	public class DAOChampionship : DAOBase<Championship>, IDAOChampionship
 	{

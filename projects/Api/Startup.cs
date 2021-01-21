@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Api.Modules;
 using Api.Modules.FeatureFlags;
+using Keeper.Api.Modules;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -14,7 +15,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 
-namespace Api
+namespace Keeper.Api
 {
 	public class Startup
 	{
@@ -28,8 +29,8 @@ namespace Api
 		public void ConfigureServices(IServiceCollection services) =>
 			services
 				.AddFeatureFlags(this.Configuration) // should be the first one.
-				//.AddInvalidRequestLogging()
-				//.AddCurrencyExchange(this.Configuration)
+													 //.AddInvalidRequestLogging()
+													 //.AddCurrencyExchange(this.Configuration)
 				.AddSQLServer(this.Configuration)
 				//.AddHealthChecks(this.Configuration)
 				//.AddAuthentication(this.Configuration)

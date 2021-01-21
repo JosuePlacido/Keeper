@@ -1,13 +1,7 @@
-using Domain.Enum;
-using Domain.Models;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Infrastructure.CrossCutting.DTO
+namespace Keeper.Infrastructure.CrossCutting.DTO
 {
 	public static class MatchAuditoryContants
 	{

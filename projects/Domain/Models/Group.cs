@@ -1,14 +1,10 @@
-using System.Threading.Tasks.Dataflow;
-using System.Text.RegularExpressions;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System;
-using Domain;
-using Domain.Enum;
+using Keeper.Domain.Core;
+using Keeper.Domain.Enum;
 
-namespace Domain.Models
+namespace Keeper.Domain.Models
 {
 	public class Group : Entity
 	{
@@ -25,7 +21,8 @@ namespace Domain.Models
 			Vacancys = new List<Vacancy>();
 			Matchs = new List<Match>();
 		}
-		public Group(string name, Statistic[] stats = null, Vacancy[] vacancys = null) : base(Guid.NewGuid().ToString())
+		public Group(string name, Statistic[] stats = null, Vacancy[] vacancys = null)
+			: base(Guid.NewGuid().ToString())
 		{
 			Name = name;
 			Statistics = stats != null ? new List<Statistic>(stats) : new List<Statistic>();

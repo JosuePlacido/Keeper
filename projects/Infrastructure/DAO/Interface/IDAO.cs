@@ -1,7 +1,6 @@
 using System.Threading.Tasks;
-using Domain.Models;
 
-namespace Infrastructure.DAO
+namespace Keeper.Infrastructure.DAO
 {
 	public interface IDAO<TEntity> where TEntity : class
 	{

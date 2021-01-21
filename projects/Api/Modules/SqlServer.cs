@@ -3,9 +3,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.FeatureManagement;
 using Api.Modules.FeatureFlags;
-using Infrastructure.Data;
+using Keeper.Infrastructure.Data;
 
-namespace Api.Modules
+namespace Keeper.Api.Modules
 {
 	public static class SQLServerExtensions
 	{

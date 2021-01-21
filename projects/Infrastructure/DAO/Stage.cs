@@ -1,8 +1,8 @@
-using Infrastructure.DAO;
-using Infrastructure.Data;
-using Domain.Models;
+using Keeper.Domain.Models;
+using Keeper.Infrastructure.DAO;
+using Keeper.Infrastructure.Data;
 
-namespace Infrastruture.DAO
+namespace Keeper.Infrastruture.DAO
 {
 	public class DAOStage : DAOBase<Stage>
 	{

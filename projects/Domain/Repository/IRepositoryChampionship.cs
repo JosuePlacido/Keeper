@@ -1,5 +1,6 @@
 using Domain.Repository;
-using Domain.Models;
+using Keeper.Domain.Core;
+using Keeper.Domain.Models;
 
 namespace Domain.Repository
 {

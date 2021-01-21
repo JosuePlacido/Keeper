@@ -1,8 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Domain.Models;
 
-namespace Domain.Repository
+namespace Keeper.Domain.Core
 {
 	public interface IRepositoryBase<TEntity> where TEntity : class
 	{

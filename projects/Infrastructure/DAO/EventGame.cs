@@ -1,8 +1,7 @@
-using Infrastructure.DAO;
-using Infrastructure.Data;
-using Domain.Models;
+using Keeper.Domain.Models;
+using Keeper.Infrastructure.Data;
 
-namespace Infrastruture.DAO
+namespace Keeper.Infrastructure.DAO
 {
 	public class DAOEventGame : DAOBase<EventGame>
 	{

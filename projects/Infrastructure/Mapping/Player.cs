@@ -1,8 +1,8 @@
-using Domain.Models;
+using Keeper.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Infrastructure.Mapping
+namespace Keeper.Infrastructure.Mapping
 {
 	public class PlayerMap : IEntityTypeConfiguration<Player>
 	{

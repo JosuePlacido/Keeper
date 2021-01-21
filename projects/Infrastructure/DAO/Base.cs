@@ -1,11 +1,11 @@
-using Infrastructure.Data;
+using Keeper.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Infrastructure.DAO
+namespace Keeper.Infrastructure.DAO
 {
 	public abstract class DAOBase<TEntity> : IDisposable, IDAO<TEntity> where TEntity : class
 	{

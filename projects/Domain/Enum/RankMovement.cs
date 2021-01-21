@@ -1,4 +1,4 @@
-namespace Domain.Enum
+namespace Keeper.Domain.Enum
 {
 	public enum RankMovement
 	{

@@ -3,10 +3,8 @@ using System.IO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Configuration.Json;
-using Microsoft.Extensions.Configuration.EnvironmentVariables;
 
-namespace Infrastructure.Data
+namespace Keeper.Infrastructure.Data
 {
 	public sealed class ContextFactory : IDesignTimeDbContextFactory<ApplicationContext>
 	{
