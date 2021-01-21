@@ -1,8 +1,8 @@
 using System;
-using Domain.Models;
+using Keeper.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Infrastructure.Data
+namespace Keeper.Infrastructure.Data
 {
 	public sealed class ApplicationContext : DbContext
 	{
@@ -12,7 +12,6 @@ namespace Infrastructure.Data
 		}
 
 		public DbSet<Championship> Championships { get; set; }
-		public DbSet<Category> Categorys { get; set; }
 		public DbSet<Stage> Stages { get; set; }
 		public DbSet<Group> Groups { get; set; }
 		public DbSet<Match> Matchs { get; set; }

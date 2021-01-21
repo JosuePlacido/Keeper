@@ -1,22 +1,27 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Keeper.Domain.Core;
 
-namespace Domain.Models
+namespace Keeper.Domain.Models
 {
-	public sealed class Category : Entity
+	public sealed class Category : ValueObject<Category>
 	{
 		public string Name { get; private set; }
-		public string Description { get; private set; }
 		private Category() { }
-		public Category(string name, string description = null)
+		public Category(string name)
 		{
 			Name = name;
-			Description = description;
 		}
 		public override string ToString()
 		{
 			return Name;
+		}
+
+		protected override IEnumerable<object> GetEqualityComponents()
+		{
+			yield return Name;
 		}
 	}
 }

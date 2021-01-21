@@ -1,21 +1,16 @@
-using Domain.Enum;
-using Domain.Models;
-using Infrastructure.CrossCutting.DTO;
-using System;
-using System.Collections.Generic;
+using Keeper.Domain.Enum;
+using Keeper.Infrastructure.CrossCutting.DTO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Test.DataExamples
+namespace Keeper.Test.DataExamples
 {
 	public static class ChampionshipCreateDTODataExamples
 	{
-		public static ChampionshipCreateDTO SemiFinal = new ChampionshipCreateDTO
+		private static ChampionshipCreateDTO semiFinal = new ChampionshipCreateDTO
 		{
 			Name = "RECOPA",
 			Edition = "Edicao",
-			CategoryId = SeedData.Categorys.First().Id,
+			Category = SeedData.Categorys.First().Name,
 			Stages = new StageDTO[] {
 						new StageDTO
 						{
@@ -105,5 +100,8 @@ namespace Test.DataExamples
 				},
 			}
 		};
+
+		public static ChampionshipCreateDTO SemiFinal { get => semiFinal; set => semiFinal = value; }
+		public static ChampionshipCreateDTO SemiFinal1 { get => semiFinal; set => semiFinal = value; }
 	}
 }

@@ -1,12 +1,13 @@
 using Domain.Repository;
-using Infrastructure.Data;
+using Keeper.Domain.Core;
+using Keeper.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Infrastructure.Repository
+namespace Keeper.Infrastructure.Repository
 {
 	public abstract class RepositoryBase<TEntity> : IDisposable, IRepositoryBase<TEntity> where TEntity : class
 	{

@@ -1,12 +1,12 @@
-using Domain.Models;
-using Infrastructure.Data;
+using Keeper.Domain.Models;
+using Keeper.Infrastructure.Data;
+using Keeper.Test;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Data.Common;
-using System.Data.SqlClient;
 
-namespace Test
+namespace Keeper.Test
 {
 	public class SharedDatabaseFixture : IDisposable
 	{
@@ -19,7 +19,6 @@ namespace Test
 			Seed();
 			Connection.Open();
 		}
-
 		public DbConnection Connection { get; }
 
 		public ApplicationContext CreateContext(DbTransaction transaction = null)
@@ -50,7 +49,7 @@ namespace Test
 						context.Set<Category>().AddRange(SeedData.Categorys);
 						context.Set<Championship>().Add(SeedData.GetChampionship());
 						context.Set<Championship>().Add(new Championship("remove", "remove",
-							SeedData.Categorys[0].Id, "remove"));
+							SeedData.Categorys[0], "remove"));
 						context.SaveChanges();
 					}
 

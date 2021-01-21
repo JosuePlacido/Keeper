@@ -1,12 +1,9 @@
-using Domain.Enum;
-using Domain.Models;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Keeper.Domain.Enum;
+using Keeper.Domain.Models;
 
-namespace Test
+namespace Keeper.Test
 {
 	public static class SeedData
 	{
@@ -164,7 +161,7 @@ namespace Test
 				knockout: true, finalGame: true, penalty: true, home: teams[1].Id,
 				vacancyHome: vacancys[1].Id, vacancyAway: vacancys[0].Id, away: teams[0].Id);
 			Second.RegisterResult(0, 0, 2, 4);
-			return new Championship("Recopa Sulamericana", "1993", Categorys[2].Id,
+			return new Championship("Recopa Sulamericana", "1993", Categorys[2],
 				Status.Finish,
 				new Stage[]
 				{
