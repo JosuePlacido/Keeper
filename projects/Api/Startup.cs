@@ -36,8 +36,8 @@ namespace Keeper.Api
 				//.AddAuthentication(this.Configuration)
 				//.AddVersioning()
 				//.AddSwagger()
-				//.AddUseCases()
-				//.AddCustomControllers()
+				.AddApplicationServices()
+				.AddDependencyInjectionConfiguration()
 				//.AddCustomCors()
 				//.AddProxy();
 				//.AddCustomDataProtection();/*
@@ -71,7 +71,7 @@ namespace Keeper.Api
 				//.UseHealthChecks()
 				//.UseCustomCors()
 				//.UseCustomHttpMetrics()
-				//.UseRouting()
+				.UseRouting()
 				//.UseVersionedSwagger(provider, this.Configuration, env)
 				//.UseAuthentication()
 				//.UseAuthorization()
