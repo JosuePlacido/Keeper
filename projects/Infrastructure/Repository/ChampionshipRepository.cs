@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 using AutoMapper;
-using Domain.Repository;
+using Keeper.Domain.Repository;
 using Keeper.Domain.Models;
 using Keeper.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
