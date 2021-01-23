@@ -15,12 +15,14 @@ namespace Keeper.Infrastructure.CrossCutting.IoC
 		public static void RegisterServices(IServiceCollection services)
 		{
 			services.AddAutoMapper(typeof(ChampionshipDTOToDomainProfile), typeof(TeamDTOProfile),
-				typeof(MatchEditProfile));
+				typeof(MatchEditProfile), typeof(PlayerDTOProfile));
 
 			services.AddScoped<ApplicationContext>();
 			services.AddScoped<IRepositoryChampionship, ChampionshipRepository>();
 			services.AddScoped<IRepositoryTeam, TeamRepository>();
 			services.AddScoped<IDAOTeam, DAOTeam>();
+			services.AddScoped<IRepositoryPlayer, PlayerRepository>();
+			services.AddScoped<IDAOPlayer, DAOPlayer>();
 		}
 	}
 }

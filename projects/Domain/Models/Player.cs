@@ -7,6 +7,7 @@ namespace Keeper.Domain.Models
 {
 	public class Player : Entity, IAggregateRoot
 	{
+		public string Nickname { get; private set; }
 		public string Name { get; private set; }
 		private Player() { }
 
@@ -17,7 +18,7 @@ namespace Keeper.Domain.Models
 
 		public override string ToString()
 		{
-			return Name;
+			return string.IsNullOrEmpty(Nickname) ? Name : Nickname;
 		}
 	}
 }

@@ -9,6 +9,7 @@ namespace Keeper.Api.Modules
 		public static IServiceCollection AddApplicationServices(this IServiceCollection services)
 		{
 			services.AddScoped<ITeamService, TeamService>();
+			services.AddScoped<IPlayerService, PlayerService>();
 			services.AddScoped<IChampionshipService, ChampionshipService>();
 
 			return services;
