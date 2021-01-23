@@ -53,10 +53,6 @@ namespace Keeper.Application.Services
 			return await _repo.GetById(id);
 		}
 
-		public async Task<Player[]> List()
-		{
-			return await _repo.GetAll();
-		}
 		public async Task<PlayerPaginationDTO> GetAvailables(string terms = "", string championship = "",
 			int page = 1, int take = 10)
 		{
