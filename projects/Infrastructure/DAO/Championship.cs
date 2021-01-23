@@ -11,12 +11,7 @@ namespace Keeper.Infrastructure.DAO
 {
 	public class DAOChampionship : DAOBase<Championship>, IDAOChampionship
 	{
-		private readonly ApplicationContext _context;
-		public DAOChampionship(ApplicationContext Context)
-			: base(Context)
-		{
-			_context = Context;
-		}
+		public DAOChampionship(ApplicationContext Context): base(Context){}
 
 		public override async Task<Championship> Add(Championship obj)
 		{

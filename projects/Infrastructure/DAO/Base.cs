@@ -9,7 +9,7 @@ namespace Keeper.Infrastructure.DAO
 {
 	public abstract class DAOBase<TEntity> : IDisposable, IDAO<TEntity> where TEntity : class
 	{
-		private readonly ApplicationContext _context;
+		protected readonly ApplicationContext _context;
 
 		public DAOBase(ApplicationContext Context)
 		{

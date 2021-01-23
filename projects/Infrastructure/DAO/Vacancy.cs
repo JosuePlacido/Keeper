@@ -5,8 +5,6 @@ namespace Keeper.Infrastructure.DAO
 {
 	public class DAOVacancy : DAOBase<Vacancy>
 	{
-		private readonly ApplicationContext _context;
-		public DAOVacancy(ApplicationContext Context)
-			: base(Context) => _context = Context;
+		public DAOVacancy(ApplicationContext Context) : base(Context) { }
 	}
 }

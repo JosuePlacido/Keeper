@@ -7,12 +7,7 @@ namespace Keeper.Infrastructure.DAO
 {
 	public class DAOMatch : DAOBase<Match>
 	{
-		private readonly ApplicationContext _context;
-		public DAOMatch(ApplicationContext Context)
-			: base(Context)
-		{
-			_context = Context;
-		}
+		public DAOMatch(ApplicationContext Context) : base(Context) { }
 
 		internal Match[] GetByGroupWithTeams(string group)
 		{

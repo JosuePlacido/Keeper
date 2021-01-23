@@ -6,8 +6,6 @@ namespace Keeper.Infrastructure.DAO
 {
 	public class DAOGroup : DAOBase<Group>
 	{
-		private readonly ApplicationContext _context;
-		public DAOGroup(ApplicationContext Context)
-			: base(Context) => _context = Context;
+		public DAOGroup(ApplicationContext Context) : base(Context) { }
 	}
 }

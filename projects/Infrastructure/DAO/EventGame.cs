@@ -5,11 +5,6 @@ namespace Keeper.Infrastructure.DAO
 {
 	public class DAOEventGame : DAOBase<EventGame>
 	{
-		private readonly ApplicationContext _context;
-		public DAOEventGame(ApplicationContext Context)
-			: base(Context)
-		{
-			_context = Context;
-		}
+		public DAOEventGame(ApplicationContext Context) : base(Context){}
 	}
 }
