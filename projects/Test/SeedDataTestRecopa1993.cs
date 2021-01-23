@@ -33,6 +33,7 @@ namespace Keeper.Test
 							new Player("Guilherme"),
 							new Player("Robson"),
 							new Player("Rogério Lage"),
+							new Player("Delete"),
 						};
 
 		public static PlayerSubscribe[] PlayerSubscribes = new PlayerSubscribe[]{

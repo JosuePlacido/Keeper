@@ -11,18 +11,19 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Newtonsoft.Json;
 using Test.DataExamples;
+using Test.Utils;
 using Xunit;
 
 namespace Keeper.Test.Integration.Api
 {
 	[Collection("WebApi Collection")]
-	public class TeamCRUDTests : IClassFixture<WebApplicationFactory<Startup>>
+	public class PlayerCRUDTests : IClassFixture<WebApplicationFactory<Startup>>
 	{
 		private readonly CustomWebApplicationFactoryFixture _fixture;
-		public TeamCRUDTests(CustomWebApplicationFactoryFixture fixture) => this._fixture = fixture;
+		public PlayerCRUDTests(CustomWebApplicationFactoryFixture fixture) => this._fixture = fixture;
 
 		[Fact]
-		public async Task Get_TeamsList_ReturnTeamList()
+		public async Task Get_PlayersList_ReturnPlayerList()
 		{
 
 			HttpClient client = this._fixture
@@ -30,25 +31,25 @@ namespace Keeper.Test.Integration.Api
 				.CreateClient();
 
 			HttpResponseMessage actualResponse = await client
-				.GetAsync("/Team")
+				.GetAsync("/Player")
 				.ConfigureAwait(false);
 
-			var result = JsonConvert.DeserializeObject<Team[]>(
+			var result = JsonConvert.DeserializeObject<Player[]>(
 				await actualResponse.Content.ReadAsStringAsync());
 			actualResponse.EnsureSuccessStatusCode();
 			Assert.Equal(HttpStatusCode.OK, actualResponse.StatusCode);
-			Assert.IsType<Team[]>(result);
+			Assert.IsType<Player[]>(result);
 		}
 
 		[Fact]
-		public async Task Get_NonExistingTeam_ReturnEmpty()
+		public async Task Get_NonExistingPlayer_ReturnEmpty()
 		{
 			HttpClient client = this._fixture
 				.CustomWebApplicationFactory
 				.CreateClient();
 
 			HttpResponseMessage actualResponse = await client
-				.GetAsync($"/Team/teste")
+				.GetAsync($"/Player/teste")
 				.ConfigureAwait(false);
 			string RequestResult = await actualResponse.Content.ReadAsStringAsync();
 			var result = JsonConvert.DeserializeObject(RequestResult);
@@ -56,7 +57,7 @@ namespace Keeper.Test.Integration.Api
 			Assert.True(string.IsNullOrEmpty(RequestResult));
 		}
 		[Fact]
-		public async Task Get_Teams_ReturnTeam()
+		public async Task Get_Players_ReturnPlayer()
 		{
 
 			HttpClient client = this._fixture
@@ -64,96 +65,99 @@ namespace Keeper.Test.Integration.Api
 				.CreateClient();
 
 			HttpResponseMessage actualResponse = await client
-				.GetAsync($"/Team/test")
+				.GetAsync($"/Player/test")
 				.ConfigureAwait(false);
 
 			string requestResult = await actualResponse.Content.ReadAsStringAsync();
-			Team teamResult = JsonConvert.DeserializeObject<Team>(requestResult);
+			Player playerResult = JsonConvert.DeserializeObject<Player>(requestResult);
 			actualResponse.EnsureSuccessStatusCode();
-			Assert.NotNull(teamResult);
+			Assert.NotNull(playerResult);
 		}
 
 
 		[Fact]
-		public async Task Post_ValidTeam_ReturnOk()
+		public async Task Post_ValidPlayer_ReturnOk()
 		{
 			HttpClient client = this._fixture
 				.CustomWebApplicationFactory
 				.CreateClient();
 
-			TeamCreateDTO team = TeamDTODataExample.TeamFull;
+			PlayerCreateDTO player = PlayerDTODataExample.PlayerFull;
 			HttpContent httpContent = new StringContent(
-				JsonConvert.SerializeObject(team),
+				JsonConvert.SerializeObject(player),
 				Encoding.UTF8, "application/json");
 
 			HttpResponseMessage actualResponse = await client
-				.PostAsync("/Team", httpContent)
+				.PostAsync("/Player", httpContent)
 				.ConfigureAwait(false);
 			string request = await actualResponse.Content.ReadAsStringAsync();
-			var result = JsonConvert.DeserializeObject<Team>(request);
+			var result = JsonConvert.DeserializeObject<Player>(request);
 			actualResponse.EnsureSuccessStatusCode();
 			Assert.Equal(HttpStatusCode.OK, actualResponse.StatusCode);
-			Assert.IsType<Team>(result);
+			Assert.IsType<Player>(result);
 		}
 		[Fact]
-		public async Task Post_InvalidTeam_ReturnBadRequest()
+		public async Task Post_InvalidPlayer_ReturnBadRequest()
 		{
 			HttpClient client = this._fixture
 				.CustomWebApplicationFactory
 				.CreateClient();
 
-			TeamCreateDTO team = TeamDTODataExample.TeamInválid;
+			PlayerCreateDTO player = PlayerDTODataExample.PlayerInválid;
 			HttpContent httpContent = new StringContent(
-				JsonConvert.SerializeObject(team),
+				JsonConvert.SerializeObject(player),
 				Encoding.UTF8, "application/json");
 
 			HttpResponseMessage actualResponse = await client
-				.PostAsync("/Team", httpContent)
+				.PostAsync("/Player", httpContent)
 				.ConfigureAwait(false);
 			string request = await actualResponse.Content.ReadAsStringAsync();
 			var result = JsonConvert.DeserializeObject<ValidationProblemDetails>(request);
-			Assert.False(actualResponse.IsSuccessStatusCode);
+			Assert.True(!actualResponse.IsSuccessStatusCode);
 			Assert.Equal(result.Status, 400);
 			Assert.True(result.Errors.Count > 0);
 		}
 
 
 		[Fact]
-		public async Task Put_ValidTeam_ReturnOk()
+		public async Task Put_ValidPlayer_ReturnOk()
 		{
 			HttpClient client = this._fixture
 				.CustomWebApplicationFactory
 				.CreateClient();
 
-			TeamUpdateDTO team = TeamDTODataExample.TeamUpdateUrl;
+			PlayerUpdateDTO player = PlayerDTODataExample.PlayerUpdateNickname;
 			HttpContent httpContent = new StringContent(
-				JsonConvert.SerializeObject(team),
+				JsonConvert.SerializeObject(player),
 				Encoding.UTF8, "application/json");
 
 			HttpResponseMessage actualResponse = await client
-				.PutAsync("/Team", httpContent)
+				.PutAsync("/Player", httpContent)
 				.ConfigureAwait(false);
 			string request = await actualResponse.Content.ReadAsStringAsync();
-			var teamResult = JsonConvert.DeserializeObject<Team>(request);
+			var playerResult = JsonConvert.DeserializeObject<Player>(request, new JsonSerializerSettings()
+			{
+				ContractResolver = new PrivateResolver()
+			});
 			actualResponse.EnsureSuccessStatusCode();
-			Assert.IsType<Team>(teamResult);
-			Assert.Equal(team.LogoUrl, teamResult.LogoUrl);
-			Assert.Equal("test", teamResult.Name);
+			Assert.IsType<Player>(playerResult);
+			Assert.Equal(player.Nickname, playerResult.Nickname);
+			Assert.Equal("test", playerResult.Name);
 		}
 		[Fact]
-		public async Task Put_InvalidTeam_ReturnBadRequest()
+		public async Task Put_InvalidPlayer_ReturnBadRequest()
 		{
 			HttpClient client = this._fixture
 				.CustomWebApplicationFactory
 				.CreateClient();
 
-			TeamUpdateDTO team = TeamDTODataExample.TeamUpdateNameOnly;
+			PlayerUpdateDTO player = PlayerDTODataExample.PlayerUpdateNameOnly;
 			HttpContent httpContent = new StringContent(
-				JsonConvert.SerializeObject(team),
+				JsonConvert.SerializeObject(player),
 				Encoding.UTF8, "application/json");
 
 			HttpResponseMessage actualResponse = await client
-				.PutAsync("/Team", httpContent)
+				.PutAsync("/Player", httpContent)
 				.ConfigureAwait(false);
 			string request = await actualResponse.Content.ReadAsStringAsync();
 			var result = JsonConvert.DeserializeObject<ValidationProblemDetails>(request);
@@ -162,20 +166,20 @@ namespace Keeper.Test.Integration.Api
 			Assert.True(result.Errors.Count > 0);
 		}
 		[Fact]
-		public async Task Put_NonExistinTeam_ReturnBadRequest()
+		public async Task Put_NonExistinPlayer_ReturnBadRequest()
 		{
 			HttpClient client = this._fixture
 				.CustomWebApplicationFactory
 				.CreateClient();
 
-			TeamUpdateDTO team = TeamDTODataExample.TeamUpdateNameOnly;
-			team.Id = "non exist";
+			PlayerUpdateDTO player = PlayerDTODataExample.PlayerUpdateNameOnly;
+			player.Id = "non exist";
 			HttpContent httpContent = new StringContent(
-				JsonConvert.SerializeObject(team),
+				JsonConvert.SerializeObject(player),
 				Encoding.UTF8, "application/json");
 
 			HttpResponseMessage actualResponse = await client
-				.PutAsync("/Team", httpContent)
+				.PutAsync("/Player", httpContent)
 				.ConfigureAwait(false);
 			string request = await actualResponse.Content.ReadAsStringAsync();
 			var result = JsonConvert.DeserializeObject<ValidationProblemDetails>(request);
@@ -184,14 +188,14 @@ namespace Keeper.Test.Integration.Api
 			Assert.True(result.Errors.Count > 0);
 		}
 		[Fact]
-		public async Task Delete_NonExistinTeam_ReturnBadRequest()
+		public async Task Delete_NonExistinPlayer_ReturnBadRequest()
 		{
 			HttpClient client = this._fixture
 				.CustomWebApplicationFactory
 				.CreateClient();
 
 			HttpResponseMessage actualResponse = await client
-				.DeleteAsync("/Team/testeinvalid")
+				.DeleteAsync("/Player/testeinvalid")
 				.ConfigureAwait(false);
 			string request = await actualResponse.Content.ReadAsStringAsync();
 			var result = JsonConvert.DeserializeObject<ValidationProblemDetails>(request);
@@ -200,20 +204,20 @@ namespace Keeper.Test.Integration.Api
 			Assert.True(result.Errors.Count > 0);
 		}
 		[Fact]
-		public async Task Delete_ValidTeam_ReturnOK()
+		public async Task Delete_ValidPlayer_ReturnOK()
 		{
 			HttpClient client = this._fixture
 				.CustomWebApplicationFactory
 				.CreateClient();
 
 			HttpResponseMessage actualResponse = await client
-				.DeleteAsync("/Team/remove")
+				.DeleteAsync("/Player/remove")
 				.ConfigureAwait(false);
 			string request = await actualResponse.Content.ReadAsStringAsync();
-			var result = JsonConvert.DeserializeObject<Team>(request);
+			var result = JsonConvert.DeserializeObject<Player>(request);
 			actualResponse.EnsureSuccessStatusCode();
 			Assert.Equal(HttpStatusCode.OK, actualResponse.StatusCode);
-			Assert.IsType<Team>(result);
+			Assert.IsType<Player>(result);
 		}
 	}
 }
