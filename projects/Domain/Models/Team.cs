@@ -24,7 +24,7 @@ namespace Keeper.Domain.Models
 
 		public override string ToString()
 		{
-			return "{Name}";
+			return Name;
 		}
 	}
 }

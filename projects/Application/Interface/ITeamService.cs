@@ -1,19 +1,20 @@
+using System;
 using System.Threading.Tasks;
-using Domain.Models;
-using Infrastructure.CrossCutting.DTO;
+using Keeper.Domain.Models;
+using Keeper.Infrastructure.CrossCutting.DTO;
 
-namespace Application.Interface
+namespace Keeper.Application.Interface
 {
-	interface ITeamService
+	public interface ITeamService : IDisposable
 	{
 
 		Task<Team> Create(TeamCreateDTO dto);
 
-		Task<Team> Delete(Team dto);
+		Task<IServiceResult> Delete(string dto);
 
 		Task<Team> Get(string id);
 		Task<Team[]> List();
 
-		Task<Team> Update(TeamUpdateDTO dto);
+		Task<IServiceResult> Update(TeamUpdateDTO dto);
 	}
 }

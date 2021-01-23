@@ -1,8 +1,8 @@
 using AutoMapper;
-using Domain.Models;
-using Infrastructure.CrossCutting.DTO;
+using Keeper.Domain.Models;
+using Keeper.Infrastructure.CrossCutting.DTO;
 
-namespace Infrastructure.CrossCutting.Adapter
+namespace Keeper.Infrastructure.CrossCutting.Adapter
 {
 	public class TeamDTOProfile : Profile
 	{
@@ -11,6 +11,7 @@ namespace Infrastructure.CrossCutting.Adapter
 			CreateMap<TeamCreateDTO, Team>()
 				.ForMember(dest => dest.Id, opt => opt.Ignore());
 			CreateMap<TeamUpdateDTO, Team>();
+			CreateMap<TeamViewDTO, Team>();
 		}
 	}
 }

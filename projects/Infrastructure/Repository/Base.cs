@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Keeper.Infrastructure.Repository
 {
-	public abstract class RepositoryBase<TEntity> : IDisposable, IRepositoryBase<TEntity> where TEntity : class
+	public abstract class RepositoryBase<TEntity> : IDisposable, IRepositoryBase<TEntity> where TEntity : Entity
 	{
 		protected readonly ApplicationContext _context;
 
@@ -27,7 +27,8 @@ namespace Keeper.Infrastructure.Repository
 
 		public virtual async Task<TEntity> GetById(string id)
 		{
-			return await _context.Set<TEntity>().FindAsync(id);
+			return await _context.Set<TEntity>().AsNoTracking()
+				.Where(t => t.Id == id).FirstOrDefaultAsync();
 		}
 
 		public virtual async Task<TEntity[]> GetAll()

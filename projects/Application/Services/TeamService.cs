@@ -1,25 +1,27 @@
-using Application.Interface;
 using AutoMapper;
-using FluentValidation.Results;
 using System;
-using System.Text;
-using Domain.Models;
 using System.Threading.Tasks;
-using Domain.Repository;
-using System.Linq;
-using System.Collections.Generic;
-using Infrastructure.CrossCutting.DTO;
+using Keeper.Domain.Repository;
+using Keeper.Application.Interface;
+using Keeper.Infrastructure.CrossCutting.DTO;
+using Keeper.Domain.Models;
+using Keeper.Infrastructure.DAO;
+using Application.Validation;
+using Keeper.Application.Models;
+using FluentValidation.Results;
 
-namespace Application.Services
+namespace Keeper.Application.Services
 {
 	public class TeamService : ITeamService
 	{
 		private readonly IRepositoryTeam _repo;
 		private readonly IMapper _mapper;
-		public TeamService(IMapper mapper, IRepositoryTeam repoChamp)
+		private readonly IDAOTeam _dao;
+		public TeamService(IMapper mapper, IRepositoryTeam repoChamp, IDAOTeam dao)
 		{
 			_mapper = mapper;
 			_repo = repoChamp;
+			_dao = dao;
 		}
 		public async Task<Team> Create(TeamCreateDTO dto)
 		{
@@ -27,9 +29,18 @@ namespace Application.Services
 			return await _repo.Add(Team);
 		}
 
-		public async Task<Team> Delete(Team dto)
+		public async Task<IServiceResult> Delete(string id)
 		{
-			return await _repo.Remove(dto);
+			ServiceResponse response = new ServiceResponse();
+			TeamViewDTO dto = await _dao.GetByIdView(id);
+
+			response.ValidationResult = new TeamDeleteValidation().Validate(dto);
+			if (response.ValidationResult.IsValid)
+			{
+				Team team = _mapper.Map<Team>(dto);
+				response.Value = await _repo.Remove(team);
+			}
+			return response;
 		}
 
 		public void Dispose()
@@ -47,10 +58,22 @@ namespace Application.Services
 			return await _repo.GetAll();
 		}
 
-		public async Task<Team> Update(TeamUpdateDTO dto)
+		public async Task<IServiceResult> Update(TeamUpdateDTO dto)
 		{
-			Team Team = _mapper.Map<Team>(dto);
-			return await _repo.Update(Team);
+			ServiceResponse response = new ServiceResponse();
+
+			response.ValidationResult = new ValidationResult();
+			if (await _repo.GetById(dto.Id) != null)
+			{
+				Team team = _mapper.Map<Team>(dto);
+				response.Value = await _repo.Update(team);
+			}
+			else
+			{
+				response.ValidationResult.Errors.Add(new ValidationFailure("Id"
+					, "Time não encontrado"));
+			}
+			return response;
 		}
 	}
 }
