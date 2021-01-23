@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Api.Modules;
 using Api.Modules.FeatureFlags;
+using Keeper.Api.Extensions;
 using Keeper.Api.Modules;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -37,6 +38,7 @@ namespace Keeper.Api
 				//.AddVersioning()
 				//.AddSwagger()
 				.AddApplicationServices()
+				.AddGlobalExceptionHandlerMiddleware()
 				.AddDependencyInjectionConfiguration()
 				//.AddCustomCors()
 				//.AddProxy();
@@ -54,17 +56,13 @@ namespace Keeper.Api
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env
-			/*IApiVersionDescriptionProvider provider*/)
+			, ILoggerFactory loggerFactory)
 		{
 			if (env.IsDevelopment())
 			{
 				app.UseDeveloperExceptionPage();
 			}
-			else
-			{
-				app.UseExceptionHandler("/api/V1/CustomError")
-					.UseHsts();
-			}
+			app.UseGlobalExceptionHandlerMiddleware();
 
 			app
 				//.UseProxy(this.Configuration)
