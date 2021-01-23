@@ -105,7 +105,8 @@ namespace Keeper.Test.Integration.Application
 					cfg.AddProfile<PlayerDTOProfile>();
 				});
 				IMapper mapper = config.CreateMapper();
-				Player[] result = new PlayerService(mapper, repo, new DAOPlayer(context)).List().Result;
+				Player[] result = new PlayerService(mapper, repo, new DAOPlayer(context))
+					.GetAvailables().Result.Players;
 				Assert.NotEmpty(result);
 			}
 		}

@@ -34,11 +34,11 @@ namespace Keeper.Test.Integration.Api
 				.GetAsync("/Player")
 				.ConfigureAwait(false);
 
-			var result = JsonConvert.DeserializeObject<Player[]>(
+			var result = JsonConvert.DeserializeObject<PlayerPaginationDTO>(
 				await actualResponse.Content.ReadAsStringAsync());
 			actualResponse.EnsureSuccessStatusCode();
 			Assert.Equal(HttpStatusCode.OK, actualResponse.StatusCode);
-			Assert.IsType<Player[]>(result);
+			Assert.IsType<Player[]>(result.Players);
 		}
 
 		[Fact]
