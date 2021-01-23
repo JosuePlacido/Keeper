@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Keeper.Domain.Models;
 
 namespace Keeper.Infrastructure.CrossCutting.DTO
 {
@@ -27,5 +28,15 @@ namespace Keeper.Infrastructure.CrossCutting.DTO
 		public string Name { get; set; }
 		public string Nickname { get; set; }
 		public bool IsDeletable { get; set; }
+	}
+	public class PlayerPaginationDTO
+	{
+		public Player[] Players { get; set; }
+		public string Terms { get; set; }
+		public string ExcludeFromChampionship { get; set; }
+		public int Page { get; set; }
+		public int Take { get; set; }
+		public int Total { get; set; }
+
 	}
 }

@@ -20,9 +20,10 @@ namespace Keeper.Api.Controllers
 			_PlayerAppService = PlayerAppService;
 		}
 
-		public async Task<IEnumerable<Player>> Get()
+		public async Task<PlayerPaginationDTO> Get(string terms = null,
+			string notInChampinship = null, int page = 1, int take = 10)
 		{
-			return await _PlayerAppService.List();
+			return await _PlayerAppService.GetAvailables(terms, notInChampinship, page, take);
 		}
 
 		[HttpGet("{id}")]

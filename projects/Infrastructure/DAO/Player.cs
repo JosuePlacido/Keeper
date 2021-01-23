@@ -24,5 +24,13 @@ namespace Keeper.Infrastructure.DAO
 				IsDeletable = _context.PlayerSubscribe.Where(ts => ts.PlayerId == id).Count() == 0
 			};
 		}
+
+		public async Task<int> GetTotalFromSearch(string terms, string notInChampionship)
+		{
+			string[] subscribed = await _context.Championships.Where(c => c.Id == notInChampionship)
+				.SelectMany(c => c.Teams.SelectMany(ts => ts.Players)).Select(ps => ps.PlayerId).ToArrayAsync();
+			return await _context.Players.AsNoTracking().Where(p => (p.Name.Contains(terms)
+				|| p.Nickname.Contains(terms)) && !subscribed.Contains(p.Id)).CountAsync();
+		}
 	}
 }
