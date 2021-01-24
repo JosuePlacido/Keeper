@@ -1,10 +1,9 @@
 using System.Threading.Tasks;
-using Keeper.Domain.Models;
-using Keeper.Infrastructure.CrossCutting.DTO;
+using Keeper.Application.DTO;
 
-namespace Keeper.Infrastructure.DAO
+namespace Keeper.Application.DAO
 {
-	public interface IDAOPlayer : IDAO<Player>
+	public interface IDAOPlayer
 	{
 		Task<PlayerViewDTO> GetByIdView(string id);
 		Task<int> GetTotalFromSearch(string terms, string notInChampionship);

@@ -6,7 +6,7 @@ using Keeper.Api;
 using Keeper.Application.Interface;
 using Keeper.Application.Models;
 using Keeper.Domain.Models;
-using Keeper.Infrastructure.CrossCutting.DTO;
+using Keeper.Application.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Newtonsoft.Json;

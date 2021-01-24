@@ -1,16 +1,21 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Keeper.Domain.Models;
-using Keeper.Infrastructure.CrossCutting.DTO;
+using Keeper.Application.DTO;
 using Keeper.Infrastructure.DAO;
 using Keeper.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using Keeper.Application.DAO;
 
 namespace Keeper.Infrastructure.DAO
 {
-	public class DAOPlayer : DAOBase<Player>, IDAOPlayer
+	public class DAOPlayer : IDAOPlayer
 	{
-		public DAOPlayer(ApplicationContext Context) : base(Context) { }
+		private readonly ApplicationContext _context;
+		public DAOPlayer(ApplicationContext Context)
+		{
+			_context = Context;
+		}
 
 		public async Task<PlayerViewDTO> GetByIdView(string id)
 		{

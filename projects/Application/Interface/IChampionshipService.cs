@@ -2,7 +2,7 @@ using System;
 using System.Threading.Tasks;
 using FluentValidation.Results;
 using Keeper.Application.Models;
-using Keeper.Infrastructure.CrossCutting.DTO;
+using Keeper.Application.DTO;
 
 namespace Keeper.Application.Interface
 {

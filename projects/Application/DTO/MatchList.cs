@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Keeper.Infrastructure.CrossCutting.DTO
+namespace Keeper.Application.DTO
 {
 	public static class MatchAuditoryContants
 	{

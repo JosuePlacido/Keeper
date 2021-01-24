@@ -3,7 +3,7 @@ using Keeper.Application.Services;
 using AutoMapper;
 using Keeper.Domain.Models;
 using Keeper.Infrastructure.CrossCutting.Adapter;
-using Keeper.Infrastructure.CrossCutting.DTO;
+using Keeper.Application.DTO;
 using Keeper.Infrastructure.Repository;
 using Keeper.Test;
 using Test.DataExamples;

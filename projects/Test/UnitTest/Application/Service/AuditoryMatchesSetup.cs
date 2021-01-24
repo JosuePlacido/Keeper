@@ -1,4 +1,4 @@
-using Keeper.Infrastructure.CrossCutting.DTO;
+using Keeper.Application.DTO;
 using Xunit;
 
 namespace Keeper.Test.UnitTest.Application.Service

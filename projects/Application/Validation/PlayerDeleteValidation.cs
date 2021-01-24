@@ -1,5 +1,5 @@
 using FluentValidation;
-using Keeper.Infrastructure.CrossCutting.DTO;
+using Keeper.Application.DTO;
 
 namespace Application.Validation
 {

@@ -8,9 +8,10 @@ using Keeper.Infrastructure.Repository;
 using Keeper.Infrastructure.DAO;
 using System.Collections.Generic;
 using Keeper.Domain.Models;
-using Keeper.Infrastructure.CrossCutting.DTO;
+using Keeper.Application.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Keeper.Infrastructure.CrossCutting.Adapter;
+using Newtonsoft.Json;
 
 namespace Keeper.Test.UnitTest.Application.Service
 {
@@ -32,7 +33,8 @@ namespace Keeper.Test.UnitTest.Application.Service
 					cfg.AddProfile<SquadEditDTOProfile>();
 				});
 				IMapper mapper = config.CreateMapper();
-				string champ = repo.GetAll().Result.Last().Id;
+				string champ = repo.GetAll().Result.Where(c => c.Edition == "1993")
+					.FirstOrDefault().Id;
 				SquadEditDTO[] result = new ChampionshipService(mapper, repo).GetSquads(champ).Result;
 				Assert.Equal(2, result.Length);
 				Assert.Equal(6, result.SelectMany(ts => ts.Players).Count());

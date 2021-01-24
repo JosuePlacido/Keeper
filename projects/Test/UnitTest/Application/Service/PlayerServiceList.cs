@@ -8,7 +8,8 @@ using Keeper.Infrastructure.Repository;
 using Keeper.Infrastructure.DAO;
 using System.Collections.Generic;
 using Keeper.Domain.Models;
-using Keeper.Infrastructure.CrossCutting.DTO;
+using Keeper.Application.DTO;
+using Newtonsoft.Json;
 
 namespace Keeper.Test.UnitTest.Application.Service
 {
@@ -22,21 +23,21 @@ namespace Keeper.Test.UnitTest.Application.Service
 		[Fact]
 		public void Get_PlayerList_PageAndTakes()
 		{
-			var expected = SeedData.Players;
-			int pages = expected.Length / 5;
-			List<Player> finalList = new List<Player>();
 			using (var context = Fixture.CreateContext())
 			{
 				PlayerRepository repo = new PlayerRepository(context);
+				Player[] expected = repo.GetAll().Result;
+				int pages = expected.Length / 5;
+				List<Player> finalList = new List<Player>();
 				DAOPlayer dao = new DAOPlayer(context);
 				var service = new PlayerService(null, repo, dao);
 				PlayerPaginationDTO result = null;
 				for (int p = 1; p <= pages; p++)
 				{
 					result = service.GetAvailables(page: p, take: 5).Result;
-					Assert.Equal(result.Total, expected.Length);
-					Assert.Equal(result.Page, p);
-					Assert.Equal(result.Players.Length, 5);
+					Assert.Equal(expected.Length, result.Total);
+					Assert.Equal(p, result.Page);
+					Assert.Equal(5, result.Players.Length);
 					finalList.AddRange(result.Players);
 				}
 				result = service.GetAvailables(page: 3, take: 5).Result;
@@ -69,12 +70,16 @@ namespace Keeper.Test.UnitTest.Application.Service
 		{
 			using (var context = Fixture.CreateContext())
 			{
-				string championship = new ChampionshipRepository(context).GetAll().Result.LastOrDefault().Id;
+				string championship = new ChampionshipRepository(context).GetAll()
+					.Result.Where(c => c.Edition == "1993")
+					.FirstOrDefault().Id;
+				var prayers = new PlayerRepository(context).GetAll().Result;
+				_output.WriteLine(JsonConvert.SerializeObject(prayers, Formatting.Indented));
 				PlayerRepository repo = new PlayerRepository(context);
 				var result = new PlayerService(null, repo, new DAOPlayer(context))
 					.GetAvailables(championship: championship).Result;
 				var expected = SeedData.Players;
-				Assert.Equal(result.Total, 5);
+				Assert.Equal(5, result.Total);
 				Assert.Equal(result.ExcludeFromChampionship, championship);
 				Assert.Equal(result.Players.Length, 5);
 				Assert.All(result.Players, item => expected.Contains(item));

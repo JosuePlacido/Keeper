@@ -3,12 +3,12 @@ using System;
 using System.Threading.Tasks;
 using Keeper.Domain.Repository;
 using Keeper.Application.Interface;
-using Keeper.Infrastructure.CrossCutting.DTO;
 using Keeper.Domain.Models;
-using Keeper.Infrastructure.DAO;
+using Keeper.Application.DTO;
 using Application.Validation;
 using Keeper.Application.Models;
 using FluentValidation.Results;
+using Keeper.Application.DAO;
 
 namespace Keeper.Application.Services
 {

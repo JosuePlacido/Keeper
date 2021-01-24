@@ -1,18 +1,20 @@
 using Keeper.Domain.Models;
-using Keeper.Infrastructure.CrossCutting.DTO;
+using Keeper.Application.DTO;
 using Keeper.Infrastructure.DAO;
 using Keeper.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
+using Keeper.Application.DAO;
 
 namespace Keeper.Infrastructure.DAO
 {
-	public class DAOTeam : DAOBase<Team>, IDAOTeam
+	public class DAOTeam : IDAOTeam
 	{
+		private readonly ApplicationContext _context;
 		public DAOTeam(ApplicationContext Context)
-			: base(Context)
 		{
+			_context = Context;
 		}
 
 		public async Task<TeamViewDTO> GetByIdView(string id)

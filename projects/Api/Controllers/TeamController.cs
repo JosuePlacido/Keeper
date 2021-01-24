@@ -1,10 +1,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Keeper.Application.DTO;
 using Keeper.Application.Interface;
 using Keeper.Domain.Models;
-using Keeper.Infrastructure.CrossCutting.DTO;
-using Keeper.Infrastructure.DAO;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Keeper.Api.Controllers

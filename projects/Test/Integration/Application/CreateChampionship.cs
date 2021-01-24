@@ -3,7 +3,7 @@ using Xunit.Abstractions;
 using AutoMapper;
 using Newtonsoft.Json;
 using System.Linq;
-using Keeper.Infrastructure.CrossCutting.DTO;
+using Keeper.Application.DTO;
 using Keeper.Infrastructure.Repository;
 using Keeper.Infrastructure.CrossCutting.Adapter;
 using Keeper.Test.DataExamples;

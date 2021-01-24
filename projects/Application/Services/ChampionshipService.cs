@@ -4,12 +4,11 @@ using System.Threading.Tasks;
 using Keeper.Domain.Repository;
 using System.Linq;
 using System.Collections.Generic;
-using Keeper.Infrastructure.CrossCutting.DTO;
+using Keeper.Application.DTO;
 using Keeper.Domain.Models;
 using Keeper.Application.Interface;
 using FluentValidation.Results;
 using Keeper.Application.Models;
-using Keeper.Infrastructure.DAO;
 
 namespace Keeper.Application.Services
 {

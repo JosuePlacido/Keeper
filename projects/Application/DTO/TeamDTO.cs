@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Keeper.Infrastructure.CrossCutting.DTO
+namespace Keeper.Application.DTO
 {
 	public class TeamCreateDTO
 	{

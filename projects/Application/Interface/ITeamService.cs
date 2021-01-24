@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Keeper.Domain.Models;
-using Keeper.Infrastructure.CrossCutting.DTO;
+using Keeper.Application.DTO;
 
 namespace Keeper.Application.Interface
 {

@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using Keeper.Domain.Models;
 
-namespace Keeper.Infrastructure.CrossCutting.DTO
+namespace Keeper.Application.DTO
 {
 	public class SquadEditDTO
 	{

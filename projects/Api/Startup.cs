@@ -37,7 +37,6 @@ namespace Keeper.Api
 				//.AddAuthentication(this.Configuration)
 				//.AddVersioning()
 				//.AddSwagger()
-				.AddApplicationServices()
 				.AddGlobalExceptionHandlerMiddleware()
 				.AddDependencyInjectionConfiguration()
 				//.AddCustomCors()

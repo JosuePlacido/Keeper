@@ -1,7 +1,6 @@
-
 using Keeper.Domain.Enum;
 
-namespace Keeper.Infrastructure.CrossCutting.DTO
+namespace Keeper.Application.DTO
 {
 	public class ChampionshipCreateDTO
 	{
