@@ -34,9 +34,9 @@ namespace Keeper.Test.UnitTest.Application.Service
 				for (int p = 1; p <= pages; p++)
 				{
 					result = service.GetAvailables(page: p, take: 5).Result;
-					Assert.True(result.Total == expected.Length);
-					Assert.True(result.Page == p);
-					Assert.True(result.Players.Length == 5);
+					Assert.Equal(result.Total, expected.Length);
+					Assert.Equal(result.Page, p);
+					Assert.Equal(result.Players.Length, 5);
 					finalList.AddRange(result.Players);
 				}
 				result = service.GetAvailables(page: 3, take: 5).Result;
@@ -74,9 +74,9 @@ namespace Keeper.Test.UnitTest.Application.Service
 				var result = new PlayerService(null, repo, new DAOPlayer(context))
 					.GetAvailables(championship: championship).Result;
 				var expected = SeedData.Players;
-				Assert.True(result.Total == 5);
-				Assert.True(result.ExcludeFromChampionship == championship);
-				Assert.True(result.Players.Length == 5);
+				Assert.Equal(result.Total, 5);
+				Assert.Equal(result.ExcludeFromChampionship, championship);
+				Assert.Equal(result.Players.Length, 5);
 				Assert.All(result.Players, item => expected.Contains(item));
 			}
 		}
