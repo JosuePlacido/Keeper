@@ -9,6 +9,7 @@ using Keeper.Domain.Models;
 using Keeper.Application.Interface;
 using FluentValidation.Results;
 using Keeper.Application.Models;
+using Domain.Core;
 
 namespace Keeper.Application.Services
 {
@@ -16,10 +17,12 @@ namespace Keeper.Application.Services
 	{
 		private readonly IRepositoryChampionship _repoChamp;
 		private readonly IMapper _mapper;
-		public ChampionshipService(IMapper mapper, IRepositoryChampionship repoChamp)
+		private readonly IUnitOfWork _uow;
+		public ChampionshipService(IMapper mapper, IUnitOfWork uow, IRepositoryChampionship repoChamp)
 		{
 			_mapper = mapper;
 			_repoChamp = repoChamp;
+			_uow = uow;
 		}
 		public async Task<CreateChampionshipResponse> Create(ChampionshipCreateDTO dto)
 		{
@@ -38,6 +41,7 @@ namespace Keeper.Application.Services
 			{
 				await _repoChamp.Add(championship);
 				validation.Matches = _mapper.Map<MatchEditsScope>(championship);
+				await _uow.Commit();
 			}
 			return validation;
 		}

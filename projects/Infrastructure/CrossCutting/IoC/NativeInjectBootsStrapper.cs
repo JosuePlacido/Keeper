@@ -8,6 +8,8 @@ using AutoMapper;
 using Keeper.Infrastructure.CrossCutting.Adapter;
 using Keeper.Infrastructure.DAO;
 using Keeper.Application.DAO;
+using Domain.Core;
+using Infrastructure.Data;
 
 namespace Keeper.Infrastructure.CrossCutting.IoC
 {
@@ -19,6 +21,7 @@ namespace Keeper.Infrastructure.CrossCutting.IoC
 				typeof(MatchEditProfile), typeof(PlayerDTOProfile));
 
 			services.AddScoped<ApplicationContext>();
+			services.AddScoped<IUnitOfWork, UnitOfWork>();
 			services.AddScoped<IRepositoryChampionship, ChampionshipRepository>();
 			services.AddScoped<IRepositoryTeam, TeamRepository>();
 

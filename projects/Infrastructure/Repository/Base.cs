@@ -21,7 +21,6 @@ namespace Keeper.Infrastructure.Repository
 		public virtual async Task<TEntity> Add(TEntity obj)
 		{
 			await _context.Set<TEntity>().AddAsync(obj);
-			await _context.SaveChangesAsync();
 			return obj;
 		}
 
@@ -38,15 +37,13 @@ namespace Keeper.Infrastructure.Repository
 
 		public virtual async Task<TEntity> Update(TEntity obj)
 		{
-			_context.Entry(obj).State = EntityState.Modified;
-			await _context.SaveChangesAsync();
+			await Task.Run(() => _context.Entry(obj).State = EntityState.Modified);
 			return obj;
 		}
 
 		public virtual async Task<TEntity> Remove(TEntity obj)
 		{
-			_context.Set<TEntity>().Remove(obj);
-			await _context.SaveChangesAsync();
+			await Task.Run(() => _context.Set<TEntity>().Remove(obj));
 			return obj;
 		}
 

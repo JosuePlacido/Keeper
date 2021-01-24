@@ -9,24 +9,29 @@ using Keeper.Application.Models;
 using FluentValidation.Results;
 using Keeper.Application.DTO;
 using Keeper.Application.DAO;
+using Domain.Core;
 
 namespace Keeper.Application.Services
 {
 	public class PlayerService : IPlayerService
 	{
 		private readonly IRepositoryPlayer _repo;
+		private readonly IUnitOfWork _uow;
 		private readonly IMapper _mapper;
 		private readonly IDAOPlayer _dao;
-		public PlayerService(IMapper mapper, IRepositoryPlayer repoChamp, IDAOPlayer dao)
+		public PlayerService(IMapper mapper, IUnitOfWork uow, IRepositoryPlayer repoChamp, IDAOPlayer dao)
 		{
 			_mapper = mapper;
 			_repo = repoChamp;
 			_dao = dao;
+			_uow = uow;
 		}
 		public async Task<Player> Create(PlayerCreateDTO dto)
 		{
 			Player Player = _mapper.Map<Player>(dto);
-			return await _repo.Add(Player);
+			var result = await _repo.Add(Player);
+			await _uow.Commit();
+			return result;
 		}
 
 		public async Task<IServiceResult> Delete(string id)
@@ -39,6 +44,7 @@ namespace Keeper.Application.Services
 			{
 				Player player = _mapper.Map<Player>(dto);
 				response.Value = await _repo.Remove(player);
+				await _uow.Commit();
 			}
 			return response;
 		}
@@ -76,6 +82,7 @@ namespace Keeper.Application.Services
 			{
 				Player player = _mapper.Map<Player>(dto);
 				response.Value = await _repo.Update(player);
+				await _uow.Commit();
 			}
 			else
 			{

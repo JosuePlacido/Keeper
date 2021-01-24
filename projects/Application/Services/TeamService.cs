@@ -9,6 +9,7 @@ using Application.Validation;
 using Keeper.Application.Models;
 using FluentValidation.Results;
 using Keeper.Application.DAO;
+using Domain.Core;
 
 namespace Keeper.Application.Services
 {
@@ -17,16 +18,20 @@ namespace Keeper.Application.Services
 		private readonly IRepositoryTeam _repo;
 		private readonly IMapper _mapper;
 		private readonly IDAOTeam _dao;
-		public TeamService(IMapper mapper, IRepositoryTeam repoChamp, IDAOTeam dao)
+		private readonly IUnitOfWork _uow;
+		public TeamService(IMapper mapper, IUnitOfWork uow, IRepositoryTeam repoChamp, IDAOTeam dao)
 		{
 			_mapper = mapper;
 			_repo = repoChamp;
 			_dao = dao;
+			_uow = uow;
 		}
 		public async Task<Team> Create(TeamCreateDTO dto)
 		{
 			Team Team = _mapper.Map<Team>(dto);
-			return await _repo.Add(Team);
+			Team result = await _repo.Add(Team);
+			await _uow.Commit();
+			return result;
 		}
 
 		public async Task<IServiceResult> Delete(string id)
@@ -39,6 +44,7 @@ namespace Keeper.Application.Services
 			{
 				Team team = _mapper.Map<Team>(dto);
 				response.Value = await _repo.Remove(team);
+				await _uow.Commit();
 			}
 			return response;
 		}
@@ -67,6 +73,7 @@ namespace Keeper.Application.Services
 			{
 				Team team = _mapper.Map<Team>(dto);
 				response.Value = await _repo.Update(team);
+				await _uow.Commit();
 			}
 			else
 			{
