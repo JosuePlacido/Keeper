@@ -255,5 +255,11 @@ namespace Keeper.Application.Services
 		{
 			GC.SuppressFinalize(this);
 		}
+
+		public async Task<SquadEditDTO[]> GetSquads(string championshipId)
+		{
+			Championship championship = await _repoChamp.GetByIdWithTeamsWithPLayers(championshipId);
+			return championship != null ? _mapper.Map<SquadEditDTO[]>(championship.Teams) : new SquadEditDTO[0];
+		}
 	}
 }

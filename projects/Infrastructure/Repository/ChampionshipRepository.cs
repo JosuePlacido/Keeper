@@ -4,6 +4,7 @@ using Keeper.Domain.Repository;
 using Keeper.Domain.Models;
 using Keeper.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace Keeper.Infrastructure.Repository
 {
@@ -24,5 +25,14 @@ namespace Keeper.Infrastructure.Repository
 			return obj;
 		}
 
+		public async Task<Championship> GetByIdWithTeamsWithPLayers(string championship)
+		{
+			return await _context.Championships.AsNoTracking().Where(c => c.Id == championship)
+				.Include(c => c.Teams)
+					.ThenInclude(ts => ts.Team)
+				.Include(c => c.Teams)
+					.ThenInclude(ts => ts.Players)
+						.ThenInclude(ps => ((PlayerSubscribe)ps).Player).FirstOrDefaultAsync();
+		}
 	}
 }

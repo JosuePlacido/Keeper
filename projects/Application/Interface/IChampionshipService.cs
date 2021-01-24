@@ -10,5 +10,6 @@ namespace Keeper.Application.Interface
 	{
 		Task<CreateChampionshipResponse> Create(ChampionshipCreateDTO dto);
 		MatchEditsScope CheckMatches(MatchEditsScope dto);
+		Task<SquadEditDTO[]> GetSquads(string championship);
 	}
 }
