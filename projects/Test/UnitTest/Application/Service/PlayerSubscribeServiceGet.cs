@@ -12,6 +12,7 @@ using Keeper.Application.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Keeper.Infrastructure.CrossCutting.Adapter;
 using Newtonsoft.Json;
+using Infrastructure.Data;
 
 namespace Keeper.Test.UnitTest.Application.Service
 {
@@ -35,7 +36,7 @@ namespace Keeper.Test.UnitTest.Application.Service
 				IMapper mapper = config.CreateMapper();
 				string champ = repo.GetAll().Result.Where(c => c.Edition == "1993")
 					.FirstOrDefault().Id;
-				SquadEditDTO[] result = new ChampionshipService(mapper, repo).GetSquads(champ).Result;
+				SquadEditDTO[] result = new ChampionshipService(mapper, new UnitOfWork(context), repo).GetSquads(champ).Result;
 				Assert.Equal(2, result.Length);
 				Assert.Equal(6, result.SelectMany(ts => ts.Players).Count());
 			}
@@ -46,7 +47,7 @@ namespace Keeper.Test.UnitTest.Application.Service
 			using (var context = Fixture.CreateContext())
 			{
 				ChampionshipRepository repo = new ChampionshipRepository(context);
-				SquadEditDTO[] result = new ChampionshipService(null, repo)
+				SquadEditDTO[] result = new ChampionshipService(null, new UnitOfWork(context), repo)
 					.GetSquads("player").Result;
 				Assert.Empty(result);
 			}

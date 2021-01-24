@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using Keeper.Domain.Models;
 using Keeper.Application.DTO;
 using Newtonsoft.Json;
+using Infrastructure.Data;
 
 namespace Keeper.Test.UnitTest.Application.Service
 {
@@ -28,9 +29,10 @@ namespace Keeper.Test.UnitTest.Application.Service
 				PlayerRepository repo = new PlayerRepository(context);
 				Player[] expected = repo.GetAll().Result;
 				int pages = expected.Length / 5;
+				int LastPage = expected.Length % 5;
 				List<Player> finalList = new List<Player>();
 				DAOPlayer dao = new DAOPlayer(context);
-				var service = new PlayerService(null, repo, dao);
+				var service = new PlayerService(null, new UnitOfWork(context), repo, dao);
 				PlayerPaginationDTO result = null;
 				for (int p = 1; p <= pages; p++)
 				{
@@ -40,12 +42,12 @@ namespace Keeper.Test.UnitTest.Application.Service
 					Assert.Equal(5, result.Players.Length);
 					finalList.AddRange(result.Players);
 				}
-				result = service.GetAvailables(page: 3, take: 5).Result;
-				Assert.True(result.Total == expected.Length);
-				Assert.True(result.Page == 3);
-				Assert.True(result.Players.Length == 1);
+				result = service.GetAvailables(page: pages + 1, take: 5).Result;
+				Assert.Equal(expected.Length, result.Total);
+				Assert.Equal(pages + 1, result.Page);
+				Assert.Equal(LastPage, result.Players.Length);
 				finalList.AddRange(result.Players);
-				Assert.True(expected.Length == finalList.Count);
+				Assert.Equal(expected.Length, finalList.Count);
 				Assert.All(result.Players, item => expected.Contains(item));
 				Assert.All(result.Players, item => expected.Contains(item));
 			}
@@ -56,7 +58,7 @@ namespace Keeper.Test.UnitTest.Application.Service
 			using (var context = Fixture.CreateContext())
 			{
 				PlayerRepository repo = new PlayerRepository(context);
-				var result = new PlayerService(null, repo, new DAOPlayer(context))
+				var result = new PlayerService(null, new UnitOfWork(context), repo, new DAOPlayer(context))
 					.GetAvailables("player").Result;
 				var expected = SeedData.Players.Take(4);
 				Assert.True(result.Total == 4);
@@ -76,7 +78,7 @@ namespace Keeper.Test.UnitTest.Application.Service
 				var prayers = new PlayerRepository(context).GetAll().Result;
 				_output.WriteLine(JsonConvert.SerializeObject(prayers, Formatting.Indented));
 				PlayerRepository repo = new PlayerRepository(context);
-				var result = new PlayerService(null, repo, new DAOPlayer(context))
+				var result = new PlayerService(null, new UnitOfWork(context), repo, new DAOPlayer(context))
 					.GetAvailables(championship: championship).Result;
 				var expected = SeedData.Players;
 				Assert.Equal(5, result.Total);

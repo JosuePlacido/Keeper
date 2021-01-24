@@ -63,13 +63,18 @@ namespace Keeper.Test.UnitTest.Infra.Repositorys
 		{
 			using (var context = Fixture.CreateContext())
 			{
-				var repo = new ChampionshipRepository(context);
-				var beforeItemsCount = repo.GetAll().Result.Length;
-				await repo.Add(Championship);
-				var afterItemsCount = repo.GetAll().Result.Length;
-				var items = repo.GetAll().Result;
-				Assert.NotNull(Championship.Id);
-				Assert.True(beforeItemsCount < afterItemsCount);
+				using (var transaction = context.Database.BeginTransaction())
+				{
+					var repo = new ChampionshipRepository(context);
+					var beforeItemsCount = repo.GetAll().Result.Length;
+					await repo.Add(Championship);
+					context.SaveChanges();
+					var afterItemsCount = repo.GetAll().Result.Length;
+					var items = repo.GetAll().Result;
+					Assert.NotNull(Championship.Id);
+					Assert.True(beforeItemsCount < afterItemsCount);
+					transaction.Rollback();
+				}
 			}
 		}
 		[Fact]
@@ -90,13 +95,18 @@ namespace Keeper.Test.UnitTest.Infra.Repositorys
 		{
 			using (var context = Fixture.CreateContext())
 			{
-				var repo = new ChampionshipRepository(context);
-				var championship = repo.GetAll().Result.Where(c => c.Name == "remove" || c.Name == "UPDATE").FirstOrDefault();
-				await repo.Remove(championship);
-				var result1 = repo.GetById(championship.Id).Result;
-				var count = repo.GetAll().Result.Length;
-				Assert.Null(result1);
-				Assert.DoesNotContain(championship, repo.GetAll().Result);
+				using (var transaction = context.Database.BeginTransaction())
+				{
+					var repo = new ChampionshipRepository(context);
+					var championship = repo.GetAll().Result.Where(c => c.Name == "remove" || c.Name == "UPDATE").FirstOrDefault();
+					await repo.Remove(championship);
+					context.SaveChanges();
+					var result1 = repo.GetById(championship.Id).Result;
+					var count = repo.GetAll().Result.Length;
+					Assert.Null(result1);
+					Assert.DoesNotContain(championship, repo.GetAll().Result);
+					transaction.Rollback();
+				}
 			}
 		}
 	}

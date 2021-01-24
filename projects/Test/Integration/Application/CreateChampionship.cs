@@ -9,6 +9,7 @@ using Keeper.Infrastructure.CrossCutting.Adapter;
 using Keeper.Test.DataExamples;
 using Keeper.Application.Services;
 using FluentValidation.Results;
+using Infrastructure.Data;
 
 namespace Keeper.Test.Integration.Application
 {
@@ -25,15 +26,20 @@ namespace Keeper.Test.Integration.Application
 			ValidationResult result = null;
 			using (var context = Fixture.CreateContext())
 			{
-				var repo = new ChampionshipRepository(context);
-				var config = new MapperConfiguration(cfg =>
+				using (var transaction = context.Database.BeginTransaction())
 				{
-					cfg.AddProfile<ChampionshipDTOToDomainProfile>();
-					cfg.AddProfile<MatchEditProfile>();
-				});
-				var mapper = config.CreateMapper();
-				var test = ChampionshipCreateDTODataExamples.SemiFinal;
-				result = new ChampionshipService(mapper, repo).Create(test).Result;
+					var repo = new ChampionshipRepository(context);
+					var config = new MapperConfiguration(cfg =>
+					{
+						cfg.AddProfile<ChampionshipDTOToDomainProfile>();
+						cfg.AddProfile<MatchEditProfile>();
+					});
+					var mapper = config.CreateMapper();
+					var test = ChampionshipCreateDTODataExamples.SemiFinal;
+					result = new ChampionshipService(mapper, new UnitOfWork(context), repo).Create(test).Result;
+
+					transaction.Rollback();
+				}
 			}
 			var jsonResult = JsonConvert.SerializeObject(result, Formatting.Indented);
 			Assert.NotNull(result);
