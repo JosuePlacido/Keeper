@@ -11,5 +11,6 @@ namespace Keeper.Domain.Enum
 		public const string Classified = "Classificado";
 		public const string Champion = "Campeão";
 		public const string Created = "Criado";
+		public const string FreeAgent = "Livre";
 	}
 }

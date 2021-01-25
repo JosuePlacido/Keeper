@@ -7,6 +7,8 @@ using Keeper.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Keeper.Application.DAO;
 using Keeper.Domain.Utils;
+using System.Collections.Generic;
+using Keeper.Domain.Enum;
 
 namespace Keeper.Infrastructure.DAO
 {
@@ -29,6 +31,15 @@ namespace Keeper.Infrastructure.DAO
 				Nickname = player?.Nickname,
 				IsDeletable = _context.PlayerSubscribe.Where(ts => ts.PlayerId == id).Count() == 0
 			};
+		}
+
+		public async Task<PlayerSubscribe[]> GetFreeAgentsInChampionship(string championship)
+		{
+			string[] teamsId = await _context.TeamSubscribes.AsNoTracking()
+				.Where(ts => ts.ChampionshipId == championship).Select(ts => ts.Id).ToArrayAsync();
+			return await _context.PlayerSubscribe.AsNoTracking()
+				.Where(ps => teamsId.Contains(ps.TeamSubscribeId))
+				.Where(ps => ps.Status == Status.FreeAgent).ToArrayAsync();
 		}
 
 		public async Task<int> GetTotalFromSearch(string terms, string notInChampionship)

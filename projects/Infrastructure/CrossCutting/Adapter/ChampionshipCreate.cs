@@ -42,7 +42,8 @@ namespace Keeper.Infrastructure.CrossCutting.Adapter
 			CreateMap<TeamDTO, TeamSubscribe>()
 				.ConstructUsing(src => new TeamSubscribe(src.TeamId))
 				.ForMember(dest => dest.Players, opts =>
-					opts.MapFrom(src => src.Players.Select(str => new PlayerSubscribe(str))))
+					opts.MapFrom(src => src.Players.Select(str =>
+						 new PlayerSubscribe(str, Status.Matching))))
 				.ForAllOtherMembers(opt => opt.Ignore());
 		}
 	}

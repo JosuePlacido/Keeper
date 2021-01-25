@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Keeper.Application.DTO;
+using Keeper.Domain.Models;
 
 namespace Keeper.Application.DAO
 {
@@ -7,5 +9,6 @@ namespace Keeper.Application.DAO
 	{
 		Task<PlayerViewDTO> GetByIdView(string id);
 		Task<int> GetTotalFromSearch(string terms, string notInChampionship);
+		Task<PlayerSubscribe[]> GetFreeAgentsInChampionship(string championship);
 	}
 }

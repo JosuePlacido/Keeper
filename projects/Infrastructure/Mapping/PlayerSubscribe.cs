@@ -1,3 +1,4 @@
+using Keeper.Domain.Enum;
 using Keeper.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -13,6 +14,11 @@ namespace Keeper.Infrastructure.Mapping
 				.HasColumnName("Id")
 				.IsRequired();
 			builder.HasOne(player_subscribe => player_subscribe.Player);
+			builder.Property(player_subscribe => player_subscribe.Status)
+				.HasColumnType("varchar(15)")
+				.HasMaxLength(15)
+				.HasDefaultValue(Status.Matching)
+				.IsRequired();
 		}
 	}
 }

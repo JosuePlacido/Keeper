@@ -10,6 +10,9 @@ using FluentValidation.Results;
 using Keeper.Application.DTO;
 using Keeper.Application.DAO;
 using Domain.Core;
+using System.Collections.Generic;
+using System.Linq;
+using Keeper.Domain.Enum;
 
 namespace Keeper.Application.Services
 {
@@ -62,15 +65,21 @@ namespace Keeper.Application.Services
 		public async Task<PlayerPaginationDTO> GetAvailables(string terms = "", string championship = "",
 			int page = 1, int take = 10)
 		{
-			return new PlayerPaginationDTO
+			Player[] availables = await _repo.GetAvailables(terms, championship, page, take);
+			List<PlayerSubscribe> freeAgents = new List<PlayerSubscribe>(
+				await _dao.GetFreeAgentsInChampionship(championship));
+
+			freeAgents.AddRange(availables.Select(p => new PlayerSubscribe(p.Id, Status.FreeAgent)));
+			PlayerPaginationDTO view = new PlayerPaginationDTO
 			{
 				ExcludeFromChampionship = championship,
 				Take = take,
 				Page = page,
 				Terms = terms,
-				Players = await _repo.GetAvailables(terms, championship, page, take),
+				Players = freeAgents.ToArray(),
 				Total = await _dao.GetTotalFromSearch(terms, championship)
 			};
+			return view;
 		}
 
 		public async Task<IServiceResult> Update(PlayerUpdateDTO dto)

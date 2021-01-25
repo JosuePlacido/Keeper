@@ -31,7 +31,7 @@ namespace Keeper.Application.DTO
 	}
 	public class PlayerPaginationDTO
 	{
-		public Player[] Players { get; set; }
+		public PlayerSubscribe[] Players { get; set; }
 		public string Terms { get; set; }
 		public string ExcludeFromChampionship { get; set; }
 		public int Page { get; set; }

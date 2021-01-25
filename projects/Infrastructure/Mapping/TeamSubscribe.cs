@@ -16,7 +16,7 @@ namespace Keeper.Infrastructure.Mapping
 			builder.Property(teamSubscribe => teamSubscribe.Status)
 				.HasColumnType("varchar(15)")
 				.HasMaxLength(15)
-				.HasDefaultValue(Status.Created)
+				.HasDefaultValue(Status.Matching)
 				.IsRequired();
 
 			builder.HasMany(teamSubscribe => teamSubscribe.Players)
