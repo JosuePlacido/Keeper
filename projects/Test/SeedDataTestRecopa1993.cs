@@ -179,8 +179,9 @@ namespace Keeper.Test
 							new Group(name:"Final", vacancys: vacancys,
 							stats: new Statistic[]
 								{
-									new Statistic(teams[0].Id)
-									.UpdateNumbers(
+									Statistic.Factory(
+										"stat1",
+										teams[0].Id,
 										reds: 0,
 										drowns: 2,
 										games: 2,
@@ -189,14 +190,14 @@ namespace Keeper.Test
 										goalsScores: 0,
 										lost: 0,
 										won: 0,
-										yellows: 4,
 										position: 1,
 										lastfive: "draw,draw",
-										rankMovement: RankMovement.Stay,
+										rankMovement: 0,
 										points: 2
 									),
-									new Statistic(teams[1].Id)
-									.UpdateNumbers(
+									Statistic.Factory(
+										"stat2",
+										teams[1].Id,
 										reds: 0,
 										drowns: 2,
 										games: 2,
@@ -208,7 +209,7 @@ namespace Keeper.Test
 										yellows: 2,
 										position: 2,
 										lastfive: "draw,draw",
-										rankMovement: RankMovement.Stay,
+										rankMovement: 0,
 										points: 2
 									),
 								}
