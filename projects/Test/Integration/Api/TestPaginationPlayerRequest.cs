@@ -23,26 +23,24 @@ namespace Keeper.Test.Integration.Api
 		public TestPaginationPlayerRequest(CustomWebApplicationFactoryFixture fixture) => this._fixture = fixture;
 
 		[Fact]
-		public async Task Get_PlayersList_ReturnPlayerList()
+		public void Get_PlayersList_ReturnPlayerList()
 		{
 
 			HttpClient client = this._fixture
 				.CustomWebApplicationFactory
 				.CreateClient();
 
-			HttpResponseMessage actualResponse = await client
-				.GetAsync("/Player?terms=test")
-				.ConfigureAwait(false);
+			HttpResponseMessage actualResponse = client
+				.GetAsync("/Player/Availables?terms=test").Result;
 
-			var result = JsonConvert.DeserializeObject<PlayerPaginationDTO>(
-				await actualResponse.Content.ReadAsStringAsync());
+			var result = JsonConvert.DeserializeObject<PlayerAvailablePaginationDTO>(
+				actualResponse.Content.ReadAsStringAsync().Result);
 			actualResponse.EnsureSuccessStatusCode();
-			Assert.Equal(HttpStatusCode.OK, actualResponse.StatusCode);
-			Assert.True(result.Page == 1);
-			Assert.True(result.Take == 10);
-			Assert.True(result.Terms == "test");
-			Assert.True(string.IsNullOrEmpty(result.ExcludeFromChampionship));
-			Assert.IsType<Player[]>(result.Players);
+			Assert.Equal(1, result.Page);
+			Assert.Equal(10, result.Take);
+			Assert.Equal("test", result.Terms);
+			Assert.Null(result.ExcludeFromChampionship);
+			Assert.IsType<PlayerSubscribe[]>(result.Players);
 		}
 	}
 }

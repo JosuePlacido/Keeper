@@ -14,11 +14,11 @@ using Infrastructure.Data;
 
 namespace Keeper.Test.UnitTest.Application.Service
 {
-	public class PlayerServiceList : IClassFixture<SharedDatabaseFixture>
+	public class PlayerAvailableServiceList : IClassFixture<SharedDatabaseFixture>
 	{
 		private readonly ITestOutputHelper _output;
 		public SharedDatabaseFixture Fixture { get; }
-		public PlayerServiceList(SharedDatabaseFixture fixture, ITestOutputHelper output)
+		public PlayerAvailableServiceList(SharedDatabaseFixture fixture, ITestOutputHelper output)
 			=> (_output, Fixture) = (output, fixture);
 
 		[Fact]
@@ -33,23 +33,22 @@ namespace Keeper.Test.UnitTest.Application.Service
 				List<Player> finalList = new List<Player>();
 				DAOPlayer dao = new DAOPlayer(context);
 				var service = new PlayerService(null, new UnitOfWork(context), repo, dao);
-				PlayerPaginationDTO result = null;
+				PlayerAvailablePaginationDTO result = null;
 				for (int p = 1; p <= pages; p++)
 				{
 					result = service.GetAvailables(page: p, take: 5).Result;
 					Assert.Equal(expected.Length, result.Total);
 					Assert.Equal(p, result.Page);
 					Assert.Equal(5, result.Players.Length);
-					finalList.AddRange(result.Players);
+					finalList.AddRange(result.Players.Select(ts => ts.Player));
 				}
 				result = service.GetAvailables(page: pages + 1, take: 5).Result;
 				Assert.Equal(expected.Length, result.Total);
 				Assert.Equal(pages + 1, result.Page);
 				Assert.Equal(LastPage, result.Players.Length);
-				finalList.AddRange(result.Players);
+				finalList.AddRange(result.Players.Select(ts => ts.Player));
 				Assert.Equal(expected.Length, finalList.Count);
-				Assert.All(result.Players, item => expected.Contains(item));
-				Assert.All(result.Players, item => expected.Contains(item));
+				Assert.All(finalList, item => expected.Contains(item));
 			}
 		}
 		[Fact]
@@ -64,7 +63,7 @@ namespace Keeper.Test.UnitTest.Application.Service
 				Assert.True(result.Total == 4);
 				Assert.True(result.Terms == "player");
 				Assert.True(result.Players.Length == expected.Count());
-				Assert.All(result.Players, item => expected.Contains(item));
+				Assert.All(result.Players.Select(ps => ps.Player), item => expected.Contains(item));
 			}
 		}
 		[Fact]
@@ -84,7 +83,8 @@ namespace Keeper.Test.UnitTest.Application.Service
 				Assert.Equal(5, result.Total);
 				Assert.Equal(result.ExcludeFromChampionship, championship);
 				Assert.Equal(result.Players.Length, 5);
-				Assert.All(result.Players, item => expected.Contains(item));
+				Assert.All(result.Players.Select(PlayerService => PlayerService.Player),
+					 item => expected.Contains(item));
 			}
 		}
 	}

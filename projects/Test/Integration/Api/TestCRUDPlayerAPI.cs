@@ -23,52 +23,49 @@ namespace Keeper.Test.Integration.Api
 		public PlayerCRUDTests(CustomWebApplicationFactoryFixture fixture) => this._fixture = fixture;
 
 		[Fact]
-		public async Task Get_PlayersList_ReturnPlayerList()
+		public void Get_PlayersList_ReturnPlayerList()
 		{
 
 			HttpClient client = this._fixture
 				.CustomWebApplicationFactory
 				.CreateClient();
 
-			HttpResponseMessage actualResponse = await client
-				.GetAsync("/Player")
-				.ConfigureAwait(false);
+			HttpResponseMessage actualResponse = client
+				.GetAsync("/Player").Result;
 
-			var result = JsonConvert.DeserializeObject<PlayerPaginationDTO>(
-				await actualResponse.Content.ReadAsStringAsync());
+			var result = JsonConvert.DeserializeObject<Player[]>(
+				actualResponse.Content.ReadAsStringAsync().Result);
 			actualResponse.EnsureSuccessStatusCode();
 			Assert.Equal(HttpStatusCode.OK, actualResponse.StatusCode);
-			Assert.IsType<Player[]>(result.Players);
+			Assert.IsType<Player[]>(result);
 		}
 
 		[Fact]
-		public async Task Get_NonExistingPlayer_ReturnEmpty()
+		public void Get_NonExistingPlayer_ReturnEmpty()
 		{
 			HttpClient client = this._fixture
 				.CustomWebApplicationFactory
 				.CreateClient();
 
-			HttpResponseMessage actualResponse = await client
-				.GetAsync($"/Player/teste")
-				.ConfigureAwait(false);
-			string RequestResult = await actualResponse.Content.ReadAsStringAsync();
+			HttpResponseMessage actualResponse = client
+				.GetAsync($"/Player/teste").Result;
+			string RequestResult = actualResponse.Content.ReadAsStringAsync().Result;
 			var result = JsonConvert.DeserializeObject(RequestResult);
-			await actualResponse.Content.ReadAsStringAsync();
 			Assert.True(string.IsNullOrEmpty(RequestResult));
 		}
 		[Fact]
-		public async Task Get_Players_ReturnPlayer()
+		public void Get_Players_ReturnPlayer()
 		{
 
 			HttpClient client = this._fixture
 				.CustomWebApplicationFactory
 				.CreateClient();
 
-			HttpResponseMessage actualResponse = await client
+			HttpResponseMessage actualResponse = client
 				.GetAsync($"/Player/test")
-				.ConfigureAwait(false);
+				.Result;
 
-			string requestResult = await actualResponse.Content.ReadAsStringAsync();
+			string requestResult = actualResponse.Content.ReadAsStringAsync().Result;
 			Player playerResult = JsonConvert.DeserializeObject<Player>(requestResult);
 			actualResponse.EnsureSuccessStatusCode();
 			Assert.NotNull(playerResult);
@@ -76,7 +73,7 @@ namespace Keeper.Test.Integration.Api
 
 
 		[Fact]
-		public async Task Post_ValidPlayer_ReturnOk()
+		public void Post_ValidPlayer_ReturnOk()
 		{
 			HttpClient client = this._fixture
 				.CustomWebApplicationFactory
@@ -87,17 +84,17 @@ namespace Keeper.Test.Integration.Api
 				JsonConvert.SerializeObject(player),
 				Encoding.UTF8, "application/json");
 
-			HttpResponseMessage actualResponse = await client
+			HttpResponseMessage actualResponse = client
 				.PostAsync("/Player", httpContent)
-				.ConfigureAwait(false);
-			string request = await actualResponse.Content.ReadAsStringAsync();
+				.Result;
+			string request = actualResponse.Content.ReadAsStringAsync().Result;
 			var result = JsonConvert.DeserializeObject<Player>(request);
 			actualResponse.EnsureSuccessStatusCode();
 			Assert.Equal(HttpStatusCode.OK, actualResponse.StatusCode);
 			Assert.IsType<Player>(result);
 		}
 		[Fact]
-		public async Task Post_InvalidPlayer_ReturnBadRequest()
+		public void Post_InvalidPlayer_ReturnBadRequest()
 		{
 			HttpClient client = this._fixture
 				.CustomWebApplicationFactory
@@ -108,10 +105,10 @@ namespace Keeper.Test.Integration.Api
 				JsonConvert.SerializeObject(player),
 				Encoding.UTF8, "application/json");
 
-			HttpResponseMessage actualResponse = await client
+			HttpResponseMessage actualResponse = client
 				.PostAsync("/Player", httpContent)
-				.ConfigureAwait(false);
-			string request = await actualResponse.Content.ReadAsStringAsync();
+				.Result;
+			string request = actualResponse.Content.ReadAsStringAsync().Result;
 			var result = JsonConvert.DeserializeObject<ValidationProblemDetails>(request);
 			Assert.True(!actualResponse.IsSuccessStatusCode);
 			Assert.Equal(result.Status, 400);
@@ -120,7 +117,7 @@ namespace Keeper.Test.Integration.Api
 
 
 		[Fact]
-		public async Task Put_ValidPlayer_ReturnOk()
+		public void Put_ValidPlayer_ReturnOk()
 		{
 			HttpClient client = this._fixture
 				.CustomWebApplicationFactory
@@ -131,10 +128,10 @@ namespace Keeper.Test.Integration.Api
 				JsonConvert.SerializeObject(player),
 				Encoding.UTF8, "application/json");
 
-			HttpResponseMessage actualResponse = await client
+			HttpResponseMessage actualResponse = client
 				.PutAsync("/Player", httpContent)
-				.ConfigureAwait(false);
-			string request = await actualResponse.Content.ReadAsStringAsync();
+				.Result;
+			string request = actualResponse.Content.ReadAsStringAsync().Result;
 			var playerResult = JsonConvert.DeserializeObject<Player>(request, new JsonSerializerSettings()
 			{
 				ContractResolver = new PrivateResolver()
@@ -145,7 +142,7 @@ namespace Keeper.Test.Integration.Api
 			Assert.Equal("test", playerResult.Name);
 		}
 		[Fact]
-		public async Task Put_InvalidPlayer_ReturnBadRequest()
+		public void Put_InvalidPlayer_ReturnBadRequest()
 		{
 			HttpClient client = this._fixture
 				.CustomWebApplicationFactory
@@ -156,17 +153,17 @@ namespace Keeper.Test.Integration.Api
 				JsonConvert.SerializeObject(player),
 				Encoding.UTF8, "application/json");
 
-			HttpResponseMessage actualResponse = await client
+			HttpResponseMessage actualResponse = client
 				.PutAsync("/Player", httpContent)
-				.ConfigureAwait(false);
-			string request = await actualResponse.Content.ReadAsStringAsync();
+				.Result;
+			string request = actualResponse.Content.ReadAsStringAsync().Result;
 			var result = JsonConvert.DeserializeObject<ValidationProblemDetails>(request);
 			Assert.True(!actualResponse.IsSuccessStatusCode);
 			Assert.Equal(result.Status, 400);
 			Assert.True(result.Errors.Count > 0);
 		}
 		[Fact]
-		public async Task Put_NonExistinPlayer_ReturnBadRequest()
+		public void Put_NonExistinPlayer_ReturnBadRequest()
 		{
 			HttpClient client = this._fixture
 				.CustomWebApplicationFactory
@@ -178,42 +175,42 @@ namespace Keeper.Test.Integration.Api
 				JsonConvert.SerializeObject(player),
 				Encoding.UTF8, "application/json");
 
-			HttpResponseMessage actualResponse = await client
+			HttpResponseMessage actualResponse = client
 				.PutAsync("/Player", httpContent)
-				.ConfigureAwait(false);
-			string request = await actualResponse.Content.ReadAsStringAsync();
+				.Result;
+			string request = actualResponse.Content.ReadAsStringAsync().Result;
 			var result = JsonConvert.DeserializeObject<ValidationProblemDetails>(request);
 			Assert.True(!actualResponse.IsSuccessStatusCode);
 			Assert.Equal(result.Status, 400);
 			Assert.True(result.Errors.Count > 0);
 		}
 		[Fact]
-		public async Task Delete_NonExistinPlayer_ReturnBadRequest()
+		public void Delete_NonExistinPlayer_ReturnBadRequest()
 		{
 			HttpClient client = this._fixture
 				.CustomWebApplicationFactory
 				.CreateClient();
 
-			HttpResponseMessage actualResponse = await client
+			HttpResponseMessage actualResponse = client
 				.DeleteAsync("/Player/testeinvalid")
-				.ConfigureAwait(false);
-			string request = await actualResponse.Content.ReadAsStringAsync();
+				.Result;
+			string request = actualResponse.Content.ReadAsStringAsync().Result;
 			var result = JsonConvert.DeserializeObject<ValidationProblemDetails>(request);
 			Assert.False(actualResponse.IsSuccessStatusCode);
 			Assert.Equal(result.Status, 400);
 			Assert.True(result.Errors.Count > 0);
 		}
 		[Fact]
-		public async Task Delete_ValidPlayer_ReturnOK()
+		public void Delete_ValidPlayer_ReturnOK()
 		{
 			HttpClient client = this._fixture
 				.CustomWebApplicationFactory
 				.CreateClient();
 
-			HttpResponseMessage actualResponse = await client
+			HttpResponseMessage actualResponse = client
 				.DeleteAsync("/Player/remove")
-				.ConfigureAwait(false);
-			string request = await actualResponse.Content.ReadAsStringAsync();
+				.Result;
+			string request = actualResponse.Content.ReadAsStringAsync().Result;
 			var result = JsonConvert.DeserializeObject<Player>(request);
 			actualResponse.EnsureSuccessStatusCode();
 			Assert.Equal(HttpStatusCode.OK, actualResponse.StatusCode);

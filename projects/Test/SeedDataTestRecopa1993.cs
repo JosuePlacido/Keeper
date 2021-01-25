@@ -35,21 +35,6 @@ namespace Keeper.Test
 							new Player("Rogério Lage"),
 							new Player("Delete"),
 						};
-
-		public static PlayerSubscribe[] PlayerSubscribes = new PlayerSubscribe[]{
-							new PlayerSubscribe(Players[4].Id)
-								.UpdateNumbers(2,0,1,0,0),
-							new PlayerSubscribe(Players[5].Id)
-								.UpdateNumbers(2,0,1,0,0),
-							new PlayerSubscribe(Players[6].Id)
-								.UpdateNumbers(2,0,1,0,0),
-							new PlayerSubscribe(Players[7].Id)
-								.UpdateNumbers(2,0,1,0,0),
-							new PlayerSubscribe(Players[8].Id)
-								.UpdateNumbers(2,0,1,0,0),
-							new PlayerSubscribe(Players[9].Id)
-								.UpdateNumbers(2,0,1,0,0),
-						};
 		public static TeamSubscribe[] TeamsSubscribesNoPlayers = new TeamSubscribe[]
 				{
 					new TeamSubscribe(Teams[4].Id)
@@ -80,19 +65,19 @@ namespace Keeper.Test
 		public static Championship GetChampionship()
 		{
 			var players = new PlayerSubscribe[]{
-							new PlayerSubscribe(Players[4].Id)
-								.UpdateNumbers(2,0,1,0,0),
-							new PlayerSubscribe(Players[5].Id)
-								.UpdateNumbers(2,0,1,0,0),
-							new PlayerSubscribe(Players[6].Id)
-								.UpdateNumbers(2,0,1,0,0),
-							new PlayerSubscribe(Players[7].Id)
-								.UpdateNumbers(2,0,1,0,0),
-							new PlayerSubscribe(Players[8].Id)
-								.UpdateNumbers(2,0,1,0,0),
-							new PlayerSubscribe(Players[9].Id)
-								.UpdateNumbers(2,0,1,0,0),
-						};
+				PlayerSubscribe.Factory("ps1",
+					playerId:Players[4].Id,games:2, yellowCard:1),
+				PlayerSubscribe.Factory("ps2",
+					playerId:Players[5].Id,games:2, yellowCard:1),
+				PlayerSubscribe.Factory("ps3",
+					playerId:Players[6].Id,games:2, yellowCard:1),
+				PlayerSubscribe.Factory("ps4",
+					playerId:Players[7].Id,games:2, yellowCard:1),
+				PlayerSubscribe.Factory("ps5",
+					playerId:Players[8].Id,games:2, yellowCard:1),
+				PlayerSubscribe.Factory("ps6",
+					playerId:Players[9].Id,games:2, yellowCard:1),
+			};
 			var teams = new TeamSubscribe[]
 				{
 					new TeamSubscribe(Teams[4].Id)
