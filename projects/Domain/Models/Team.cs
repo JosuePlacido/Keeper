@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Keeper.Domain.Core;
+using Keeper.Domain.Utils;
 
 namespace Keeper.Domain.Models
 {
@@ -12,7 +13,16 @@ namespace Keeper.Domain.Models
 		}
 
 		public string Name { get; private set; }
-		public string Abrev { get; private set; }
+		private string _abrev;
+		public string Abrev
+		{
+			get { return _abrev; }
+			private set
+			{
+				_abrev = !string.IsNullOrEmpty(value) ?
+	  				StringUtils.NormalizeLower(value).ToUpper() : value;
+			}
+		}
 		public string LogoUrl { get; private set; }
 
 		public Team(string name, string abrev = null, string logoUrl = null)

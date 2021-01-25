@@ -1,5 +1,6 @@
 using System;
 using Keeper.Domain.Models;
+using Keeper.Domain.Utils;
 using Microsoft.EntityFrameworkCore;
 
 namespace Keeper.Infrastructure.Data
@@ -30,6 +31,28 @@ namespace Keeper.Infrastructure.Data
 			}
 
 			modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationContext).Assembly);
+		}
+		public override int SaveChanges()
+		{
+			foreach (var entry in ChangeTracker.Entries<Team>())
+			{
+				if (entry.State == EntityState.Modified || entry.State == EntityState.Added)
+				{
+					entry.Property<string>("NormalizedName").CurrentValue = StringUtils
+						.NormalizeLower(entry.Entity.Name);
+				}
+			}
+			foreach (var entry in ChangeTracker.Entries<Player>())
+			{
+				if (entry.State == EntityState.Modified || entry.State == EntityState.Added)
+				{
+					entry.Property<string>("NormalizedName").CurrentValue = StringUtils
+						.NormalizeLower(entry.Entity.Name);
+					entry.Property<string>("NormalizedNick").CurrentValue = StringUtils
+						.NormalizeLower(entry.Entity.Nickname);
+				}
+			}
+			return base.SaveChanges();
 		}
 	}
 }

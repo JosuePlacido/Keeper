@@ -59,6 +59,20 @@ namespace Keeper.Application.Services
 			return await _repo.GetById(id);
 		}
 
+		public async Task<TeamPaginationDTO> GetTeamsAvailablesForChampionship(string terms,
+			 string notInChampinship, int page, int take)
+		{
+			return new TeamPaginationDTO
+			{
+				NotInChampionship = notInChampinship,
+				Page = page,
+				Take = take,
+				Terms = terms,
+				Total = await _dao.GetTotalFromSearch(terms, notInChampinship),
+				Teams = await _repo.GetAllAvailableForChampionship(terms, notInChampinship, page, take)
+			};
+		}
+
 		public async Task<Team[]> List()
 		{
 			return await _repo.GetAll();

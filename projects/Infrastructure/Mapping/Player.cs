@@ -11,6 +11,8 @@ namespace Keeper.Infrastructure.Mapping
 			builder.ToTable("tb_player");
 			builder.Property(player => player.Id)
 				.HasColumnName("Id").ValueGeneratedOnAdd();
+			builder.Property<string>("NormalizedName");
+			builder.Property<string>("NormalizedNick");
 			builder.Property(player => player.Name)
 				.HasColumnType("varchar(50)")
 				.HasMaxLength(50)

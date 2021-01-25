@@ -16,5 +16,7 @@ namespace Keeper.Application.Interface
 		Task<Team[]> List();
 
 		Task<IServiceResult> Update(TeamUpdateDTO dto);
+		Task<TeamPaginationDTO> GetTeamsAvailablesForChampionship(string terms,
+			string notInChampinship, int page, int take);
 	}
 }

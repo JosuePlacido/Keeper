@@ -6,6 +6,9 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
 using Keeper.Application.DAO;
+using System.Linq.Expressions;
+using System;
+using Keeper.Domain.Utils;
 
 namespace Keeper.Infrastructure.DAO
 {
@@ -29,6 +32,19 @@ namespace Keeper.Infrastructure.DAO
 				LogoUrl = team?.LogoUrl,
 				IsDeletable = _context.TeamSubscribes.Where(ts => ts.TeamId == id).Count() == 0
 			};
+		}
+
+		public async Task<int> GetTotalFromSearch(string terms, string notInChampionship)
+		{
+			string termsNormalized = StringUtils.NormalizeLower(terms);
+			string termsNormalizedUpper = termsNormalized.ToUpper();
+			string[] subscribed = await _context.TeamSubscribes.AsNoTracking()
+				.Where(ts => ts.ChampionshipId == notInChampionship).Select(ts => ts.TeamId)
+				.ToArrayAsync();
+			return await _context.Teams
+				.Where(t => !subscribed.Contains(t.Id))
+				.Where(t => EF.Property<string>(t, "NormalizedName").Contains(termsNormalized) ||
+					t.Abrev.Contains(termsNormalizedUpper)).CountAsync();
 		}
 	}
 }

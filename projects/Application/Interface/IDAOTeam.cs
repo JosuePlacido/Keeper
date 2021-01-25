@@ -7,5 +7,6 @@ namespace Keeper.Application.DAO
 	public interface IDAOTeam
 	{
 		Task<TeamViewDTO> GetByIdView(string id);
+		Task<int> GetTotalFromSearch(string terms, string championship);
 	}
 }

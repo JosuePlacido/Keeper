@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Keeper.Domain.Models;
 
 namespace Keeper.Application.DTO
 {
@@ -35,7 +36,15 @@ namespace Keeper.Application.DTO
 		public string Abrev { get; set; }
 		public string LogoUrl { get; set; }
 		public bool IsDeletable { get; set; }
-
+	}
+	public class TeamPaginationDTO
+	{
+		public Team[] Teams { get; set; }
+		public string Terms { get; set; }
+		public string NotInChampionship { get; set; }
+		public int Page { get; set; }
+		public int Take { get; set; }
+		public int Total { get; set; }
 
 	}
 }

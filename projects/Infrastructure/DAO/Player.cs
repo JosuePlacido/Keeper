@@ -6,6 +6,7 @@ using Keeper.Infrastructure.DAO;
 using Keeper.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Keeper.Application.DAO;
+using Keeper.Domain.Utils;
 
 namespace Keeper.Infrastructure.DAO
 {
@@ -32,10 +33,13 @@ namespace Keeper.Infrastructure.DAO
 
 		public async Task<int> GetTotalFromSearch(string terms, string notInChampionship)
 		{
+			string termsNormalized = StringUtils.NormalizeLower(terms);
 			string[] subscribed = await _context.Championships.Where(c => c.Id == notInChampionship)
 				.SelectMany(c => c.Teams.SelectMany(ts => ts.Players)).Select(ps => ps.PlayerId).ToArrayAsync();
-			return await _context.Players.AsNoTracking().Where(p => (p.Name.Contains(terms)
-				|| p.Nickname.Contains(terms)) && !subscribed.Contains(p.Id)).CountAsync();
+			return await _context.Players.AsNoTracking()
+				.Where(p => !subscribed.Contains(p.Id))
+				.Where(p => EF.Property<string>(p, "NormalizedName").Contains(termsNormalized)
+					|| EF.Property<string>(p, "NormalizedNick").Contains(termsNormalized)).CountAsync();
 		}
 	}
 }
