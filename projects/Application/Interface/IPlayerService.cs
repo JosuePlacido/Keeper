@@ -10,7 +10,8 @@ namespace Keeper.Application.Interface
 		Task<Player> Create(PlayerCreateDTO dto);
 		Task<IServiceResult> Delete(string dto);
 		Task<Player> Get(string id);
-		Task<PlayerPaginationDTO> GetAvailables(string terms, string championship, int page, int take);
+		Task<PlayerAvailablePaginationDTO> GetAvailables(string terms, string championship, int page, int take);
 		Task<IServiceResult> Update(PlayerUpdateDTO dto);
+		Task<Player[]> Get();
 	}
 }

@@ -29,11 +29,20 @@ namespace Keeper.Application.DTO
 		public string Nickname { get; set; }
 		public bool IsDeletable { get; set; }
 	}
-	public class PlayerPaginationDTO
+	public class PlayerAvailablePaginationDTO
 	{
 		public PlayerSubscribe[] Players { get; set; }
 		public string Terms { get; set; }
 		public string ExcludeFromChampionship { get; set; }
+		public int Page { get; set; }
+		public int Take { get; set; }
+		public int Total { get; set; }
+
+	}
+	public class PlayerPaginationDTO
+	{
+		public Player[] Players { get; set; }
+		public string Terms { get; set; }
 		public int Page { get; set; }
 		public int Take { get; set; }
 		public int Total { get; set; }

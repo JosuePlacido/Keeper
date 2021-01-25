@@ -62,7 +62,12 @@ namespace Keeper.Application.Services
 			return await _repo.GetById(id);
 		}
 
-		public async Task<PlayerPaginationDTO> GetAvailables(string terms = "", string championship = "",
+		public async Task<Player[]> Get()
+		{
+			return await _repo.GetAll();
+		}
+
+		public async Task<PlayerAvailablePaginationDTO> GetAvailables(string terms = "", string championship = "",
 			int page = 1, int take = 10)
 		{
 			Player[] availables = await _repo.GetAvailables(terms, championship, page, take);
@@ -70,7 +75,7 @@ namespace Keeper.Application.Services
 				await _dao.GetFreeAgentsInChampionship(championship));
 
 			freeAgents.AddRange(availables.Select(p => new PlayerSubscribe(p.Id, Status.FreeAgent)));
-			PlayerPaginationDTO view = new PlayerPaginationDTO
+			PlayerAvailablePaginationDTO view = new PlayerAvailablePaginationDTO
 			{
 				ExcludeFromChampionship = championship,
 				Take = take,
