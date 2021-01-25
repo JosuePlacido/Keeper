@@ -6,7 +6,7 @@ namespace Keeper.Domain.Core
 {
 	public abstract class Entity
 	{
-		public string Id { get; private set; }
+		public string Id { get; protected set; }
 
 		protected Entity(string id)
 		{
