@@ -25,16 +25,21 @@ namespace Keeper.Domain.Models
 		}
 		public string LogoUrl { get; private set; }
 
-		public Team(string name, string abrev = null, string logoUrl = null)
-		{
-			Name = name;
-			Abrev = abrev;
-			LogoUrl = logoUrl;
-		}
-
 		public override string ToString()
 		{
 			return Name;
+		}
+
+		public static Team Factory(string id, string name,
+			string abrev = null, string logoUrl = null)
+		{
+			return new Team
+			{
+				Id = id,
+				Name = name,
+				Abrev = abrev,
+				LogoUrl = logoUrl,
+			};
 		}
 	}
 }

@@ -69,23 +69,22 @@ namespace Keeper.Test.UnitTest.Application.Service
 		[Fact]
 		public void Get_PlayerList_NotInChampionship()
 		{
+			PlayerAvailablePaginationDTO result = null;
+			var expected = SeedData.Players;
+			string championship = "c1";
 			using (var context = Fixture.CreateContext())
 			{
-				string championship = new ChampionshipRepository(context).GetAll()
-					.Result.Where(c => c.Edition == "1993")
-					.FirstOrDefault().Id;
 				var prayers = new PlayerRepository(context).GetAll().Result;
 				_output.WriteLine(JsonConvert.SerializeObject(prayers, Formatting.Indented));
 				PlayerRepository repo = new PlayerRepository(context);
-				var result = new PlayerService(null, new UnitOfWork(context), repo, new DAOPlayer(context))
+				result = new PlayerService(null, new UnitOfWork(context), repo, new DAOPlayer(context))
 					.GetAvailables(championship: championship).Result;
-				var expected = SeedData.Players;
-				Assert.Equal(5, result.Total);
-				Assert.Equal(result.ExcludeFromChampionship, championship);
-				Assert.Equal(result.Players.Length, 5);
-				Assert.All(result.Players.Select(PlayerService => PlayerService.Player),
-					 item => expected.Contains(item));
 			}
+			Assert.Equal(5, result.Total);
+			Assert.Equal(result.ExcludeFromChampionship, championship);
+			Assert.Equal(result.Players.Length, 5);
+			Assert.All(result.Players.Select(PlayerService => PlayerService.Player),
+				 item => expected.Contains(item));
 		}
 	}
 }

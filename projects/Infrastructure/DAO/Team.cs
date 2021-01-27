@@ -9,6 +9,7 @@ using Keeper.Application.DAO;
 using System.Linq.Expressions;
 using System;
 using Keeper.Domain.Utils;
+using Keeper.Domain.Core;
 
 namespace Keeper.Infrastructure.DAO
 {
@@ -20,7 +21,7 @@ namespace Keeper.Infrastructure.DAO
 			_context = Context;
 		}
 
-		public async Task<TeamViewDTO> GetByIdView(string id)
+		public async Task<IDTO> GetByIdView(string id)
 		{
 			var team = await _context.Teams.AsNoTracking()
 				.Where(t => t.Id == id).FirstOrDefaultAsync();

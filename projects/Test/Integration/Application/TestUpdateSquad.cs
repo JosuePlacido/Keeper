@@ -38,14 +38,10 @@ namespace Keeper.Test.Integration.Application
 			PLayerSquadPostDTO[] squad = PlayerSquadPostDTOExample.Valids;
 			using (var context = Fixture.CreateContext())
 			{
-				using (var transaction = context.Database.BeginTransaction())
-				{
-					ChampionshipRepository repo = new ChampionshipRepository(context);
-					result = new ChampionshipService(_mapper, new UnitOfWork(context), repo,
-						new DAOPlayerSubscribe(context))
-					.UpdateSquad(squad).Result;
-					transaction.Rollback();
-				}
+				ChampionshipRepository repo = new ChampionshipRepository(context);
+				result = new ChampionshipService(_mapper, new UnitOfWork(context), repo,
+					new DAOPlayerSubscribe(context))
+				.UpdateSquad(squad).Result;
 			}
 			Assert.True(result.ValidationResult.IsValid);
 		}

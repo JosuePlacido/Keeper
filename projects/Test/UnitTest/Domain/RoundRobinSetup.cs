@@ -8,25 +8,25 @@ namespace Keeper.Test.Domain
 	{
 		public RoundRobinSetup()
 		{
-			var TeamPair = new Group("TeamPair", new Statistic[]{
+			var TeamPair = Group.Factory(null, "TeamPair", null, statistics: new Statistic[]{
 					new Statistic("AAA"),
 					new Statistic("BBB")
 				});
-			var TeamNotPair = new Group("TeamNotPair", new Statistic[]{
+			var TeamNotPair = Group.Factory(null, "TeamNotPair", null, statistics: new Statistic[]{
 					new Statistic("AAA"),
 					new Statistic("BBB"),
 					new Statistic("CCC"),
 				});
-			var VacancyPair = new Group("VacancyPair", new Statistic[0],
-				new Vacancy[]{
+			var VacancyPair = Group.Factory(null, "VacancyPair", null, statistics: new Statistic[0],
+				vacancys: new Vacancy[]{
 					new Vacancy("ZZZ", Classifieds.BestVsWorst),
 					new Vacancy("XXX", Classifieds.BestVsWorst),
 					new Vacancy("YYY", Classifieds.BestVsWorst),
 					new Vacancy("WWW", Classifieds.BestVsWorst),
 				}
 			);
-			var VacancyNotPair = new Group("VacancyNotPair", new Statistic[0],
-				new Vacancy[]{
+			var VacancyNotPair = Group.Factory(null, "VacancyNotPair", null, statistics: new Statistic[0],
+				vacancys: new Vacancy[]{
 					new Vacancy("ZZZ", Classifieds.BestVsWorst),
 					new Vacancy("XXX", Classifieds.BestVsWorst),
 					new Vacancy("YYY", Classifieds.BestVsWorst),
@@ -34,29 +34,29 @@ namespace Keeper.Test.Domain
 					new Vacancy("VVV", Classifieds.BestVsWorst),
 				}
 			);
-			var HybridPair = new Group("HybridPair",
-				new Statistic[]{
+			var HybridPair = Group.Factory(null, "HybridPair", null,
+				statistics: new Statistic[]{
 					new Statistic("AAA"),
 					new Statistic("BBB"),
 					new Statistic("CCC"),
 					new Statistic("DDD"),
 				},
-				new Vacancy[]{
+				vacancys: new Vacancy[]{
 					new Vacancy("ZZZ", Classifieds.BestVsWorst),
 					new Vacancy("XXX", Classifieds.BestVsWorst),
 					new Vacancy("YYY", Classifieds.BestVsWorst),
 					new Vacancy("WWW", Classifieds.BestVsWorst),
 				}
 			);
-			var HybridNotPair = new Group("HybridNotPair",
-				new Statistic[]{
+			var HybridNotPair = Group.Factory(null, "HybridNotPair", null,
+				statistics: new Statistic[]{
 					new Statistic("AAA"),
 					new Statistic("BBB"),
 					new Statistic("CCC"),
 					new Statistic("DDD"),
 					new Statistic("EEE"),
 				},
-				new Vacancy[]{
+				vacancys: new Vacancy[]{
 					new Vacancy("ZZZ", Classifieds.BestVsWorst),
 					new Vacancy("XXX", Classifieds.BestVsWorst),
 					new Vacancy("YYY", Classifieds.BestVsWorst),

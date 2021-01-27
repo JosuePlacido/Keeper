@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Keeper.Domain.Core;
 using Keeper.Domain.Models;
 
 namespace Keeper.Application.DTO
@@ -29,7 +30,7 @@ namespace Keeper.Application.DTO
 		[MaxLength(200, ErrorMessage = "Máximo de 200")]
 		public string LogoUrl { get; set; }
 	}
-	public class TeamViewDTO
+	public class TeamViewDTO : IDTO
 	{
 		public string Id { get; set; }
 		public string Name { get; set; }

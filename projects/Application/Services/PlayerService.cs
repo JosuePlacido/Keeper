@@ -40,7 +40,7 @@ namespace Keeper.Application.Services
 		public async Task<IServiceResult> Delete(string id)
 		{
 			ServiceResponse response = new ServiceResponse();
-			PlayerViewDTO dto = await _dao.GetByIdView(id);
+			PlayerViewDTO dto = (PlayerViewDTO)await _dao.GetByIdView(id);
 
 			response.ValidationResult = new PlayerDeleteValidation().Validate(dto);
 			if (response.ValidationResult.IsValid)

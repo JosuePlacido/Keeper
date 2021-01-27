@@ -24,9 +24,10 @@ namespace Keeper.Test.Integration.Application
 		public void TestCreateChampionship()
 		{
 			ValidationResult result = null;
-			using (var context = Fixture.CreateContext())
+			using (var transaction = Fixture.Connection.BeginTransaction())
 			{
-				using (var transaction = context.Database.BeginTransaction())
+
+				using (var context = Fixture.CreateContext(transaction))
 				{
 					var repo = new ChampionshipRepository(context);
 					var config = new MapperConfiguration(cfg =>
@@ -38,8 +39,6 @@ namespace Keeper.Test.Integration.Application
 					var test = ChampionshipCreateDTODataExamples.SemiFinal;
 					result = new ChampionshipService(mapper, new UnitOfWork(context), repo,
 						null).Create(test).Result;
-
-					transaction.Rollback();
 				}
 			}
 			var jsonResult = JsonConvert.SerializeObject(result, Formatting.Indented);

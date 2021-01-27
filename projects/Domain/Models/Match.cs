@@ -53,8 +53,6 @@ namespace Keeper.Domain.Models
 			EventGames = new List<EventGame>();
 		}
 
-
-
 		public void RegisterResult(int homeGoals, int awayGoals,
 			int? homePenalties = null, int? awayPenalties = null, EventGame[] events = null)
 		{
@@ -78,6 +76,47 @@ namespace Keeper.Domain.Models
 				{
 					EventGames.Add(eg);
 				}
+		}
+		public static Match Factory(string id, string name, string groupId, int round,
+			string status = Enum.Status.Created,
+			string vacancyHomeId = null, string vacancyAwayId = null,
+			string homeId = null, string awayId = null,
+			string address = null, DateTime? date = null,
+			int? goalsHome = null, int? goalsAway = null,
+			int? goalsPenaltyHome = null, int? goalsPenaltyAway = null,
+			bool aggregateGame = false, bool penalty = false, bool finalGame = false,
+			int? aggregateGoalsAway = null, int? aggregateGoalsHome = null,
+			TeamSubscribe home = null, Vacancy vacancyHome = null,
+			TeamSubscribe away = null, Vacancy vacancyAway = null, IList<EventGame> eventGames = null)
+		{
+			return new Match
+			{
+				Id = id,
+				Name = name,
+				Address = address,
+				Date = date,
+				VacancyHome = vacancyHome,
+				VacancyHomeId = vacancyHomeId,
+				VacancyAway = vacancyAway,
+				VacancyAwayId = vacancyAwayId,
+				HomeId = homeId,
+				Home = home,
+				AwayId = awayId,
+				Away = away,
+				Round = round,
+				GoalsHome = goalsHome,
+				GoalsAway = goalsAway,
+				GoalsPenaltyHome = goalsPenaltyHome,
+				GoalsPenaltyAway = goalsPenaltyAway,
+				FinalGame = finalGame,
+				AggregateGame = aggregateGame,
+				Penalty = penalty,
+				AggregateGoalsAway = aggregateGoalsAway,
+				AggregateGoalsHome = aggregateGoalsHome,
+				Status = status,
+				GroupId = groupId,
+				EventGames = eventGames,
+			};
 		}
 	}
 }

@@ -29,9 +29,9 @@ namespace Keeper.Test.UnitTest.Infra.Repositorys
 				PlayerSubscribe.Factory("ps1", "p5", "ts1", status: Status.FreeAgent),
 				PlayerSubscribe.Factory("ps2", "p6", "ts2", status: Status.Matching),
 			};
-			using (var context = Fixture.CreateContext())
+			using (var transaction = Fixture.Connection.BeginTransaction())
 			{
-				using (var transaction = context.Database.BeginTransaction())
+				using (var context = Fixture.CreateContext(transaction))
 				{
 					ChampionshipRepository repository = new ChampionshipRepository(context);
 					PlayerSubscribe result = null;

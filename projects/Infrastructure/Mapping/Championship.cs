@@ -39,6 +39,12 @@ namespace Keeper.Infrastructure.Mapping
 				.HasForeignKey(s => s.ChampionshipId)
 				.IsRequired()
 				.OnDelete(DeleteBehavior.Cascade);
+
+			builder.HasMany(c => c.Teams)
+				.WithOne()
+				.HasForeignKey(ts => ts.ChampionshipId)
+				.IsRequired()
+				.OnDelete(DeleteBehavior.Cascade);
 		}
 	}
 }

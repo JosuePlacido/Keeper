@@ -4,14 +4,16 @@ using Keeper.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20210124230506_normalizedprop")]
+    partial class normalizedprop
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -258,13 +260,6 @@ namespace Infrastructure.Migrations
                     b.Property<int>("RedCard")
                         .HasColumnType("int");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(15)
-                        .HasColumnType("varchar(15)")
-                        .HasDefaultValue("Disputando");
-
                     b.Property<string>("TeamSubscribeId")
                         .HasColumnType("nvarchar(450)");
 
@@ -421,7 +416,6 @@ namespace Infrastructure.Migrations
                         .HasColumnName("Id");
 
                     b.Property<string>("ChampionshipId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("Drowns")
@@ -450,7 +444,7 @@ namespace Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(15)
                         .HasColumnType("varchar(15)")
-                        .HasDefaultValue("Disputando");
+                        .HasDefaultValue("Criado");
 
                     b.Property<string>("TeamId")
                         .HasColumnType("nvarchar(450)");
@@ -608,9 +602,7 @@ namespace Infrastructure.Migrations
                 {
                     b.HasOne("Keeper.Domain.Models.Championship", null)
                         .WithMany("Teams")
-                        .HasForeignKey("ChampionshipId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ChampionshipId");
 
                     b.HasOne("Keeper.Domain.Models.Team", "Team")
                         .WithMany()

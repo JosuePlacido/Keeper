@@ -46,10 +46,18 @@ namespace Keeper.Test
 						context.Database.EnsureCreated();
 						context.Set<Team>().AddRange(SeedData.Teams);
 						context.Set<Player>().AddRange(SeedData.Players);
+						context.Set<PlayerSubscribe>().AddRange(SeedData.PlayersSubscribe);
 						context.Set<Category>().AddRange(SeedData.Categorys);
-						context.Set<Championship>().Add(SeedData.GetChampionship());
-						context.Set<Championship>().Add(new Championship("remove", "remove",
-							SeedData.Categorys[0], "remove"));
+						context.Set<Championship>().Add(SeedData.Championship);
+						context.Set<TeamSubscribe>().AddRange(SeedData.TeamsSubscribes);
+						context.Set<Stage>().AddRange(SeedData.Stages);
+						context.Set<Group>().AddRange(SeedData.Groups);
+						context.Set<Vacancy>().AddRange(SeedData.Vacancys);
+						context.Set<Statistic>().AddRange(SeedData.Statistics);
+						context.Set<Match>().AddRange(SeedData.Matches);
+						context.Set<EventGame>().AddRange(SeedData.EventGames);
+						context.Set<Championship>().Add(Championship.Factory("remove",
+							"remove", "remove"));
 						context.SaveChanges();
 					}
 

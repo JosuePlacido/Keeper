@@ -61,9 +61,9 @@ namespace Keeper.Test.UnitTest.Infra.Repositorys
 		[ClassData(typeof(ValidChampionshipSetup))]
 		public void AddValidChampionship(Championship Championship)
 		{
-			using (var context = Fixture.CreateContext())
+			using (var transaction = Fixture.Connection.BeginTransaction())
 			{
-				using (var transaction = context.Database.BeginTransaction())
+				using (var context = Fixture.CreateContext(transaction))
 				{
 					var repo = new ChampionshipRepository(context);
 					var beforeItemsCount = repo.GetAll().Result.Length;
@@ -73,7 +73,6 @@ namespace Keeper.Test.UnitTest.Infra.Repositorys
 					var items = repo.GetAll().Result;
 					Assert.NotNull(Championship.Id);
 					Assert.True(beforeItemsCount < afterItemsCount);
-					transaction.Rollback();
 				}
 			}
 		}
@@ -93,12 +92,12 @@ namespace Keeper.Test.UnitTest.Infra.Repositorys
 		[Fact]
 		public void RemoveChampionship()
 		{
-			using (var context = Fixture.CreateContext())
+			using (var transaction = Fixture.Connection.BeginTransaction())
 			{
-				using (var transaction = context.Database.BeginTransaction())
+				using (var context = Fixture.CreateContext(transaction))
 				{
 					var repo = new ChampionshipRepository(context);
-					var championship = repo.GetAll().Result.Where(c => c.Name == "remove" || c.Name == "UPDATE").FirstOrDefault();
+					var championship = Championship.Factory("remove", "remove", "remove");
 					championship = repo.Remove(championship).Result;
 					context.SaveChanges();
 					var result1 = repo.GetById(championship.Id).Result;

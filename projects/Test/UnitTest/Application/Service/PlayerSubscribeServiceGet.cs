@@ -26,6 +26,7 @@ namespace Keeper.Test.UnitTest.Application.Service
 		[Fact]
 		public void Get_PlayerList_ReturnList()
 		{
+			SquadEditDTO[] result = null;
 			using (var context = Fixture.CreateContext())
 			{
 				ChampionshipRepository repo = new ChampionshipRepository(context);
@@ -36,11 +37,11 @@ namespace Keeper.Test.UnitTest.Application.Service
 				IMapper mapper = config.CreateMapper();
 				string champ = repo.GetAll().Result.Where(c => c.Edition == "1993")
 					.FirstOrDefault().Id;
-				SquadEditDTO[] result = new ChampionshipService(mapper, new UnitOfWork(context),
+				result = new ChampionshipService(mapper, new UnitOfWork(context),
 					repo, null).GetSquads(champ).Result;
-				Assert.Equal(2, result.Length);
-				Assert.Equal(6, result.SelectMany(ts => ts.Players).Count());
 			}
+			Assert.Equal(2, result.Length);
+			Assert.Equal(6, result.SelectMany(ts => ts.Players).Count());
 		}
 		[Fact]
 		public void Get_PlayerListINvalidChampionchip_ReturnErrors()

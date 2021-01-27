@@ -21,14 +21,6 @@ namespace Keeper.Domain.Models
 			Vacancys = new List<Vacancy>();
 			Matchs = new List<Match>();
 		}
-		public Group(string name, Statistic[] stats = null, Vacancy[] vacancys = null)
-			: base(Guid.NewGuid().ToString())
-		{
-			Name = name;
-			Statistics = stats != null ? new List<Statistic>(stats) : new List<Statistic>();
-			Vacancys = vacancys != null ? new List<Vacancy>(vacancys) : new List<Vacancy>();
-			Matchs = new List<Match>();
-		}
 		public Group AddMatches(Match[] matches)
 		{
 			foreach (var match in matches)
@@ -139,6 +131,21 @@ namespace Keeper.Domain.Models
 		public override string ToString()
 		{
 			return Name;
+		}
+
+		public static Group Factory(string id, string name,
+			string stageId, IList<Match> matchs = null,
+			IList<Vacancy> vacancys = null, IList<Statistic> statistics = null)
+		{
+			return new Group
+			{
+				Id = id,
+				StageId = stageId,
+				Matchs = matchs,
+				Vacancys = vacancys,
+				Statistics = statistics,
+				Name = name
+			};
 		}
 	}
 }

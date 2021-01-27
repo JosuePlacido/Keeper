@@ -85,7 +85,7 @@ namespace Keeper.Domain.Models
 				Yellows = yellows,
 				Reds = reds,
 				Players = players,
-
+				ChampionshipId = championshipId
 			};
 		}
 	}

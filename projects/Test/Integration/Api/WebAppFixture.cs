@@ -43,13 +43,13 @@ namespace Keeper.Test.Integration.Api
 					db.Database.EnsureCreated();
 					try
 					{
+						db.Database.ExecuteSqlRaw("DELETE FROM tb_championship WHERE Id LIKE 'test'");
+						db.Database.ExecuteSqlRaw("DELETE FROM tb_team_subscribe WHERE Id LIKE 'test'");
+						db.Database.ExecuteSqlRaw("DELETE FROM tb_player_subscribe WHERE Id LIKE 'test'");
 						db.Database.ExecuteSqlRaw("DELETE FROM tb_team WHERE Id LIKE 'test'");
 						db.Database.ExecuteSqlRaw("DELETE FROM tb_team WHERE Id LIKE 'remove'");
 						db.Database.ExecuteSqlRaw("DELETE FROM tb_player WHERE Id LIKE 'test'");
 						db.Database.ExecuteSqlRaw("DELETE FROM tb_player WHERE Id LIKE 'remove'");
-						db.Database.ExecuteSqlRaw("DELETE FROM tb_player_subscribe WHERE Id LIKE 'test'");
-						db.Database.ExecuteSqlRaw("DELETE FROM tb_team_subscribe WHERE Id LIKE 'test'");
-						db.Database.ExecuteSqlRaw("DELETE FROM tb_championship WHERE Id LIKE 'test'");
 						db.Database.ExecuteSqlRaw("INSERT INTO tb_team(Id,Name) VALUES ('test','test')");
 						db.Database.ExecuteSqlRaw("INSERT INTO tb_team(Id,Name) VALUES ('remove','remove')");
 						db.Database.ExecuteSqlRaw("INSERT INTO tb_player(Id,Name) VALUES ('test','test')");

@@ -17,22 +17,28 @@ namespace Keeper.Domain.Models
 		public IList<Group> Groups { get; private set; }
 		private Stage() { }
 
-		public Stage(int order, string name, bool duplicateTurn, bool mirrorTurn,
-			TypeStage typeStage, string criterias, Classifieds regulation, IList<Group> groups)
-		{
-			Order = order;
-			Name = name;
-			DuplicateTurn = duplicateTurn;
-			MirrorTurn = mirrorTurn;
-			TypeStage = typeStage;
-			Criterias = criterias;
-			Regulation = regulation;
-			Groups = groups;
-		}
-
 		public override string ToString()
 		{
 			return Name;
+		}
+
+		public static Stage Factory(string id, string championshipId, int order, string name, bool duplicateTurn = false,
+			bool mirrorTurn = false, TypeStage typeStage = TypeStage.League, string criterias = "",
+			Classifieds regulation = Classifieds.Random, IList<Group> groups = null)
+		{
+			return new Stage
+			{
+				Id = id,
+				Order = order,
+				Name = name,
+				DuplicateTurn = duplicateTurn,
+				MirrorTurn = mirrorTurn,
+				TypeStage = typeStage,
+				Criterias = criterias,
+				Regulation = regulation,
+				ChampionshipId = championshipId,
+				Groups = groups,
+			};
 		}
 	}
 }

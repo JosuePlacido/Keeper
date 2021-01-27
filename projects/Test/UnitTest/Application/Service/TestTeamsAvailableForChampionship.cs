@@ -28,14 +28,11 @@ namespace Keeper.Test.UnitTest.Application.Service
 		{
 			Team[] expected = SeedData.Teams.Skip(4).Take(2).ToArray();
 			TeamPaginationDTO result = null;
+			string champ = SeedData.Championship.Id;
 			using (var context = Fixture.CreateContext())
 			{
 				TeamRepository repo = new TeamRepository(context);
 				DAOTeam dao = new DAOTeam(context);
-
-				string champ = new ChampionshipRepository(context).GetAll().Result.Where(c => c.Edition == "1993")
-					.FirstOrDefault().Id;
-
 				result = new TeamService(null, null, repo, dao)
 					.GetTeamsAvailablesForChampionship("", champ, 1, 30).Result;
 			}

@@ -18,18 +18,28 @@ namespace Keeper.Domain.Models
 		public PlayerSubscribe RegisterPlayer { get; set; }
 		private EventGame() { }
 
-		public EventGame(int order, string description, TypeEvent type, bool isHomeEvent,
-		 string player)
-		{
-			Order = order;
-			Type = type;
-			Description = description;
-			IsHomeEvent = isHomeEvent;
-		}
-
 		public override string ToString()
 		{
 			return Description;
+		}
+
+		public static EventGame Factory(string id, int order, string description,
+			TypeEvent type, bool isHomeEvent,
+			string matchId, string registerPlayerId,
+			Match match = null, PlayerSubscribe registerPlayer = null)
+		{
+			return new EventGame
+			{
+				Id = id,
+				Order = order,
+				Description = description,
+				Type = type,
+				IsHomeEvent = isHomeEvent,
+				MatchId = matchId,
+				Match = match,
+				RegisterPlayerId = registerPlayerId,
+				RegisterPlayer = registerPlayer,
+			};
 		}
 	}
 }

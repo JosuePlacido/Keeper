@@ -15,7 +15,7 @@ namespace Keeper.Domain.Models
 		public IList<Stage> Stages { get; private set; } = new List<Stage>();
 		public IList<TeamSubscribe> Teams { get; private set; } = new List<TeamSubscribe>();
 
-		protected Championship() { }
+		internal Championship() { }
 
 		public void EditScope(string name = null, string edition = null, string status = null)
 		{
@@ -33,15 +33,12 @@ namespace Keeper.Domain.Models
 			}
 		}
 
-		public Championship(string name, string edition, Category category, string status)
+		public override string ToString()
 		{
-			Name = name;
-			Edition = edition;
-			Category = category;
-			Status = status;
+			return $"{Name} {Edition}";
 		}
-		public Championship(string name, string edition, Category category
-			, string status, IList<Stage> stages, IList<TeamSubscribe> teams)
+
+		public Championship(string name, string edition, Category category, string status, IList<Stage> stages, IList<TeamSubscribe> teams)
 		{
 			Name = name;
 			Edition = edition;
@@ -51,9 +48,20 @@ namespace Keeper.Domain.Models
 			Teams = teams;
 		}
 
-		public override string ToString()
+		public static Championship Factory(string id, string name, string edition,
+			Category category = null, string status = Enum.Status.Matching,
+			IList<Stage> stages = null, IList<TeamSubscribe> teams = null)
 		{
-			return $"{Name} {Edition}";
+			return new Championship()
+			{
+				Id = id,
+				Name = name,
+				Edition = edition,
+				Category = category,
+				Status = status,
+				Stages = stages,
+				Teams = teams,
+			};
 		}
 	}
 }

@@ -10,7 +10,8 @@ namespace Keeper.Test.UnitTest.Infra.Repositorys
 	{
 		public ValidChampionshipSetup()
 		{
-			Add(new Championship("test", "edition", SeedData.Categorys.First(), Status.Created));
+			Add(Championship.Factory("test", "test", "edition",
+				SeedData.Categorys.First(), Status.Created));
 		}
 	}
 }

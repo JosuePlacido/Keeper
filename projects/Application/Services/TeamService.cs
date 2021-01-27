@@ -37,7 +37,7 @@ namespace Keeper.Application.Services
 		public async Task<IServiceResult> Delete(string id)
 		{
 			ServiceResponse response = new ServiceResponse();
-			TeamViewDTO dto = await _dao.GetByIdView(id);
+			TeamViewDTO dto = (TeamViewDTO)await _dao.GetByIdView(id);
 
 			response.ValidationResult = new TeamDeleteValidation().Validate(dto);
 			if (response.ValidationResult.IsValid)

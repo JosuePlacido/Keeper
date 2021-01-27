@@ -24,18 +24,17 @@ namespace Keeper.Test.Integration.Api
 		public TestTeamListAvailablePaginationRequest(CustomWebApplicationFactoryFixture fixture) => this._fixture = fixture;
 
 		[Fact]
-		public async Task Get_TeamsList_ReturnTeamList()
+		public void Get_TeamsList_ReturnTeamList()
 		{
 			HttpClient client = this._fixture
 				.CustomWebApplicationFactory
 				.CreateClient();
 
-			HttpResponseMessage actualResponse = await client
-				.GetAsync("Team/Availables?terms=sao")
-				.ConfigureAwait(false);
+			HttpResponseMessage actualResponse = client
+				.GetAsync("Team/Availables?terms=sao").Result;
 
 			var result = JsonConvert.DeserializeObject<TeamPaginationDTO>(
-				await actualResponse.Content.ReadAsStringAsync());
+				actualResponse.Content.ReadAsStringAsync().Result);
 			actualResponse.EnsureSuccessStatusCode();
 			Assert.Equal(HttpStatusCode.OK, actualResponse.StatusCode);
 			Assert.Equal(1, result.Page);

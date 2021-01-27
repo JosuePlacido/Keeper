@@ -9,6 +9,7 @@ using Keeper.Application.DAO;
 using Keeper.Domain.Utils;
 using System.Collections.Generic;
 using Keeper.Domain.Enum;
+using Keeper.Domain.Core;
 
 namespace Keeper.Infrastructure.DAO
 {
@@ -20,7 +21,7 @@ namespace Keeper.Infrastructure.DAO
 			_context = Context;
 		}
 
-		public async Task<PlayerViewDTO> GetByIdView(string id)
+		public async Task<IDTO> GetByIdView(string id)
 		{
 			var player = await _context.Players.AsNoTracking()
 				.Where(t => t.Id == id).FirstOrDefaultAsync();

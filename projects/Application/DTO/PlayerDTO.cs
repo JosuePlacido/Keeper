@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Keeper.Domain.Core;
 using Keeper.Domain.Models;
 
 namespace Keeper.Application.DTO
@@ -22,7 +23,7 @@ namespace Keeper.Application.DTO
 		[MaxLength(50, ErrorMessage = "Máximo de 50")]
 		public string Nickname { get; set; }
 	}
-	public class PlayerViewDTO
+	public class PlayerViewDTO : IDTO
 	{
 		public string Id { get; set; }
 		public string Name { get; set; }

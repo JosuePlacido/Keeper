@@ -30,29 +30,26 @@ namespace Keeper.Application.Interface
 
 		protected void ValidateStructure()
 		{
-			RuleFor(c => c.Stages.Count)
-				.GreaterThan(0).WithMessage("O campeonato deve ter no mínimo 1 Fase");
+			RuleFor(c => c.Stages).NotNull().NotEmpty()
+				.WithMessage("O campeonato deve ter no mínimo 1 Fase");
 			RuleForEach(c => c.Stages).ChildRules(stg =>
 			{
-				stg.RuleFor(s => s.Groups.Count).GreaterThan(0);
+				stg.RuleFor(s => s.Groups).NotNull().NotEmpty();
 			}).WithMessage("O campeonato deve ter no mínimo 1 grupo");
 
 			RuleForEach(c => c.Stages).ChildRules(stg =>
 			{
 				stg.RuleForEach(s => s.Groups).ChildRules(grp =>
 				{
-					grp.RuleFor(g => g.Vacancys.Count).GreaterThan(1);
-				});
-			}).When(c => c.Teams.Count < 2)
-				.WithMessage("O campeonato deve ter no mínimo com 2 vagas ou 2 times inscritos");
-
-			RuleForEach(c => c.Stages).ChildRules(stg =>
-			{
-				stg.RuleForEach(s => s.Groups).ChildRules(grp =>
-				{
-					grp.RuleFor(g => g.Matchs.Count).GreaterThan(0);
+					grp.RuleFor(g => g.Matchs).NotNull().NotEmpty();
 				});
 			}).WithMessage("O campeonato deve ter no mínimo 1 jogo criado");
+
+			RuleFor(c => c.Stages[0])
+				.Must(s => s.Groups.SelectMany(g => g.Vacancys).Count() +
+					s.Groups.SelectMany(g => g.Statistics).Count() >= 2)
+				.When(c => c.Stages != null && c.Stages.Count > 0)
+				.WithMessage("O campeonato deve ter no mínimo 2 vagas/times");
 		}
 	}
 }

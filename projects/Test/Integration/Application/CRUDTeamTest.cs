@@ -11,6 +11,7 @@ using Xunit;
 using Xunit.Abstractions;
 using Keeper.Infrastructure.DAO;
 using Infrastructure.Data;
+using Keeper.Application.Interface;
 
 namespace Keeper.Test.Integration.Application
 {
@@ -25,9 +26,9 @@ namespace Keeper.Test.Integration.Application
 		public void TestCreateTeam()
 		{
 			Team result = null;
-			using (var context = Fixture.CreateContext())
+			using (var transaction = Fixture.Connection.BeginTransaction())
 			{
-				using (var transaction = context.Database.BeginTransaction())
+				using (var context = Fixture.CreateContext(transaction))
 				{
 					var repo = new TeamRepository(context);
 					var config = new MapperConfiguration(cfg =>
@@ -39,17 +40,17 @@ namespace Keeper.Test.Integration.Application
 					result = new TeamService(mapper, new UnitOfWork(context), repo, null).Create(test).Result;
 					Assert.NotNull(result.Id);
 					Assert.NotNull(context.Teams.Find(result.Id));
-
-					transaction.Rollback();
 				}
 			}
 		}
 		[Fact]
 		public void UpdateTeam()
 		{
-			using (var context = Fixture.CreateContext())
+			Team finalResult;
+			IServiceResult result;
+			using (var transaction = Fixture.Connection.BeginTransaction())
 			{
-				using (var transaction = context.Database.BeginTransaction())
+				using (var context = Fixture.CreateContext(transaction))
 				{
 					TeamUpdateDTO test = TeamDTODataExample.TeamUpdateNameOnly;
 					test.Id = SeedData.Teams[4].Id;
@@ -60,22 +61,22 @@ namespace Keeper.Test.Integration.Application
 						cfg.AddProfile<TeamDTOProfile>();
 					});
 					IMapper mapper = config.CreateMapper();
-					var result = new TeamService(mapper, new UnitOfWork(context),
+					result = new TeamService(mapper, new UnitOfWork(context),
 						repo, new DAOTeam(context)).Update(test).Result;
-					Team finalResult = context.Teams.Find(((Team)result.Value).Id);
-					Assert.NotNull(((Team)result.Value).Id);
-					Assert.NotNull(finalResult);
-
-					transaction.Rollback();
+					finalResult = context.Teams.Find(((Team)result.Value).Id);
 				}
 			}
+			Assert.NotNull(((Team)result.Value).Id);
+			Assert.NotNull(finalResult);
 		}
 		[Fact]
 		public void DeleteTeam()
 		{
-			using (var context = Fixture.CreateContext())
+			Team team;
+			Team test;
+			using (var transaction = Fixture.Connection.BeginTransaction())
 			{
-				using (var transaction = context.Database.BeginTransaction())
+				using (var context = Fixture.CreateContext(transaction))
 				{
 					TeamRepository repo = new TeamRepository(context);
 					MapperConfiguration config = new MapperConfiguration(cfg =>
@@ -83,17 +84,15 @@ namespace Keeper.Test.Integration.Application
 						cfg.AddProfile<TeamDTOProfile>();
 					});
 					IMapper mapper = config.CreateMapper();
-					Team test = SeedData.Teams.Last();
+					test = SeedData.Teams.Last();
 					var result = new TeamService(mapper, new UnitOfWork(context),
 						repo, new DAOTeam(context)).Delete(test.Id).Result;
-					Team team = result.Value as Team;
-					Assert.IsType<Team>(team);
-					Assert.Equal(team, test);
+					team = result.Value as Team;
 					Assert.Null(context.Teams.Find(team.Id));
-
-					transaction.Rollback();
 				}
 			}
+			Assert.IsType<Team>(team);
+			Assert.Equal(team, test);
 		}
 		[Fact]
 		public void GetTeam()
