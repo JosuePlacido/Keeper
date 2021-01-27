@@ -21,23 +21,6 @@ namespace Keeper.Domain.Models
 		public int Reds { get; private set; }
 		public IList<PlayerSubscribe> Players { get; private set; }
 		private TeamSubscribe() { }
-
-		public TeamSubscribe UpdateNumbers(string status, int games, int won,
-			int drowns, int lost, int goalsScores,
-			int goalsAgainst, int goalsDifference, int yellows, int reds)
-		{
-			Status = status;
-			Games = games;
-			Won = won;
-			Drowns = drowns;
-			Lost = lost;
-			GoalsScores = goalsScores;
-			GoalsAgainst = goalsAgainst;
-			GoalsDifference = goalsDifference;
-			Yellows = yellows;
-			Reds = reds;
-			return this;
-		}
 		public TeamSubscribe AddPlayer(PlayerSubscribe player)
 		{
 			Players.Add(player);
@@ -76,6 +59,34 @@ namespace Keeper.Domain.Models
 			Status = Enum.Status.Matching;
 			TeamId = team;
 			Players = new List<PlayerSubscribe>();
+		}
+
+
+
+		public static TeamSubscribe Factory(string id, string teamId,
+			string championshipId = null, string status = Enum.Status.Matching, Team team = null,
+			int games = 0, int won = 0, int drowns = 0, int lost = 0, int goalsScores = 0,
+			int goalsAgainst = 0, int goalsDifference = 0, int yellows = 0, int reds = 0,
+			IList<PlayerSubscribe> players = null)
+		{
+			return new TeamSubscribe
+			{
+				Id = id,
+				Status = status,
+				TeamId = teamId,
+				Team = team,
+				Games = games,
+				Won = won,
+				Drowns = drowns,
+				Lost = lost,
+				GoalsScores = goalsScores,
+				GoalsAgainst = goalsAgainst,
+				GoalsDifference = goalsDifference,
+				Yellows = yellows,
+				Reds = reds,
+				Players = players,
+
+			};
 		}
 	}
 }

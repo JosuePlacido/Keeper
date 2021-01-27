@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Keeper.Application.DTO;
 using Keeper.Application.Interface;
+using Keeper.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Keeper.Api.Controllers
@@ -19,6 +20,12 @@ namespace Keeper.Api.Controllers
 		public async Task<SquadEditDTO[]> Squads(string id)
 		{
 			return await _ChampionshipAppService.GetSquads(id);
+		}
+		[HttpPost("Squad")]
+		public async Task<IActionResult> Squad(PLayerSquadPostDTO[] squads)
+		{
+			return !ModelState.IsValid ? CustomResponse(ModelState) :
+				CustomResponse(await _ChampionshipAppService.UpdateSquad(squads));
 		}
 	}
 }

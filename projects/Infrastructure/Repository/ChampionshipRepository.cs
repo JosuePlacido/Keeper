@@ -34,5 +34,23 @@ namespace Keeper.Infrastructure.Repository
 					.ThenInclude(ts => ts.Players)
 						.ThenInclude(ps => ((PlayerSubscribe)ps).Player).FirstOrDefaultAsync();
 		}
+
+		public async Task<PlayerSubscribe> UpdatePLayer(PlayerSubscribe player)
+		{
+			PlayerSubscribe temp = await _context.PlayerSubscribe.FindAsync(player.Id);
+			if (temp == null)
+			{
+				await _context.PlayerSubscribe.AddAsync(
+					new PlayerSubscribe(player.PlayerId, player.TeamSubscribeId, player.Status));
+			}
+			else if (!await _context.PlayerSubscribe.AnyAsync(psi =>
+				psi.Id == player.Id && psi.PlayerId == player.PlayerId &&
+				psi.TeamSubscribeId == player.TeamSubscribeId && psi.Status == player.Status))
+			{
+				temp.TransferTeam(player.TeamSubscribeId, player.Status);
+				_context.Entry(temp).State = EntityState.Modified;
+			}
+			return player;
+		}
 	}
 }

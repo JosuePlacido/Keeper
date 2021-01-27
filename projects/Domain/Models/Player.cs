@@ -11,14 +11,18 @@ namespace Keeper.Domain.Models
 		public string Name { get; private set; }
 		private Player() { }
 
-		public Player(string name)
-		{
-			Name = name;
-		}
-
 		public override string ToString()
 		{
 			return string.IsNullOrEmpty(Nickname) ? Name : Nickname;
+		}
+		public static Player Factory(string id, string name, string nick = null)
+		{
+			return new Player
+			{
+				Id = id,
+				Name = name,
+				Nickname = nick
+			};
 		}
 	}
 }

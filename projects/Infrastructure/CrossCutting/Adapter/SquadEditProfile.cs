@@ -14,6 +14,9 @@ namespace Keeper.Infrastructure.CrossCutting.Adapter
 					   src.Player.Name))
 				.ForMember(dst => dst.PlayerNick, opt => opt.MapFrom(src =>
 					   src.Player.Nickname));
+			CreateMap<PLayerSquadPostDTO, PlayerSubscribe>()
+				.ConstructUsing(src => new PlayerSubscribe(src.PlayerId,
+					src.TeamSubscribeId, src.Status));
 		}
 	}
 }

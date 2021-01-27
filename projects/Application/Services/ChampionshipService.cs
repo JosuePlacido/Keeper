@@ -10,6 +10,8 @@ using Keeper.Application.Interface;
 using FluentValidation.Results;
 using Keeper.Application.Models;
 using Domain.Core;
+using Keeper.Domain.Enum;
+using Keeper.Application.DAO;
 
 namespace Keeper.Application.Services
 {
@@ -17,12 +19,15 @@ namespace Keeper.Application.Services
 	{
 		private readonly IRepositoryChampionship _repoChamp;
 		private readonly IMapper _mapper;
+		private readonly IDAOPlayerSubscribe _daoPlayerSubscribe;
 		private readonly IUnitOfWork _uow;
-		public ChampionshipService(IMapper mapper, IUnitOfWork uow, IRepositoryChampionship repoChamp)
+		public ChampionshipService(IMapper mapper, IUnitOfWork uow,
+		 IRepositoryChampionship repoChamp, IDAOPlayerSubscribe daoPlayerSubscribe)
 		{
 			_mapper = mapper;
 			_repoChamp = repoChamp;
 			_uow = uow;
+			_daoPlayerSubscribe = daoPlayerSubscribe;
 		}
 		public async Task<CreateChampionshipResponse> Create(ChampionshipCreateDTO dto)
 		{
@@ -263,6 +268,32 @@ namespace Keeper.Application.Services
 		{
 			Championship championship = await _repoChamp.GetByIdWithTeamsWithPLayers(championshipId);
 			return championship != null ? _mapper.Map<SquadEditDTO[]>(championship.Teams) : new SquadEditDTO[0];
+		}
+
+		public async Task<IServiceResult> UpdateSquad(PLayerSquadPostDTO[] squadsEnter)
+		{
+			ServiceResponse response = new ServiceResponse();
+			squadsEnter = squadsEnter.Where(s => !string.IsNullOrEmpty(s.Id) ||
+			!string.IsNullOrEmpty(s.TeamSubscribeId) || s.Status != Status.FreeAgent).ToArray();
+			PlayerSubscribe[] squads = _mapper.Map<PlayerSubscribe[]>(squadsEnter);
+			response.ValidationResult = new ValidationResult();
+			for (int x = 0; x < squads.Length; x++)
+			{
+				PlayerSubscribe player = squads[x];
+				string errorMessage = await _daoPlayerSubscribe.ValidateUpdateOnSquad(player);
+				if (!string.IsNullOrEmpty(errorMessage))
+				{
+					response.ValidationResult.Errors.Add(
+						new ValidationFailure(squadsEnter[x].PlayerName, errorMessage));
+					player = await _repoChamp.UpdatePLayer(player);
+				};
+			}
+			if (response.ValidationResult.IsValid)
+			{
+				await _uow.Commit();
+				response.Value = squads;
+			}
+			return response;
 		}
 	}
 }

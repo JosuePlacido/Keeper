@@ -17,14 +17,20 @@ namespace Keeper.Domain.Models
 		public int MVPs { get; private set; }
 		public string Status { get; private set; }
 
-		private PlayerSubscribe() { }
+		public PlayerSubscribe() { }
 		public PlayerSubscribe(string player, string status = Enum.Status.Matching)
 			: base(Guid.NewGuid().ToString())
 		{
 			PlayerId = player;
 			Status = Status;
 		}
-
+		public PlayerSubscribe(string player, string team, string status = Enum.Status.Matching)
+					: base(Guid.NewGuid().ToString())
+		{
+			PlayerId = player;
+			TeamSubscribeId = team;
+			Status = Status;
+		}
 		public override string ToString()
 		{
 			return (Player == null) ? base.ToString() : $"{Player.Name}";
@@ -37,6 +43,7 @@ namespace Keeper.Domain.Models
 			return new PlayerSubscribe()
 			{
 				Id = id,
+				TeamSubscribeId = teamSubscribeId,
 				PlayerId = playerId,
 				Player = player,
 				Games = games,
@@ -46,6 +53,12 @@ namespace Keeper.Domain.Models
 				MVPs = mVPs,
 				Status = status,
 			};
+		}
+
+		public void TransferTeam(string teamSubscribeId, string status)
+		{
+			TeamSubscribeId = teamSubscribeId;
+			Status = status;
 		}
 	}
 }

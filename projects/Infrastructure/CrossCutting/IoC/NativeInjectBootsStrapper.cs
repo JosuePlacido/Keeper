@@ -30,6 +30,7 @@ namespace Keeper.Infrastructure.CrossCutting.IoC
 			services.AddScoped<IDAOPlayer, DAOPlayer>();
 
 			services.AddScoped<ITeamService, TeamService>();
+			services.AddScoped<IDAOPlayerSubscribe, DAOPlayerSubscribe>();
 			services.AddScoped<IPlayerService, PlayerService>();
 			services.AddScoped<IChampionshipService, ChampionshipService>();
 		}
