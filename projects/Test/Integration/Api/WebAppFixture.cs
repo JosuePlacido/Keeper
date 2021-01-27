@@ -10,6 +10,7 @@ using Keeper.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Keeper.Domain.Models;
 
 namespace Keeper.Test.Integration.Api
 {
@@ -44,12 +45,21 @@ namespace Keeper.Test.Integration.Api
 					{
 						db.Database.ExecuteSqlRaw("DELETE FROM tb_team WHERE Id LIKE 'test'");
 						db.Database.ExecuteSqlRaw("DELETE FROM tb_team WHERE Id LIKE 'remove'");
-						db.Database.ExecuteSqlRaw("INSERT INTO tb_team(Id,Name) VALUES ('test','test')");
-						db.Database.ExecuteSqlRaw("INSERT INTO tb_team(Id,Name) VALUES ('remove','remove')");
 						db.Database.ExecuteSqlRaw("DELETE FROM tb_player WHERE Id LIKE 'test'");
 						db.Database.ExecuteSqlRaw("DELETE FROM tb_player WHERE Id LIKE 'remove'");
+						db.Database.ExecuteSqlRaw("DELETE FROM tb_player_subscribe WHERE Id LIKE 'test'");
+						db.Database.ExecuteSqlRaw("DELETE FROM tb_team_subscribe WHERE Id LIKE 'test'");
+						db.Database.ExecuteSqlRaw("DELETE FROM tb_championship WHERE Id LIKE 'test'");
+						db.Database.ExecuteSqlRaw("INSERT INTO tb_team(Id,Name) VALUES ('test','test')");
+						db.Database.ExecuteSqlRaw("INSERT INTO tb_team(Id,Name) VALUES ('remove','remove')");
 						db.Database.ExecuteSqlRaw("INSERT INTO tb_player(Id,Name) VALUES ('test','test')");
 						db.Database.ExecuteSqlRaw("INSERT INTO tb_player(Id,Name) VALUES ('remove','remove')");
+						db.Database.ExecuteSqlRaw("INSERT INTO tb_championship(Id,Name,Edition) VALUES ('test','test','test')");
+						db.Set<TeamSubscribe>().Add(TeamSubscribe.Factory("test", "test", "test"));
+						db.Set<PlayerSubscribe>().Add(PlayerSubscribe.Factory("test",
+							"test", "test"));
+						db.SaveChanges();
+						//db.Database.ExecuteSqlRaw("INSERT INTO tb_player_subscribe(Id,PLayerId,TeamSubscribeId,Status) VALUES ('test','test','test','Matching')");
 					}
 					catch (Exception ex)
 					{

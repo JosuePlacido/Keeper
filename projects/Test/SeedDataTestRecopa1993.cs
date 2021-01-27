@@ -23,48 +23,19 @@ namespace Keeper.Test
 		};
 
 		public static Player[] Players = new Player[] {
-							new Player("player1"),
-							new Player("player2"),
-							new Player("player3"),
-							new Player("player4"),
-							new Player("Palhinha"),
-							new Player("Dinho"),
-							new Player("Gilmar"),
-							new Player("Guilherme"),
-							new Player("Robson"),
-							new Player("Rogério Lage"),
-							new Player("Delete"),
+							Player.Factory("p1","player1"),
+							Player.Factory("p2","player2"),
+							Player.Factory("p3","player3"),
+							Player.Factory("p4","player4"),
+							Player.Factory("p5","Palhinha"),
+							Player.Factory("p6","Dinho"),
+							Player.Factory("p7","Gilmar"),
+							Player.Factory("p8","Guilherme"),
+							Player.Factory("p9","Robson"),
+							Player.Factory("p10","Rogério Lage"),
+							Player.Factory("p11","Delete"),
 						};
-		public static TeamSubscribe[] TeamsSubscribesNoPlayers = new TeamSubscribe[]
-				{
-					new TeamSubscribe(Teams[4].Id)
-						.UpdateNumbers(
-							reds: 0,
-							drowns: 2,
-							games: 2,
-							goalsAgainst: 0,
-							goalsDifference: 0,
-							goalsScores: 0,
-							lost: 0,
-							won: 0,
-							yellows: 4,
-							status: Status.Champion),
-					new TeamSubscribe(Teams[5].Id)
-						.UpdateNumbers(
-							reds: 0,
-							drowns: 2,
-							games: 2,
-							goalsAgainst: 0,
-							goalsDifference: 0,
-							goalsScores: 0,
-							lost: 0,
-							won: 0,
-							yellows: 2,
-							status: Status.Champion),
-				};
-		public static Championship GetChampionship()
-		{
-			var players = new PlayerSubscribe[]{
+		public static PlayerSubscribe[] PlayersSubscribe = new PlayerSubscribe[]{
 				PlayerSubscribe.Factory("ps1",
 					playerId:Players[4].Id,games:2, yellowCard:1),
 				PlayerSubscribe.Factory("ps2",
@@ -78,74 +49,62 @@ namespace Keeper.Test
 				PlayerSubscribe.Factory("ps6",
 					playerId:Players[9].Id,games:2, yellowCard:1),
 			};
-			var teams = new TeamSubscribe[]
+		public static TeamSubscribe[] TeamsSubscribes = new TeamSubscribe[]
 				{
-					new TeamSubscribe(Teams[4].Id)
-						.AddPlayers(players.Take(4).ToArray())
-						.UpdateNumbers(
-							reds: 0,
+					TeamSubscribe.Factory("ts1",Teams[4].Id,
 							drowns: 2,
 							games: 2,
-							goalsAgainst: 0,
-							goalsDifference: 0,
-							goalsScores: 0,
-							lost: 0,
-							won: 0,
 							yellows: 4,
-							status: Status.Champion),
-					new TeamSubscribe(Teams[5].Id)
-						.AddPlayers(players.Skip(4).ToArray())
-						.UpdateNumbers(
-							reds: 0,
+							status: Status.Champion,
+							players:PlayersSubscribe.Take(4).ToList()),
+					TeamSubscribe.Factory("ts2",Teams[5].Id,
 							drowns: 2,
 							games: 2,
-							goalsAgainst: 0,
-							goalsDifference: 0,
-							goalsScores: 0,
-							lost: 0,
-							won: 0,
 							yellows: 2,
-							status: Status.Eliminated)
+							status: Status.Eliminated,
+							players:PlayersSubscribe.Skip(4).ToList())
 				};
+		public static Championship GetChampionship()
+		{
 			var vacancys = new Vacancy[] {
 				new Vacancy("Campeão da Libertadores 1993",Classifieds.Configured),
 				new Vacancy("Campeão da Supercopa 1993",Classifieds.Configured)
 			};
 			var First = new Match(round: 1, status: Status.Finish, name: "Final Ida"
 				, date: new DateTime(1993, 9, 26, 21, 00, 00), address: "Morumbi - São Paulo/SP",
-				knockout: true, home: teams[0].Id, vacancyHome: vacancys[0].Id,
-				vacancyAway: vacancys[1].Id, away: teams[1].Id);
+				knockout: true, home: TeamsSubscribes[0].Id, vacancyHome: vacancys[0].Id,
+				vacancyAway: vacancys[1].Id, away: TeamsSubscribes[1].Id);
 			First.RegisterResult(0, 0,
 				events: new EventGame[] {
 					new EventGame(0,"Cartão Amarelo",
 						TypeEvent.YellowCard,true,
-						players[0].Id
+						PlayersSubscribe[0].Id
 					),
 					new EventGame(0,"Cartão Amarelo",
 						TypeEvent.YellowCard,true,
-						players[1].Id
+						PlayersSubscribe[1].Id
 					),
 					new EventGame(0,"Cartão Amarelo",
 						TypeEvent.YellowCard,true,
-						players[2].Id
+						PlayersSubscribe[2].Id
 					),
 					new EventGame(0,"Cartão Amarelo",
 						TypeEvent.YellowCard,true,
-						players[3].Id
+						PlayersSubscribe[3].Id
 					),
 					new EventGame(0,"Cartão Amarelo",
 						TypeEvent.YellowCard,false,
-						players[4].Id
+						PlayersSubscribe[4].Id
 					),
 					new EventGame(0,"Cartão Amarelo",
 						TypeEvent.YellowCard,false,
-						players[5].Id
+						PlayersSubscribe[5].Id
 					),
 				});
 			var Second = new Match(round: 2, status: Status.Finish, name: "Final Volta",
 			 	date: new DateTime(1993, 9, 29, 21, 00, 00), address: "Mineirão - Belo Horizonte/MG",
-				knockout: true, finalGame: true, penalty: true, home: teams[1].Id,
-				vacancyHome: vacancys[1].Id, vacancyAway: vacancys[0].Id, away: teams[0].Id);
+				knockout: true, finalGame: true, penalty: true, home: TeamsSubscribes[1].Id,
+				vacancyHome: vacancys[1].Id, vacancyAway: vacancys[0].Id, away: TeamsSubscribes[0].Id);
 			Second.RegisterResult(0, 0, 2, 4);
 			return new Championship("Recopa Sulamericana", "1993", Categorys[2],
 				Status.Finish,
@@ -166,7 +125,7 @@ namespace Keeper.Test
 								{
 									Statistic.Factory(
 										"stat1",
-										teams[0].Id,
+										TeamsSubscribes[0].Id,
 										reds: 0,
 										drowns: 2,
 										games: 2,
@@ -182,7 +141,7 @@ namespace Keeper.Test
 									),
 									Statistic.Factory(
 										"stat2",
-										teams[1].Id,
+										TeamsSubscribes[1].Id,
 										reds: 0,
 										drowns: 2,
 										games: 2,
@@ -204,7 +163,7 @@ namespace Keeper.Test
 						}
 					)
 				},
-				teams
+				TeamsSubscribes
 				);
 		}
 	}
