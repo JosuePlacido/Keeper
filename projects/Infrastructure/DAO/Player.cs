@@ -21,6 +21,22 @@ namespace Keeper.Infrastructure.DAO
 			_context = Context;
 		}
 
+		public async Task<string[]> Exists(string[] ids)
+		{
+			List<string> idNotFound = new List<string>();
+			Player player;
+			foreach (var id in ids)
+			{
+				player = await _context.Players.AsNoTracking()
+					.Where(t => t.Id == id).FirstOrDefaultAsync();
+				if (player == null)
+				{
+					idNotFound.Add(id);
+				}
+			}
+			return idNotFound.ToArray();
+		}
+
 		public async Task<IDTO> GetByIdView(string id)
 		{
 			var player = await _context.Players.AsNoTracking()
@@ -36,10 +52,10 @@ namespace Keeper.Infrastructure.DAO
 
 		public async Task<PlayerSubscribe[]> GetFreeAgentsInChampionship(string championship)
 		{
-			string[] teamsId = await _context.TeamSubscribes.AsNoTracking()
+			string[] playersId = await _context.TeamSubscribes.AsNoTracking()
 				.Where(ts => ts.ChampionshipId == championship).Select(ts => ts.Id).ToArrayAsync();
 			return await _context.PlayerSubscribe.AsNoTracking()
-				.Where(ps => teamsId.Contains(ps.TeamSubscribeId))
+				.Where(ps => playersId.Contains(ps.TeamSubscribeId))
 				.Where(ps => ps.Status == Status.FreeAgent).ToArrayAsync();
 		}
 

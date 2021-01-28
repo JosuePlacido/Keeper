@@ -1,12 +1,18 @@
+using System.ComponentModel.DataAnnotations;
 using Keeper.Domain.Enum;
 
 namespace Keeper.Application.DTO
 {
 	public class ChampionshipCreateDTO
 	{
+		[Required(ErrorMessage = "Campo orbigatório")]
+		[MaxLength(100, ErrorMessage = "Máximo de 100 caracteres")]
 		public string Name { get; set; }
+		[Required(ErrorMessage = "Campo orbigatório")]
+		[MaxLength(50, ErrorMessage = "Máximo de 50 caracteres")]
 		public string Edition { get; set; }
 		public string Category { get; set; }
+		[Required(ErrorMessage = "Campo orbigatório")]
 		public StageDTO[] Stages { get; set; }
 		public TeamDTO[] Teams { get; set; }
 	}

@@ -8,9 +8,19 @@ namespace Keeper.Application.Interface
 	{
 		public CreateChampionshipValidation()
 		{
+		}
+		public CreateChampionshipValidation ValidateScope()
+		{
 			ValidateName();
 			ValidateEdition();
 			ValidateStructure();
+			return this;
+		}
+		public CreateChampionshipValidation ValidateSecond()
+		{
+			ValidataParticipants();
+			ValidateMatches();
+			return this;
 		}
 
 
@@ -27,7 +37,6 @@ namespace Keeper.Application.Interface
 				.NotEmpty().WithMessage("Edição é um campo obrigatório")
 				.Length(2, 50).WithMessage("O nome deve ter de 2 a 50 caracteres");
 		}
-
 		protected void ValidateStructure()
 		{
 			RuleFor(c => c.Stages).NotNull().NotEmpty()
@@ -37,19 +46,27 @@ namespace Keeper.Application.Interface
 				stg.RuleFor(s => s.Groups).NotNull().NotEmpty();
 			}).WithMessage("O campeonato deve ter no mínimo 1 grupo");
 
-			RuleForEach(c => c.Stages).ChildRules(stg =>
-			{
-				stg.RuleForEach(s => s.Groups).ChildRules(grp =>
-				{
-					grp.RuleFor(g => g.Matchs).NotNull().NotEmpty();
-				});
-			}).WithMessage("O campeonato deve ter no mínimo 1 jogo criado");
+		}
+		protected void ValidataParticipants()
+		{
 
 			RuleFor(c => c.Stages[0])
 				.Must(s => s.Groups.SelectMany(g => g.Vacancys).Count() +
 					s.Groups.SelectMany(g => g.Statistics).Count() >= 2)
 				.When(c => c.Stages != null && c.Stages.Count > 0)
 				.WithMessage("O campeonato deve ter no mínimo 2 vagas/times");
+
+		}
+		protected void ValidateMatches()
+		{
+			RuleForEach(c => c.Stages).ChildRules(stg =>
+			{
+				stg.RuleForEach(s => s.Groups).ChildRules(g =>
+				{
+					g.RuleFor(g => g.Matchs).NotEmpty().NotNull();
+				});
+			}).WithMessage("O campeonato deve ter no mínimo 1 grupo");
+
 		}
 	}
 }

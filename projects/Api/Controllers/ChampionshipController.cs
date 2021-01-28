@@ -27,5 +27,11 @@ namespace Keeper.Api.Controllers
 			return !ModelState.IsValid ? CustomResponse(ModelState) :
 				CustomResponse(await _ChampionshipAppService.UpdateSquad(squads));
 		}
+		[HttpPost]
+		public async Task<IActionResult> Post(ChampionshipCreateDTO dto)
+		{
+			return !ModelState.IsValid ? CustomResponse(ModelState) :
+				CustomResponse(await _ChampionshipAppService.Create(dto));
+		}
 	}
 }

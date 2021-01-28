@@ -20,35 +20,70 @@ namespace Keeper.Application.Services
 		private readonly IRepositoryChampionship _repoChamp;
 		private readonly IMapper _mapper;
 		private readonly IDAOPlayerSubscribe _daoPlayerSubscribe;
+		private readonly IDAOPlayer _daoPlayer;
+		private readonly IDAOTeam _daoTeam;
 		private readonly IUnitOfWork _uow;
 		public ChampionshipService(IMapper mapper, IUnitOfWork uow,
-		 IRepositoryChampionship repoChamp, IDAOPlayerSubscribe daoPlayerSubscribe)
+			IRepositoryChampionship repoChamp, IDAOPlayerSubscribe daoPlayerSubscribe,
+			IDAOPlayer daoPlayer, IDAOTeam daoTeam)
 		{
 			_mapper = mapper;
 			_repoChamp = repoChamp;
 			_uow = uow;
 			_daoPlayerSubscribe = daoPlayerSubscribe;
+			_daoPlayer = daoPlayer;
+			_daoTeam = daoTeam;
 		}
-		public async Task<CreateChampionshipResponse> Create(ChampionshipCreateDTO dto)
+		public async Task<IServiceResult> Create(ChampionshipCreateDTO dto)
 		{
+			ServiceResponse response = new ServiceResponse();
 			var championship = _mapper.Map<Championship>(dto);
-			championship = UpdatadeReferences(championship, dto);
-			foreach (var stage in championship.Stages)
+			response.ValidationResult = new CreateChampionshipValidation()
+				.ValidateScope()
+				.Validate(championship);
+			if (response.ValidationResult.IsValid)
 			{
-				foreach (var group in stage.Groups)
+				championship = UpdatadeReferences(championship, dto);
+				foreach (var stage in championship.Stages)
 				{
-					group.RoundRobinMatches(stage.DuplicateTurn, stage.MirrorTurn);
+					foreach (var group in stage.Groups)
+					{
+						group.RoundRobinMatches(stage.DuplicateTurn, stage.MirrorTurn);
+					}
+				}
+				response.ValidationResult = new CreateChampionshipValidation()
+				.ValidateSecond()
+				.Validate(championship);
+				string[] teamInvalids = await _daoTeam.Exists(championship.Teams.Select(ts => ts.TeamId).ToArray());
+				string[] playerInvalids = await _daoPlayer.Exists(championship
+					.Teams.SelectMany(ts => ts.Players.Select(p => p.PlayerId)).ToArray());
+				if (teamInvalids.Length != 0)
+				{
+					foreach (var team in teamInvalids)
+					{
+						response.ValidationResult.Errors.Add(new ValidationFailure(
+							"Teams", $"O time ({team}) não registrado"
+						));
+
+					}
+				}
+				if (playerInvalids.Length != 0)
+				{
+					foreach (var player in playerInvalids)
+					{
+						response.ValidationResult.Errors.Add(new ValidationFailure(
+							"Player", $"O joogador ({player}) não registrado"
+						));
+					}
+				}
+				if (response.ValidationResult.IsValid)
+				{
+					championship = await _repoChamp.Add(championship);
+					await _uow.Commit();
+					response.Value = _mapper.Map<MatchEditsScope>(championship);
 				}
 			}
-			CreateChampionshipResponse validation = new CreateChampionshipResponse(new CreateChampionshipValidation()
-				.Validate(championship));
-			if (validation.ValidationResult.IsValid)
-			{
-				await _repoChamp.Add(championship);
-				validation.Matches = _mapper.Map<MatchEditsScope>(championship);
-				await _uow.Commit();
-			}
-			return validation;
+			return response;
 		}
 
 		public MatchEditsScope CheckMatches(MatchEditsScope dto)

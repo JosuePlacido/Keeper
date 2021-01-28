@@ -10,5 +10,6 @@ namespace Keeper.Application.DAO
 		Task<IDTO> GetByIdView(string id);
 		Task<int> GetTotalFromSearch(string terms, string notInChampionship);
 		Task<PlayerSubscribe[]> GetFreeAgentsInChampionship(string championship);
+		Task<string[]> Exists(string[] vs);
 	}
 }

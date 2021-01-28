@@ -9,7 +9,7 @@ namespace Keeper.Application.Interface
 {
 	public interface IChampionshipService : IDisposable
 	{
-		Task<CreateChampionshipResponse> Create(ChampionshipCreateDTO dto);
+		Task<IServiceResult> Create(ChampionshipCreateDTO dto);
 		MatchEditsScope CheckMatches(MatchEditsScope dto);
 		Task<SquadEditDTO[]> GetSquads(string championship);
 		Task<IServiceResult> UpdateSquad(PLayerSquadPostDTO[] squads);

@@ -18,8 +18,8 @@ namespace Keeper.Infrastructure.Mapping
 				.HasMaxLength(50)
 				.IsRequired();
 			builder.Property(stage => stage.Criterias)
-				.HasColumnType("varchar(15)")
-				.HasMaxLength(15)
+				.HasColumnType("varchar(30)")
+				.HasMaxLength(30)
 				.IsRequired();
 			builder.HasMany(stage => stage.Groups)
 				.WithOne()

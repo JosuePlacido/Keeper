@@ -10,6 +10,7 @@ using System.Linq.Expressions;
 using System;
 using Keeper.Domain.Utils;
 using Keeper.Domain.Core;
+using System.Collections.Generic;
 
 namespace Keeper.Infrastructure.DAO
 {
@@ -19,6 +20,22 @@ namespace Keeper.Infrastructure.DAO
 		public DAOTeam(ApplicationContext Context)
 		{
 			_context = Context;
+		}
+
+		public async Task<string[]> Exists(string[] ids)
+		{
+			List<string> idNotFound = new List<string>();
+			Team team;
+			foreach (var id in ids)
+			{
+				team = await _context.Teams.AsNoTracking()
+					.Where(t => t.Id == id).FirstOrDefaultAsync();
+				if (team == null)
+				{
+					idNotFound.Add(id);
+				}
+			}
+			return idNotFound.ToArray();
 		}
 
 		public async Task<IDTO> GetByIdView(string id)
