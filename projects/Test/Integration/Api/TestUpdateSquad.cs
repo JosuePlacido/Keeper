@@ -80,7 +80,7 @@ namespace Keeper.Test.Integration.Api
 			string request = actualResponse.Content.ReadAsStringAsync().Result;
 			var result = JsonConvert.DeserializeObject<ValidationProblemDetails>(request);
 			Assert.False(actualResponse.IsSuccessStatusCode);
-			Assert.Equal(result.Status, 400);
+			Assert.Equal(400, result.Status);
 			Assert.NotEmpty(result.Errors);
 		}
 	}

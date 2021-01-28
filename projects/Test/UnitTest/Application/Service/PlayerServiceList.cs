@@ -82,7 +82,7 @@ namespace Keeper.Test.UnitTest.Application.Service
 			}
 			Assert.Equal(5, result.Total);
 			Assert.Equal(result.ExcludeFromChampionship, championship);
-			Assert.Equal(result.Players.Length, 5);
+			Assert.Equal(5, result.Players.Length);
 			Assert.All(result.Players.Select(PlayerService => PlayerService.Player),
 				 item => expected.Contains(item));
 		}

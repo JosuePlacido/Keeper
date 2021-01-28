@@ -110,7 +110,8 @@ namespace Keeper.Domain
 		[ClassData(typeof(RoundRobinSetup))]
 		public void RoundNumberGeneratedInReturn(Group group, bool hasReturn, bool isMirror)
 		{
-			group.RoundRobinMatches(true, isMirror);
+			hasReturn = true;
+			group.RoundRobinMatches(hasReturn, isMirror);
 			MatchShortFormat[] matchList = group.Matchs
 				.Select(match => new MatchShortFormat(match)).ToArray();
 			var teams = NormalizeTeams(matchList).Length;

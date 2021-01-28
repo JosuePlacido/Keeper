@@ -111,8 +111,8 @@ namespace Keeper.Test.Integration.Api
 			string request = actualResponse.Content.ReadAsStringAsync().Result;
 			var result = JsonConvert.DeserializeObject<ValidationProblemDetails>(request);
 			Assert.True(!actualResponse.IsSuccessStatusCode);
-			Assert.Equal(result.Status, 400);
-			Assert.True(result.Errors.Count > 0);
+			Assert.Equal(400, result.Status);
+			Assert.NotEmpty(result.Errors);
 		}
 
 
@@ -159,8 +159,8 @@ namespace Keeper.Test.Integration.Api
 			string request = actualResponse.Content.ReadAsStringAsync().Result;
 			var result = JsonConvert.DeserializeObject<ValidationProblemDetails>(request);
 			Assert.True(!actualResponse.IsSuccessStatusCode);
-			Assert.Equal(result.Status, 400);
-			Assert.True(result.Errors.Count > 0);
+			Assert.Equal(400, result.Status);
+			Assert.NotEmpty(result.Errors);
 		}
 		[Fact]
 		public void Put_NonExistinPlayer_ReturnBadRequest()
@@ -181,8 +181,8 @@ namespace Keeper.Test.Integration.Api
 			string request = actualResponse.Content.ReadAsStringAsync().Result;
 			var result = JsonConvert.DeserializeObject<ValidationProblemDetails>(request);
 			Assert.True(!actualResponse.IsSuccessStatusCode);
-			Assert.Equal(result.Status, 400);
-			Assert.True(result.Errors.Count > 0);
+			Assert.Equal(400, result.Status);
+			Assert.NotEmpty(result.Errors);
 		}
 		[Fact]
 		public void Delete_NonExistinPlayer_ReturnBadRequest()
@@ -197,8 +197,8 @@ namespace Keeper.Test.Integration.Api
 			string request = actualResponse.Content.ReadAsStringAsync().Result;
 			var result = JsonConvert.DeserializeObject<ValidationProblemDetails>(request);
 			Assert.False(actualResponse.IsSuccessStatusCode);
-			Assert.Equal(result.Status, 400);
-			Assert.True(result.Errors.Count > 0);
+			Assert.Equal(400, result.Status);
+			Assert.NotEmpty(result.Errors);
 		}
 		[Fact]
 		public void Delete_ValidPlayer_ReturnOK()
