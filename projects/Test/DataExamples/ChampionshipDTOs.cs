@@ -6,7 +6,7 @@ namespace Keeper.Test.DataExamples
 {
 	public static class ChampionshipCreateDTODataExamples
 	{
-		private static ChampionshipCreateDTO semiFinal = new ChampionshipCreateDTO
+		public static ChampionshipCreateDTO SemiFinal = new ChampionshipCreateDTO
 		{
 			Name = "RECOPA",
 			Edition = "Edicao",
@@ -14,7 +14,7 @@ namespace Keeper.Test.DataExamples
 			Stages = new StageDTO[] {
 						new StageDTO
 						{
-							Criterias = new string[] { "pontos", "vitorias", "saldo de gol" },
+							Criterias = new string[] { "1", "2", "3","4" },
 							TypeStage = TypeStage.Knockout,
 							DuplicateTurn = true,
 							MirrorTurn = true,
@@ -35,7 +35,7 @@ namespace Keeper.Test.DataExamples
 						},
 						new StageDTO
 						{
-							Criterias = new string[] { "pontos", "vitorias", "saldo de gol" },
+							Criterias = new string[] { "1", "2", "3","4" },
 							TypeStage = TypeStage.Knockout,
 							DuplicateTurn = true,
 							MirrorTurn = true,
@@ -100,8 +100,42 @@ namespace Keeper.Test.DataExamples
 				},
 			}
 		};
-
-		public static ChampionshipCreateDTO SemiFinal { get => semiFinal; set => semiFinal = value; }
-		public static ChampionshipCreateDTO SemiFinal1 { get => semiFinal; set => semiFinal = value; }
+		public static ChampionshipCreateDTO Invalid = new ChampionshipCreateDTO
+		{
+			Name = "RECOPA",
+			Edition = "Edicao",
+			Category = SeedData.Categorys.First().Name,
+			Stages = new StageDTO[0],
+			Teams = new TeamDTO[]{
+				new TeamDTO
+				{
+					TeamId = SeedData.Teams.Skip(0).First().Id,
+					Players = SeedData.Players.Skip(0).Take(1).Select(p => p.Id).ToArray(),
+					InitStageOrder = 0,
+					InitGroupIndex = 0
+				},
+				new TeamDTO
+				{
+					TeamId = SeedData.Teams.Skip(1).First().Id,
+					Players = SeedData.Players.Skip(1).Take(1).Select(p => p.Id).ToArray(),
+					InitStageOrder = 0,
+					InitGroupIndex = 0
+				},
+				new TeamDTO
+				{
+					TeamId = SeedData.Teams.Skip(2).First().Id,
+					Players = SeedData.Players.Skip(2).Take(1).Select(p => p.Id).ToArray(),
+					InitStageOrder = 0,
+					InitGroupIndex = 1
+				},
+				new TeamDTO
+				{
+					TeamId = SeedData.Teams.Skip(3).First().Id,
+					Players = SeedData.Players.Skip(3).Take(1).Select(p => p.Id).ToArray(),
+					InitStageOrder = 0,
+					InitGroupIndex = 1
+				},
+			}
+		};
 	}
 }

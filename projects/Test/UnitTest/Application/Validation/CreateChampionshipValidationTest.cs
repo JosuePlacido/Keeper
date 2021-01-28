@@ -7,6 +7,9 @@ using Xunit.Abstractions;
 using Keeper.Application.Interface;
 using Keeper.Domain.Models;
 using Keeper.Domain.Enum;
+using Keeper.Test.DataExamples;
+using Newtonsoft.Json;
+using Keeper.Infrastructure.CrossCutting.Adapter;
 
 namespace Keeper.Test.UnitTest.Application.Validation
 {
@@ -50,15 +53,31 @@ namespace Keeper.Test.UnitTest.Application.Validation
 							}
 						)
 				});
-			var validation = new CreateChampionshipValidation().Validate(championship);
+			var validation = new CreateChampionshipValidation()
+				.ValidateScope()
+				.ValidateSecond().Validate(championship);
 			Assert.True(validation.IsValid);
 		}
 		[Fact]
 		public void TestInvalidChampionship()
 		{
 			Championship championship = Championship.Factory("test", "test", "edition", SeedData.Categorys.First(), Status.Created);
-			var validation = new CreateChampionshipValidation().Validate(championship);
+			var validation = new CreateChampionshipValidation()
+				.ValidateScope()
+				.ValidateSecond().Validate(championship);
 			Assert.False(validation.IsValid);
+		}
+		[Fact]
+		public void TestMapping()
+		{
+			var championship = ChampionshipCreateDTODataExamples.SemiFinal;
+			MapperConfiguration config = new MapperConfiguration(cfg =>
+			{
+				cfg.AddProfile<ChampionshipDTOToDomainProfile>();
+			});
+			IMapper mapper = config.CreateMapper();
+			var result = mapper.Map<Championship>(championship);
+			Assert.Equal(2, championship.Stages[1].Groups[0].Vacancys.Count());
 		}
 	}
 }

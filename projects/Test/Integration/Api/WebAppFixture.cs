@@ -42,7 +42,9 @@ namespace Keeper.Test.Integration.Api
 
 					db.Database.EnsureCreated();
 					try
-					{
+					{/*
+						db.Set<Team>().AddRange(SeedData.Players);
+						db.Set<Team>().AddRange(SeedData.Teams);*/
 						db.Database.ExecuteSqlRaw("DELETE FROM tb_championship WHERE Id LIKE 'test'");
 						db.Database.ExecuteSqlRaw("DELETE FROM tb_team_subscribe WHERE Id LIKE 'test'");
 						db.Database.ExecuteSqlRaw("DELETE FROM tb_player_subscribe WHERE Id LIKE 'test'");
@@ -59,7 +61,6 @@ namespace Keeper.Test.Integration.Api
 						db.Set<PlayerSubscribe>().Add(PlayerSubscribe.Factory("test",
 							"test", "test"));
 						db.SaveChanges();
-						//db.Database.ExecuteSqlRaw("INSERT INTO tb_player_subscribe(Id,PLayerId,TeamSubscribeId,Status) VALUES ('test','test','test','Matching')");
 					}
 					catch (Exception ex)
 					{

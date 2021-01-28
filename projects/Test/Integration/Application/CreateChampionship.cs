@@ -10,6 +10,8 @@ using Keeper.Test.DataExamples;
 using Keeper.Application.Services;
 using FluentValidation.Results;
 using Infrastructure.Data;
+using Keeper.Infrastructure.DAO;
+using Keeper.Application.Interface;
 
 namespace Keeper.Test.Integration.Application
 {
@@ -23,7 +25,7 @@ namespace Keeper.Test.Integration.Application
 		[Fact]
 		public void TestCreateChampionship()
 		{
-			ValidationResult result = null;
+			IServiceResult result = null;
 			using (var transaction = Fixture.Connection.BeginTransaction())
 			{
 
@@ -38,12 +40,12 @@ namespace Keeper.Test.Integration.Application
 					var mapper = config.CreateMapper();
 					var test = ChampionshipCreateDTODataExamples.SemiFinal;
 					result = new ChampionshipService(mapper, new UnitOfWork(context), repo,
-						null).Create(test).Result;
+						null, new DAOPlayer(context), new DAOTeam(context)).Create(test).Result;
 				}
 			}
 			var jsonResult = JsonConvert.SerializeObject(result, Formatting.Indented);
 			Assert.NotNull(result);
-			Assert.True(result.IsValid);
+			Assert.True(result.ValidationResult.IsValid);
 		}
 	}
 }
