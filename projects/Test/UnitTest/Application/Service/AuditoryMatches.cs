@@ -17,7 +17,8 @@ namespace Keeper.Test.UnitTest.Application.Service
 		[ClassData(typeof(AuditoryMatchesSetup))]
 		public void TestAuditoryMatchesList(AuditoryMatchesTestModel test)
 		{
-			var result = new ChampionshipService(null, null, null, null, null, null).CheckMatches(test.Case);
+			var result = new ChampionshipService(null, null, null, null, null, null, null)
+				.CheckMatches(test.Case);
 			Assert.True(test.ExpectedErrorsCount == result.Errors.Count);
 			var idsMatchesWithError = result.Stages.SelectMany(stg => stg.Groups.SelectMany(
 				grp => grp.Matchs.Where(MatchAuditoryContants => MatchAuditoryContants.HasError)
