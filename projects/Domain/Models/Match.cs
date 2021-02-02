@@ -53,6 +53,11 @@ namespace Keeper.Domain.Models
 			EventGames = new List<EventGame>();
 		}
 
+		public void EditScope(string name)
+		{
+			Name = name;
+		}
+
 		public void RegisterResult(int homeGoals, int awayGoals,
 			int? homePenalties = null, int? awayPenalties = null, EventGame[] events = null)
 		{

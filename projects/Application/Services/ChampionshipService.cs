@@ -22,10 +22,11 @@ namespace Keeper.Application.Services
 		private readonly IDAOPlayerSubscribe _daoPlayerSubscribe;
 		private readonly IDAOPlayer _daoPlayer;
 		private readonly IDAOTeam _daoTeam;
+		private readonly IDAOChampionship _dao;
 		private readonly IUnitOfWork _uow;
 		public ChampionshipService(IMapper mapper, IUnitOfWork uow,
 			IRepositoryChampionship repoChamp, IDAOPlayerSubscribe daoPlayerSubscribe,
-			IDAOPlayer daoPlayer, IDAOTeam daoTeam)
+			IDAOPlayer daoPlayer, IDAOTeam daoTeam, IDAOChampionship dao)
 		{
 			_mapper = mapper;
 			_repoChamp = repoChamp;
@@ -33,6 +34,7 @@ namespace Keeper.Application.Services
 			_daoPlayerSubscribe = daoPlayerSubscribe;
 			_daoPlayer = daoPlayer;
 			_daoTeam = daoTeam;
+			_dao = dao;
 		}
 		public async Task<IServiceResult> Create(ChampionshipCreateDTO dto)
 		{
@@ -328,6 +330,53 @@ namespace Keeper.Application.Services
 				await _uow.Commit();
 				response.Value = squads;
 			}
+			return response;
+		}
+
+		public async Task<ObjectRenameDTO> GetNames(string championship)
+		{
+			return (ObjectRenameDTO)await _dao.GetByIdForRename(championship);
+		}
+
+		public async Task<IServiceResult> RenameScopes(ObjectRenameDTO dto)
+		{
+			ServiceResponse response = new ServiceResponse();
+			response.ValidationResult = new ValidationResult();
+			if (dto == null)
+			{
+				response.ValidationResult.Errors.Add(new ValidationFailure("global",
+					"Renomeações não enviadas"));
+				return response;
+			}
+			Championship championship = await _repoChamp.GetByIdWithStageGroupsAndMatches(dto.Id);
+			if (!string.IsNullOrEmpty(dto.Name))
+			{
+				championship.EditScope(dto.Name);
+			}
+			for (int s = 0; s < championship.Stages.Count; s++)
+			{
+				if (!string.IsNullOrEmpty(dto.Childs[s].Name))
+				{
+					championship.Stages[s].EditScope(dto.Childs[s].Name);
+				}
+				for (int g = 0; g < championship.Stages[s].Groups.Count; g++)
+				{
+					if (!string.IsNullOrEmpty(dto.Childs[s].Childs[g].Name))
+					{
+						championship.Stages[s].Groups[g].EditScope(dto.Childs[s].Childs[g].Name);
+					}
+					for (int m = 0; m < championship.Stages[s].Groups[g].Matchs.Count; m++)
+					{
+						if (!string.IsNullOrEmpty(dto.Childs[s].Childs[g].Childs[m].Name))
+						{
+							championship.Stages[s].Groups[g].Matchs[m]
+								.EditScope(dto.Childs[s].Childs[g].Childs[m].Name);
+						}
+					}
+				}
+			}
+			response.Value = await _repoChamp.RenameScopes(championship);
+			await _uow.Commit();
 			return response;
 		}
 	}

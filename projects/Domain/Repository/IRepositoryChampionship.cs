@@ -8,6 +8,8 @@ namespace Keeper.Domain.Repository
 	public interface IRepositoryChampionship : IRepositoryBase<Championship>
 	{
 		Task<Championship> GetByIdWithTeamsWithPLayers(string championship);
+		Task<Championship> GetByIdWithStageGroupsAndMatches(string championship);
 		Task<PlayerSubscribe> UpdatePLayer(PlayerSubscribe player);
+		Task<Championship> RenameScopes(Championship championship);
 	}
 }

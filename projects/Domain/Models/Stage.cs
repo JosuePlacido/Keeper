@@ -1,5 +1,6 @@
 using Keeper.Domain.Core;
 using Keeper.Domain.Enum;
+using System;
 using System.Collections.Generic;
 
 namespace Keeper.Domain.Models
@@ -39,6 +40,11 @@ namespace Keeper.Domain.Models
 				ChampionshipId = championshipId,
 				Groups = groups,
 			};
+		}
+
+		public void EditScope(string name)
+		{
+			Name = name;
 		}
 	}
 }

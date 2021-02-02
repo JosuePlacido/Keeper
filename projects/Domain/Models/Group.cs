@@ -98,6 +98,11 @@ namespace Keeper.Domain.Models
 			return Matchs;
 		}
 
+		public void EditScope(string name)
+		{
+			Name = name;
+		}
+
 		public void AddTeam(string teamId)
 		{
 			Statistics.Add(new Statistic(teamId));

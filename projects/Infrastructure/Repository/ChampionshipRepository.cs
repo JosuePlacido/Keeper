@@ -25,6 +25,14 @@ namespace Keeper.Infrastructure.Repository
 			return obj;
 		}
 
+		public async Task<Championship> GetByIdWithStageGroupsAndMatches(string championship)
+		{
+			return await _context.Championships.AsNoTracking().Where(c => c.Id == championship)
+				.Include(c => c.Stages)
+					.ThenInclude(s => s.Groups)
+						.ThenInclude(g => g.Matchs).FirstOrDefaultAsync();
+		}
+
 		public async Task<Championship> GetByIdWithTeamsWithPLayers(string championship)
 		{
 			return await _context.Championships.AsNoTracking().Where(c => c.Id == championship)
@@ -33,6 +41,28 @@ namespace Keeper.Infrastructure.Repository
 				.Include(c => c.Teams)
 					.ThenInclude(ts => ts.Players)
 						.ThenInclude(ps => ((PlayerSubscribe)ps).Player).FirstOrDefaultAsync();
+		}
+
+		public async Task<Championship> RenameScopes(Championship championship)
+		{
+			_context.Championships.Attach(championship)
+				.Property(x => x.Name).IsModified = true;
+			for (int s = 0; s < championship.Stages.Count; s++)
+			{
+				_context.Stages.Attach(championship.Stages[s])
+					.Property(x => x.Name).IsModified = true;
+				for (int g = 0; g < championship.Stages[s].Groups.Count; g++)
+				{
+					_context.Groups.Attach(championship.Stages[s].Groups[g])
+						.Property(x => x.Name).IsModified = true;
+					for (int m = 0; m < championship.Stages[s].Groups[g].Matchs.Count; m++)
+					{
+						_context.Matchs.Attach(championship.Stages[s].Groups[g].Matchs[m])
+							.Property(x => x.Name).IsModified = true;
+					}
+				}
+			}
+			return championship;
 		}
 
 		public async Task<PlayerSubscribe> UpdatePLayer(PlayerSubscribe player)

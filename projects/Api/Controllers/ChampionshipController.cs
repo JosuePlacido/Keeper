@@ -33,5 +33,16 @@ namespace Keeper.Api.Controllers
 			return !ModelState.IsValid ? CustomResponse(ModelState) :
 				CustomResponse(await _ChampionshipAppService.Create(dto));
 		}
+		[HttpGet("Names/{id}")]
+		public async Task<ObjectRenameDTO> Names(string id)
+		{
+			return await _ChampionshipAppService.GetNames(id);
+		}
+		[HttpPost("Names")]
+		public async Task<IActionResult> Names(ObjectRenameDTO dto)
+		{
+			return !ModelState.IsValid ? CustomResponse(ModelState) :
+				CustomResponse(await _ChampionshipAppService.RenameScopes(dto));
+		}
 	}
 }
