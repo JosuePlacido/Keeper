@@ -1,18 +1,3 @@
-### Estrutura
-
--   <s>Logo ou Banner</s>
--   <s>Demonstração da Aplicação</s>
--   <s>Título e Descrição</s>
--   Badges
--   Status do Projeto
--   Tabela de Conteúdos
--   Features
--   Pré-requisitos e como rodar a aplicação/testes
--   Tecnologias utilizadas
--   Contribuição
--   Autor
--   Licença
-
 # Torneios FC
 
 ![Banner](./.github/banner.png)
