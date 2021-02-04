@@ -13,13 +13,9 @@ using Keeper.Domain.Core;
 
 namespace Keeper.Infrastructure.DAO
 {
-	public class DAOPlayer : IDAOPlayer
+	public class DAOPlayer : DAO, IDAOPlayer
 	{
-		private readonly ApplicationContext _context;
-		public DAOPlayer(ApplicationContext Context)
-		{
-			_context = Context;
-		}
+		public DAOPlayer(ApplicationContext Context) : base(Context) { }
 
 		public async Task<string[]> Exists(string[] ids)
 		{

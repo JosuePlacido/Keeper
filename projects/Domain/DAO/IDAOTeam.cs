@@ -5,7 +5,7 @@ using Keeper.Domain.Models;
 
 namespace Keeper.Application.DAO
 {
-	public interface IDAOTeam
+	public interface IDAOTeam : IDAO
 	{
 		Task<IDTO> GetByIdView(string id);
 		Task<int> GetTotalFromSearch(string terms, string championship);

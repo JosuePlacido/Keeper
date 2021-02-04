@@ -13,14 +13,17 @@ using Keeper.Domain.Core;
 
 namespace Keeper.Infrastructure.DAO
 {
-	public class DAOStatistic : DAO, IDAOStatistic
+	public abstract class DAO : IDAO
 	{
-		public DAOStatistic(ApplicationContext Context) : base(Context) { }
-
-		public async Task<Statistic> GetById(string id)
+		protected readonly ApplicationContext _context;
+		public DAO(ApplicationContext Context)
 		{
-			return await _context.Statistics.AsNoTracking()
-				.Where(s => s.Id == id).FirstOrDefaultAsync();
+			_context = Context;
+		}
+
+		public void Dispose()
+		{
+			_context.Dispose();
 		}
 	}
 }

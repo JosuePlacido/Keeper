@@ -13,12 +13,10 @@ using Keeper.Domain.Core;
 
 namespace Keeper.Infrastructure.DAO
 {
-	public class DAOChampionship : IDAOChampionship
+	public class DAOChampionship : DAO, IDAOChampionship
 	{
-		private readonly ApplicationContext _context;
-		public DAOChampionship(ApplicationContext Context)
+		public DAOChampionship(ApplicationContext Context) : base(Context)
 		{
-			_context = Context;
 		}
 		public async Task<IDTO> GetByIdForRename(string id)
 		{

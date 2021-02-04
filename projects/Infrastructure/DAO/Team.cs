@@ -14,13 +14,9 @@ using System.Collections.Generic;
 
 namespace Keeper.Infrastructure.DAO
 {
-	public class DAOTeam : IDAOTeam
+	public class DAOTeam : DAO, IDAOTeam
 	{
-		private readonly ApplicationContext _context;
-		public DAOTeam(ApplicationContext Context)
-		{
-			_context = Context;
-		}
+		public DAOTeam(ApplicationContext Context) : base(Context) { }
 
 		public async Task<string[]> Exists(string[] ids)
 		{

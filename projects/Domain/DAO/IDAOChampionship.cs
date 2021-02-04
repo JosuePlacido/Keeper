@@ -5,7 +5,7 @@ using Keeper.Domain.Models;
 
 namespace Keeper.Application.DAO
 {
-	public interface IDAOChampionship
+	public interface IDAOChampionship : IDAO
 	{
 		Task<IDTO> GetByIdForRename(string id);
 	}
