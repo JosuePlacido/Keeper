@@ -60,10 +60,22 @@ namespace Keeper.Api.Controllers
 		{
 			return await _ChampionshipAppService.TeamStats(id);
 		}
+		[HttpPost("Teams")]
+		public async Task<IActionResult> Teams(TeamSubscribePost[] dto)
+		{
+			return !ModelState.IsValid ? CustomResponse(ModelState) :
+				CustomResponse(await _ChampionshipAppService.UpdateTeamsStatistics(dto));
+		}
 		[HttpGet("Players/{id}")]
 		public async Task<PlayerStatisticDTO[]> Player(string id)
 		{
 			return await _ChampionshipAppService.PlayerStats(id);
+		}
+		[HttpPost("Players")]
+		public async Task<IActionResult> Players(PlayerSubscribePost[] dto)
+		{
+			return !ModelState.IsValid ? CustomResponse(ModelState) :
+				CustomResponse(await _ChampionshipAppService.UpdatePlayersStatistics(dto));
 		}
 	}
 }

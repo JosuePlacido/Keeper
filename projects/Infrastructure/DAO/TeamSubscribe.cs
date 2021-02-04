@@ -18,11 +18,25 @@ namespace Keeper.Infrastructure.DAO
 	{
 		public DAOTeamSubscribe(ApplicationContext Context) : base(Context) { }
 
+		public async Task<TeamSubscribe[]> GetAllById(string[] ids)
+		{
+			return await _context.TeamSubscribes.AsNoTracking()
+				.Where(ts => ids.Contains(ts.Id)).ToArrayAsync();
+		}
+
 		public async Task<TeamSubscribe[]> GetByChampionshipTeamStatistics(string championship)
 		{
 			return await _context.TeamSubscribes.AsNoTracking()
 				.Where(ts => ts.ChampionshipId == championship)
 					.Include(ts => ts.Team).ToArrayAsync();
+		}
+
+		public void UpdateAll(TeamSubscribe[] list)
+		{
+			foreach (var item in list)
+			{
+				_context.Entry(item).State = EntityState.Modified;
+			}
 		}
 	}
 }

@@ -60,5 +60,20 @@ namespace Keeper.Domain.Models
 			TeamSubscribeId = teamSubscribeId;
 			Status = status;
 		}
+
+		public void UpdateNumbers(int? games = null, int? goals = null, int? yellowCard = null,
+			int? redCard = null, int? mVPs = null)
+		{
+			if (games != null)
+				Games = (int)games;
+			if (goals != null)
+				Goals = (int)goals;
+			if (yellowCard != null)
+				YellowCard = (int)yellowCard;
+			if (redCard != null)
+				RedCard = (int)redCard;
+			if (mVPs != null)
+				MVPs = (int)mVPs;
+		}
 	}
 }

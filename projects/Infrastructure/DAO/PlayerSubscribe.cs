@@ -18,6 +18,12 @@ namespace Keeper.Infrastructure.DAO
 		{
 		}
 
+		public async Task<PlayerSubscribe[]> GetAllById(string[] ids)
+		{
+			return await _context.PlayerSubscribe.AsNoTracking()
+				.Where(ps => ids.Contains(ps.Id)).ToArrayAsync();
+		}
+
 		public async Task<PlayerSubscribe[]> GetByChampionshipPlayerStatistics(string championship)
 		{
 			string[] teams = await _context.TeamSubscribes.AsNoTracking()
@@ -25,6 +31,14 @@ namespace Keeper.Infrastructure.DAO
 			return await _context.PlayerSubscribe.AsNoTracking()
 				.Where(ps => teams.Contains(ps.TeamSubscribeId))
 				.Include(ps => ps.Player).ToArrayAsync();
+		}
+
+		public void UpdateAll(PlayerSubscribe[] list)
+		{
+			foreach (var item in list)
+			{
+				_context.Entry(item).State = EntityState.Modified;
+			}
 		}
 
 		public async Task<string> ValidateUpdateOnSquad(PlayerSubscribe player)

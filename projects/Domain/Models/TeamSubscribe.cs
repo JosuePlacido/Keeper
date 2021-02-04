@@ -60,9 +60,6 @@ namespace Keeper.Domain.Models
 			TeamId = team;
 			Players = new List<PlayerSubscribe>();
 		}
-
-
-
 		public static TeamSubscribe Factory(string id, string teamId,
 			string championshipId = null, string status = Enum.Status.Matching, Team team = null,
 			int games = 0, int won = 0, int drowns = 0, int lost = 0, int goalsScores = 0,
@@ -87,6 +84,30 @@ namespace Keeper.Domain.Models
 				Players = players,
 				ChampionshipId = championshipId
 			};
+		}
+
+		public void UpdateNumbers(int? games = null, int? drowns = null, int? goalsAgainst = null,
+			int? goalsDifference = null, int? goalsScores = null, int? lost = null,
+			int? reds = null, int? won = null, int? yellows = null)
+		{
+			if (games != null)
+				Games = (int)games;
+			if (drowns != null)
+				Drowns = (int)drowns;
+			if (goalsAgainst != null)
+				GoalsAgainst = (int)goalsAgainst;
+			if (goalsDifference != null)
+				GoalsDifference = (int)goalsDifference;
+			if (goalsScores != null)
+				GoalsScores = (int)goalsScores;
+			if (lost != null)
+				Lost = (int)lost;
+			if (reds != null)
+				Reds = (int)reds;
+			if (won != null)
+				Won = (int)won;
+			if (yellows != null)
+				Yellows = (int)yellows;
 		}
 	}
 }

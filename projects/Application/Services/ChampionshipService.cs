@@ -12,6 +12,7 @@ using Keeper.Application.Models;
 using Domain.Core;
 using Keeper.Domain.Enum;
 using Keeper.Application.DAO;
+using Application.Validation;
 
 namespace Keeper.Application.Services
 {
@@ -447,6 +448,63 @@ namespace Keeper.Application.Services
 			PlayerStatisticDTO[] result;
 			result = _mapper.Map<PlayerStatisticDTO[]>(await _daoPlayerSubscribe
 				.GetByChampionshipPlayerStatistics(id));
+			return result;
+		}
+
+		public async Task<IServiceResult> UpdateTeamsStatistics(TeamSubscribePost[] dto)
+		{
+			ServiceResponse result = new ServiceResponse();
+			result.ValidationResult = new ValidationResult();
+			if (dto == null)
+			{
+				return result;
+			}
+			if (dto.Any(i => string.IsNullOrEmpty(i.Id)))
+			{
+				result.ValidationResult.Errors.Add(new ValidationFailure("Id", "Todos os ids são obrigatórios"));
+			}
+			TeamSubscribe[] list;
+			if (result.ValidationResult.IsValid)
+			{
+				list = await _daoTeamSubscribe.GetAllById(dto.Select(ts => ts.Id).ToArray());
+				for (int x = 0; x < list.Length; x++)
+				{
+					list[x].UpdateNumbers(dto[x].Games, dto[x].Drowns, dto[x].GoalsAgainst,
+						dto[x].GoalsDifference, dto[x].GoalsScores, dto[x].Lost, dto[x].Reds,
+						dto[x].Won, dto[x].Yellows);
+				}
+				_daoTeamSubscribe.UpdateAll(list);
+				await _uow.Commit();
+				result.Value = list;
+			}
+			return result;
+		}
+
+		public async Task<IServiceResult> UpdatePlayersStatistics(PlayerSubscribePost[] dto)
+		{
+			ServiceResponse result = new ServiceResponse();
+			result.ValidationResult = new ValidationResult();
+			if (dto == null)
+			{
+				return result;
+			}
+			if (dto.Any(i => string.IsNullOrEmpty(i.Id)))
+			{
+				result.ValidationResult.Errors.Add(new ValidationFailure("Id", "Todos os ids são obrigatórios"));
+			}
+			PlayerSubscribe[] list;
+			if (result.ValidationResult.IsValid)
+			{
+				list = await _daoPlayerSubscribe.GetAllById(dto.Select(ts => ts.Id).ToArray());
+				for (int x = 0; x < list.Length; x++)
+				{
+					list[x].UpdateNumbers(dto[x].Games, dto[x].Goals, dto[x].MVPs, dto[x].Reds,
+						dto[x].Yellows);
+				}
+				_daoPlayerSubscribe.UpdateAll(list);
+				await _uow.Commit();
+				result.Value = list;
+			}
 			return result;
 		}
 	}

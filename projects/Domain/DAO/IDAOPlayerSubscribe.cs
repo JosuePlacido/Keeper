@@ -8,5 +8,7 @@ namespace Keeper.Application.DAO
 	{
 		Task<string> ValidateUpdateOnSquad(PlayerSubscribe player);
 		Task<PlayerSubscribe[]> GetByChampionshipPlayerStatistics(string championship);
+		Task<PlayerSubscribe[]> GetAllById(string[] vs);
+		void UpdateAll(PlayerSubscribe[] list);
 	}
 }
