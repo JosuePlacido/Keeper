@@ -44,7 +44,7 @@ namespace Keeper.Test.UnitTest.Application.Service
 				expected = context.Championships.AsNoTracking()
 					.Where(c => c.Id == "c1").FirstOrDefault();
 				result = new ChampionshipService(_mapper, null,
-					new ChampionshipRepository(context), null, null, null, null, null)
+					new ChampionshipRepository(context), null, null, null, null, null, null)
 					.Rank("c1").Result;
 			}
 			Assert.NotNull(result);
@@ -57,7 +57,7 @@ namespace Keeper.Test.UnitTest.Application.Service
 			using (var context = Fixture.CreateContext())
 			{
 				result = new ChampionshipService(_mapper, null,
-					new ChampionshipRepository(context), null, null, null, null, null)
+					new ChampionshipRepository(context), null, null, null, null, null, null)
 					.Rank("no exist").Result;
 			}
 			Assert.Null(result);
@@ -77,7 +77,7 @@ namespace Keeper.Test.UnitTest.Application.Service
 				var service = new ChampionshipService(null,
 					new UnitOfWork(context),
 					new ChampionshipRepository(context)
-					, null, null, null, dao, new DAOStatistic(context));
+					, null, null, null, dao, new DAOStatistic(context), null);
 				result = service.UpdateStatistics(
 					new RankPost[] { statistic }
 				).Result;
@@ -96,7 +96,7 @@ namespace Keeper.Test.UnitTest.Application.Service
 				var service = new ChampionshipService(null,
 					new UnitOfWork(context),
 					new ChampionshipRepository(context),
-					null, null, null, dao, new DAOStatistic(context));
+					null, null, null, dao, new DAOStatistic(context), null);
 				result = service.UpdateStatistics(null).Result;
 			}
 			Assert.Null(result.Value);

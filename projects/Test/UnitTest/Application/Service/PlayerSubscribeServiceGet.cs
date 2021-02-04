@@ -38,7 +38,7 @@ namespace Keeper.Test.UnitTest.Application.Service
 				string champ = repo.GetAll().Result.Where(c => c.Edition == "1993")
 					.FirstOrDefault().Id;
 				result = new ChampionshipService(mapper, new UnitOfWork(context),
-					repo, null, null, null, null, null).GetSquads(champ).Result;
+					repo, null, null, null, null, null, null).GetSquads(champ).Result;
 			}
 			Assert.Equal(2, result.Length);
 			Assert.Equal(6, result.SelectMany(ts => ts.Players).Count());
@@ -50,7 +50,7 @@ namespace Keeper.Test.UnitTest.Application.Service
 			{
 				ChampionshipRepository repo = new ChampionshipRepository(context);
 				SquadEditDTO[] result = new ChampionshipService(null, new UnitOfWork(context),
-					repo, null, null, null, null, null)
+					repo, null, null, null, null, null, null)
 					.GetSquads("player").Result;
 				Assert.Empty(result);
 			}

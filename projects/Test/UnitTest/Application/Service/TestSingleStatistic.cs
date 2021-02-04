@@ -1,0 +1,91 @@
+
+using System.Linq;
+using Keeper.Application.Services;
+using AutoMapper;
+using Xunit;
+using Xunit.Abstractions;
+using Keeper.Infrastructure.Repository;
+using Keeper.Infrastructure.DAO;
+using System.Collections.Generic;
+using Keeper.Domain.Models;
+using Keeper.Application.DTO;
+using Keeper.Infrastructure.CrossCutting.Adapter;
+using Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
+using Keeper.Application.Interface;
+
+namespace Keeper.Test.UnitTest.Application.Service
+{
+	public class TestSingleStatistic : IClassFixture<SharedDatabaseFixture>
+	{
+		private readonly ITestOutputHelper _output;
+		private readonly IMapper _mapper;
+		public SharedDatabaseFixture Fixture { get; }
+		public TestSingleStatistic(SharedDatabaseFixture fixture,
+			ITestOutputHelper output)
+		{
+			(_output, Fixture) = (output, fixture);
+			MapperConfiguration config = new MapperConfiguration(cfg =>
+			{
+				cfg.AddProfile<RankDTOProfile>();
+				cfg.AddProfile<SingleStatisticDTOProfile>();
+			});
+			_mapper = config.CreateMapper();
+		}
+
+		[Fact]
+		public void Get_Statistic_Of_Teams()
+		{
+			TeamStatisticDTO[] expected = _mapper.Map<TeamStatisticDTO[]>(SeedData.TeamsSubscribes);
+			TeamStatisticDTO[] result;
+			using (var context = Fixture.CreateContext())
+			{
+				result = new ChampionshipService(_mapper, null,
+					new ChampionshipRepository(context), null, null, null, null, null,
+					new DAOTeamSubscribe(context))
+					.TeamStats("c1").Result;
+			}
+			Assert.All(result, r => expected.Contains(r));
+		}
+		[Fact]
+		public void Get_Statistic_Of_Teams_Empty()
+		{
+			TeamStatisticDTO[] result;
+			using (var context = Fixture.CreateContext())
+			{
+				result = new ChampionshipService(_mapper, null,
+					new ChampionshipRepository(context), null, null, null, null, null,
+					new DAOTeamSubscribe(context))
+					.TeamStats("noexist").Result;
+			}
+			Assert.Empty(result);
+		}
+		[Fact]
+		public void Get_Statistic_Of_Players()
+		{
+			PlayerStatisticDTO[] expected = _mapper.Map<PlayerStatisticDTO[]>(SeedData.PlayersSubscribe);
+			PlayerStatisticDTO[] result;
+			using (var context = Fixture.CreateContext())
+			{
+				result = new ChampionshipService(_mapper, null,
+					new ChampionshipRepository(context), new DAOPlayerSubscribe(context),
+					 null, null, null, null, null)
+					.PlayerStats("c1").Result;
+			}
+			Assert.All(result, r => expected.Contains(r));
+		}
+		[Fact]
+		public void Get_Statistic_Of_Players_Empty()
+		{
+			PlayerStatisticDTO[] result;
+			using (var context = Fixture.CreateContext())
+			{
+				result = new ChampionshipService(_mapper, null,
+					new ChampionshipRepository(context), new DAOPlayerSubscribe(context),
+					 null, null, null, null, null)
+					.PlayerStats("noexist").Result;
+			}
+			Assert.Empty(result);
+		}
+	}
+}
