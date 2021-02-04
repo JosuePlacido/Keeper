@@ -2,6 +2,7 @@ using Xunit;
 using Xunit.Abstractions;
 using Keeper.Domain.Models;
 using Keeper.Infrastructure.DAO;
+using System.Linq;
 
 namespace Keeper.Test.UnitTest.Infra.DAO
 {
@@ -22,7 +23,7 @@ namespace Keeper.Test.UnitTest.Infra.DAO
 				var dao = new DAOTeamSubscribe(context);
 				result = dao.GetByChampionshipTeamStatistics("c1").Result;
 			}
-			Assert.Equal(expected, result);
+			Assert.All(result, r => expected.Contains(r));
 		}
 	}
 }

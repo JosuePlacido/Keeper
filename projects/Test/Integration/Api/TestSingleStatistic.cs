@@ -54,5 +54,89 @@ namespace Keeper.Test.Integration.Api
 			Assert.Equal(HttpStatusCode.OK, actualResponse.StatusCode);
 			Assert.IsType<TeamStatisticDTO[]>(result);
 		}
+		[Fact]
+		public void Post_Statistic_Of_Teams()
+		{
+			TeamSubscribePost test = new TeamSubscribePost
+			{
+				Id = "ts1",
+				Games = 5
+			};
+			HttpClient client = this._fixture
+				.CustomWebApplicationFactory
+				.CreateClient();
+
+			HttpContent content = new StringContent(
+				JsonConvert.SerializeObject(new TeamSubscribePost[] { test }),
+				Encoding.UTF8, "application/json");
+			HttpResponseMessage actualResponse = client
+				.PostAsync($"Championship/Teams", content)
+				.Result;
+			actualResponse.EnsureSuccessStatusCode();
+			Assert.Equal(HttpStatusCode.OK, actualResponse.StatusCode);
+		}
+		[Fact]
+		public void Post_Statistic_Of_Players()
+		{
+			PlayerSubscribePost test = new PlayerSubscribePost
+			{
+				Id = "ps1",
+				Games = 5
+			};
+			HttpClient client = this._fixture
+				.CustomWebApplicationFactory
+				.CreateClient();
+
+			HttpContent content = new StringContent(
+				JsonConvert.SerializeObject(new PlayerSubscribePost[] { test }),
+				Encoding.UTF8, "application/json");
+			HttpResponseMessage actualResponse = client
+				.PostAsync($"Championship/Players", content)
+				.Result;
+			actualResponse.EnsureSuccessStatusCode();
+			Assert.Equal(HttpStatusCode.OK, actualResponse.StatusCode);
+		}
+		[Fact]
+		public void Post_Statistic_Of_Players_Invalid()
+		{
+			PlayerSubscribePost test = new PlayerSubscribePost
+			{
+				Games = 5
+			};
+			HttpClient client = this._fixture
+				.CustomWebApplicationFactory
+				.CreateClient();
+
+			HttpContent content = new StringContent(
+				JsonConvert.SerializeObject(new PlayerSubscribePost[] { test }),
+				Encoding.UTF8, "application/json");
+			HttpResponseMessage actualResponse = client
+				.PostAsync($"Championship/Players", content)
+				.Result;
+			var result = JsonConvert.DeserializeObject<ProblemDetails>(
+				actualResponse.Content.ReadAsStringAsync().Result);
+			Assert.Equal(HttpStatusCode.BadRequest, actualResponse.StatusCode);
+		}
+		[Fact]
+		public void Post_Statistic_Of_Teams_Invalid()
+		{
+			TeamSubscribePost test = new TeamSubscribePost
+			{
+				Games = 5
+			};
+			HttpClient client = this._fixture
+				.CustomWebApplicationFactory
+				.CreateClient();
+
+			HttpContent content = new StringContent(
+				JsonConvert.SerializeObject(new TeamSubscribePost[] { test }),
+				Encoding.UTF8, "application/json");
+			HttpResponseMessage actualResponse = client
+				.PostAsync($"Championship/Teams", content)
+				.Result;
+			var result = JsonConvert.DeserializeObject<ProblemDetails>(
+				actualResponse.Content.ReadAsStringAsync().Result);
+			Assert.Equal(HttpStatusCode.BadRequest, actualResponse.StatusCode);
+		}
 	}
 }

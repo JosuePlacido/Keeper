@@ -87,5 +87,40 @@ namespace Keeper.Test.UnitTest.Application.Service
 			}
 			Assert.Empty(result);
 		}
+
+		[Fact]
+		public void Update_Player_Return_Ok()
+		{
+			PlayerSubscribePost test = new PlayerSubscribePost
+			{
+				Id = "ps1",
+				Games = 5
+			};
+			using (var context = Fixture.CreateContext())
+			{
+				var result = new ChampionshipService(_mapper, new UnitOfWork(context),
+					new ChampionshipRepository(context), new DAOPlayerSubscribe(context),
+					 null, null, null, null, null)
+					.UpdatePlayersStatistics(new PlayerSubscribePost[] { test }).Result;
+				Assert.NotNull(result);
+			}
+		}
+		[Fact]
+		public void Update_Team_Return_Ok()
+		{
+			TeamSubscribePost test = new TeamSubscribePost
+			{
+				Id = "ts1",
+				Games = 5
+			};
+			using (var context = Fixture.CreateContext())
+			{
+				var result = new ChampionshipService(_mapper, new UnitOfWork(context),
+					new ChampionshipRepository(context), new DAOPlayerSubscribe(context),
+					 null, null, null, null, new DAOTeamSubscribe(context))
+					.UpdateTeamsStatistics(new TeamSubscribePost[] { test }).Result;
+				Assert.NotNull(result);
+			}
+		}
 	}
 }
