@@ -19,7 +19,8 @@ namespace Keeper.Infrastructure.CrossCutting.IoC
 		{
 			services.AddAutoMapper(typeof(ChampionshipDTOToDomainProfile),
 				typeof(TeamDTOProfile), typeof(MatchEditProfile),
-				typeof(PlayerDTOProfile), typeof(RankDTOProfile));
+				typeof(PlayerDTOProfile), typeof(RankDTOProfile),
+				typeof(SingleStatisticDTOProfile));
 
 			services.AddScoped<ApplicationContext>();
 			services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -34,6 +35,7 @@ namespace Keeper.Infrastructure.CrossCutting.IoC
 
 			services.AddScoped<ITeamService, TeamService>();
 			services.AddScoped<IDAOPlayerSubscribe, DAOPlayerSubscribe>();
+			services.AddScoped<IDAOTeamSubscribe, DAOTeamSubscribe>();
 			services.AddScoped<IPlayerService, PlayerService>();
 			services.AddScoped<IChampionshipService, ChampionshipService>();
 		}

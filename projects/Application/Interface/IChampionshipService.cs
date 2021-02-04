@@ -17,5 +17,7 @@ namespace Keeper.Application.Interface
 		Task<IServiceResult> UpdateSquad(PLayerSquadPostDTO[] squads);
 		Task<RankDTO> Rank(string championship);
 		Task<IServiceResult> UpdateStatistics(RankPost[] dto);
+		Task<TeamStatisticDTO[]> TeamStats(string id);
+		Task<PlayerStatisticDTO[]> PlayerStats(string id);
 	}
 }

@@ -12,13 +12,21 @@ using Keeper.Domain.Enum;
 
 namespace Keeper.Infrastructure.DAO
 {
-	public class DAOPlayerSubscribe : IDAOPlayerSubscribe
+	public class DAOPlayerSubscribe : DAO, IDAOPlayerSubscribe
 	{
-		private readonly ApplicationContext _context;
-		public DAOPlayerSubscribe(ApplicationContext Context)
+		public DAOPlayerSubscribe(ApplicationContext Context) : base(Context)
 		{
-			_context = Context;
 		}
+
+		public async Task<PlayerSubscribe[]> GetByChampionshipPlayerStatistics(string championship)
+		{
+			string[] teams = await _context.TeamSubscribes.AsNoTracking()
+				.Where(ts => ts.ChampionshipId == championship).Select(ts => ts.Id).ToArrayAsync();
+			return await _context.PlayerSubscribe.AsNoTracking()
+				.Where(ps => teams.Contains(ps.TeamSubscribeId))
+				.Include(ps => ps.Player).ToArrayAsync();
+		}
+
 		public async Task<string> ValidateUpdateOnSquad(PlayerSubscribe player)
 		{
 			bool PlayerExists = await _context.Players.AsNoTracking()

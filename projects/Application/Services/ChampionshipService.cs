@@ -20,6 +20,7 @@ namespace Keeper.Application.Services
 		private readonly IRepositoryChampionship _repoChamp;
 		private readonly IMapper _mapper;
 		private readonly IDAOPlayerSubscribe _daoPlayerSubscribe;
+		private readonly IDAOTeamSubscribe _daoTeamSubscribe;
 		private readonly IDAOPlayer _daoPlayer;
 		private readonly IDAOStatistic _daoStat;
 		private readonly IDAOTeam _daoTeam;
@@ -27,7 +28,8 @@ namespace Keeper.Application.Services
 		private readonly IUnitOfWork _uow;
 		public ChampionshipService(IMapper mapper, IUnitOfWork uow,
 			IRepositoryChampionship repoChamp, IDAOPlayerSubscribe daoPlayerSubscribe,
-			IDAOPlayer daoPlayer, IDAOTeam daoTeam, IDAOChampionship dao, IDAOStatistic daoStat)
+			IDAOPlayer daoPlayer, IDAOTeam daoTeam, IDAOChampionship dao, IDAOStatistic daoStat,
+			IDAOTeamSubscribe daoTeamSubscribe)
 		{
 			_mapper = mapper;
 			_repoChamp = repoChamp;
@@ -37,6 +39,7 @@ namespace Keeper.Application.Services
 			_daoTeam = daoTeam;
 			_dao = dao;
 			_daoStat = daoStat;
+			_daoTeamSubscribe = daoTeamSubscribe;
 		}
 		public async Task<IServiceResult> Create(ChampionshipCreateDTO dto)
 		{
@@ -429,6 +432,22 @@ namespace Keeper.Application.Services
 				await _uow.Commit();
 			}
 			return response;
+		}
+
+		public async Task<TeamStatisticDTO[]> TeamStats(string id)
+		{
+			TeamStatisticDTO[] result;
+			result = _mapper.Map<TeamStatisticDTO[]>(await _daoTeamSubscribe
+				.GetByChampionshipTeamStatistics(id));
+			return result;
+		}
+
+		public async Task<PlayerStatisticDTO[]> PlayerStats(string id)
+		{
+			PlayerStatisticDTO[] result;
+			result = _mapper.Map<PlayerStatisticDTO[]>(await _daoPlayerSubscribe
+				.GetByChampionshipPlayerStatistics(id));
+			return result;
 		}
 	}
 }

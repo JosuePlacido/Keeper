@@ -55,5 +55,15 @@ namespace Keeper.Api.Controllers
 			return !ModelState.IsValid ? CustomResponse(ModelState) :
 				CustomResponse(await _ChampionshipAppService.UpdateStatistics(dto));
 		}
+		[HttpGet("Teams/{id}")]
+		public async Task<TeamStatisticDTO[]> Teams(string id)
+		{
+			return await _ChampionshipAppService.TeamStats(id);
+		}
+		[HttpGet("Players/{id}")]
+		public async Task<PlayerStatisticDTO[]> Player(string id)
+		{
+			return await _ChampionshipAppService.PlayerStats(id);
+		}
 	}
 }
