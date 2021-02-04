@@ -40,7 +40,7 @@ namespace Keeper.Test.Integration.Application
 					var mapper = config.CreateMapper();
 					var test = ChampionshipCreateDTODataExamples.SemiFinal;
 					result = new ChampionshipService(mapper, new UnitOfWork(context), repo,
-						null, new DAOPlayer(context), new DAOTeam(context), null).Create(test).Result;
+						null, new DAOPlayer(context), new DAOTeam(context), null, null).Create(test).Result;
 				}
 			}
 			var jsonResult = JsonConvert.SerializeObject(result, Formatting.Indented);

@@ -42,9 +42,8 @@ namespace Keeper.Test.Integration.Api
 
 					db.Database.EnsureCreated();
 					try
-					{/*
-						db.Set<Team>().AddRange(SeedData.Players);
-						db.Set<Team>().AddRange(SeedData.Teams);*/
+					{
+
 						db.Database.ExecuteSqlRaw("DELETE FROM tb_championship WHERE Id LIKE 'test'");
 						db.Database.ExecuteSqlRaw("DELETE FROM tb_team_subscribe WHERE Id LIKE 'test'");
 						db.Database.ExecuteSqlRaw("DELETE FROM tb_player_subscribe WHERE Id LIKE 'test'");
@@ -73,7 +72,7 @@ namespace Keeper.Test.Integration.Api
 
 		/*
 		=> builder.ConfigureAppConfiguration(
-			(context, config) =>
+			(db, config) =>
 			{
 				config.AddInMemoryCollection(
 					new Dictionary<string, string>
