@@ -21,12 +21,13 @@ namespace Keeper.Application.Services
 		private readonly IMapper _mapper;
 		private readonly IDAOPlayerSubscribe _daoPlayerSubscribe;
 		private readonly IDAOPlayer _daoPlayer;
+		private readonly IDAOStatistic _daoStat;
 		private readonly IDAOTeam _daoTeam;
 		private readonly IDAOChampionship _dao;
 		private readonly IUnitOfWork _uow;
 		public ChampionshipService(IMapper mapper, IUnitOfWork uow,
 			IRepositoryChampionship repoChamp, IDAOPlayerSubscribe daoPlayerSubscribe,
-			IDAOPlayer daoPlayer, IDAOTeam daoTeam, IDAOChampionship dao)
+			IDAOPlayer daoPlayer, IDAOTeam daoTeam, IDAOChampionship dao, IDAOStatistic daoStat)
 		{
 			_mapper = mapper;
 			_repoChamp = repoChamp;
@@ -35,6 +36,7 @@ namespace Keeper.Application.Services
 			_daoPlayer = daoPlayer;
 			_daoTeam = daoTeam;
 			_dao = dao;
+			_daoStat = daoStat;
 		}
 		public async Task<IServiceResult> Create(ChampionshipCreateDTO dto)
 		{
@@ -377,6 +379,55 @@ namespace Keeper.Application.Services
 			}
 			response.Value = await _repoChamp.RenameScopes(championship);
 			await _uow.Commit();
+			return response;
+		}
+
+		public async Task<RankDTO> Rank(string championship)
+		{
+			if (string.IsNullOrEmpty(championship))
+			{
+				return new RankDTO();
+			}
+			return _mapper.Map<RankDTO>(await _repoChamp.GetByIdWithRank(championship));
+		}
+
+		public async Task<IServiceResult> UpdateStatistics(RankPost[] dto)
+		{
+			ServiceResponse response = new ServiceResponse();
+			response.ValidationResult = new ValidationResult();
+			if (dto == null)
+			{
+				response.ValidationResult.Errors.Add(
+					new ValidationFailure("Id", $"Estatísticas estão em branco")
+				);
+			}
+			List<Statistic> list = new List<Statistic>();
+			if (response.ValidationResult.IsValid)
+			{
+				Statistic stat;
+				foreach (var item in dto)
+				{
+					stat = await _daoStat.GetById(item.Id);
+					if (stat != null && response.ValidationResult.IsValid)
+					{
+						stat.UpdateNumbers(item.Games, item.Won, item.Drowns, item.Lost,
+							item.GoalsScores, item.GoalsAgainst, item.GoalsDifference, item.Yellows,
+							item.Reds, item.Points, item.Lastfive, item.Position);
+					}
+					else
+					{
+						response.ValidationResult.Errors.Add(
+							new ValidationFailure("Id",
+								$"Registro de estatística de id: {item.Id} não existe")
+						);
+					}
+				}
+			}
+			if (response.ValidationResult.IsValid)
+			{
+				response.Value = _repoChamp.UpdateStatistics(list.ToArray());
+				await _uow.Commit();
+			}
 			return response;
 		}
 	}

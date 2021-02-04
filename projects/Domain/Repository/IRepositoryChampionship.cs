@@ -11,5 +11,7 @@ namespace Keeper.Domain.Repository
 		Task<Championship> GetByIdWithStageGroupsAndMatches(string championship);
 		Task<PlayerSubscribe> UpdatePLayer(PlayerSubscribe player);
 		Task<Championship> RenameScopes(Championship championship);
+		Task<Championship> GetByIdWithRank(string championship);
+		Task UpdateStatistics(Statistic[] statistics);
 	}
 }

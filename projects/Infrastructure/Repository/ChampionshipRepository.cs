@@ -25,6 +25,17 @@ namespace Keeper.Infrastructure.Repository
 			return obj;
 		}
 
+		public async Task<Championship> GetByIdWithRank(string championship)
+		{
+			return await _context.Championships.AsNoTracking().Where(c => c.Id == championship)
+				.Include(c => c.Stages)
+					.ThenInclude(s => ((Stage)s).Groups)
+						.ThenInclude(g => ((Group)g).Statistics)
+							.ThenInclude(s => ((Statistic)s).TeamSubscribe)
+								.ThenInclude(ts => ((TeamSubscribe)ts).Team)
+				.FirstOrDefaultAsync();
+		}
+
 		public async Task<Championship> GetByIdWithStageGroupsAndMatches(string championship)
 		{
 			return await _context.Championships.AsNoTracking().Where(c => c.Id == championship)
@@ -81,6 +92,14 @@ namespace Keeper.Infrastructure.Repository
 				_context.Entry(temp).State = EntityState.Modified;
 			}
 			return player;
+		}
+
+		public async Task UpdateStatistics(Statistic[] statistics)
+		{
+			foreach (var stat in statistics)
+			{
+				_context.Entry(stat).State = EntityState.Modified;
+			}
 		}
 	}
 }

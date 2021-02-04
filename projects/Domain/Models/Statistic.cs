@@ -27,6 +27,41 @@ namespace Keeper.Domain.Models
 			TeamSubscribeId = team;
 			Position = 1;
 		}
+
+		public Statistic UpdateNumbers(int? games = null, int? won = null, int? drowns = null,
+			int? lost = null, int? goalsScores = null, int? goalsAgainst = null,
+			int? goalsDifference = null, int? yellows = null, int? reds = null, int? points = null,
+			string lastfive = null, int? position = null)
+		{
+			if (games != null)
+				Games = (int)games;
+			if (won != null)
+				Won = (int)won;
+			if (drowns != null)
+				Drowns = (int)drowns;
+			if (lost != null)
+				Lost = (int)lost;
+			if (goalsScores != null)
+				GoalsScores = (int)goalsScores;
+			if (position != null)
+			{
+				RankMovement = RankMovement + (Position - (int)position);
+				Position = (int)position;
+			}
+			if (goalsAgainst != null)
+				GoalsAgainst = (int)goalsAgainst;
+			if (goalsDifference != null)
+				GoalsDifference = (int)goalsDifference;
+			if (yellows != null)
+				Yellows = (int)yellows;
+			if (reds != null)
+				Reds = (int)reds;
+			if (points != null)
+				Points = (int)points;
+			if (!string.IsNullOrEmpty(lastfive))
+				Lastfive = lastfive;
+			return this;
+		}
 		public Statistic Reorder(int newPosition)
 		{
 			if (Games > 1)
@@ -50,6 +85,7 @@ namespace Keeper.Domain.Models
 			return new Statistic()
 			{
 				Id = id,
+				GroupId = groupId,
 				TeamSubscribeId = teamSubscribeId,
 				TeamSubscribe = teamSubscribe,
 				Games = games,
