@@ -21,5 +21,7 @@ namespace Keeper.Application.Interface
 		Task<PlayerStatisticDTO[]> PlayerStats(string id);
 		Task<IServiceResult> UpdateTeamsStatistics(TeamSubscribePost[] dto);
 		Task<IServiceResult> UpdatePlayersStatistics(PlayerSubscribePost[] dto);
+		Task<MatchEditsScope> GetMatchSchedule(string id);
+		Task<MatchEditsScope> UpdateMatches(MatchEditsScope dto);
 	}
 }

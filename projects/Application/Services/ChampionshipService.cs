@@ -96,75 +96,77 @@ namespace Keeper.Application.Services
 
 		public MatchEditsScope CheckMatches(MatchEditsScope dto)
 		{
-			if (dto.Errors == null)
+			if (dto != null && dto.Stages != null)
 			{
-				dto.Errors = new List<string>();
-			}
-			var dictionaryTeam = new Dictionary<string, AuditoryMatch>();
-			foreach (var group in dto.Stages.SelectMany(stg => stg.Groups))
-			{
-				dictionaryTeam.Clear();
-				var matches = group.Matchs.OrderBy(mtc => mtc.Round).ToArray();
-				var teams = matches.SelectMany(mtc => new string[]{
+				if (dto.Errors == null)
+				{
+					dto.Errors = new List<string>();
+				}
+				var dictionaryTeam = new Dictionary<string, AuditoryMatch>();
+				foreach (var group in dto.Stages.SelectMany(stg => stg.Groups))
+				{
+					dictionaryTeam.Clear();
+					var matches = group.Matchs.OrderBy(mtc => mtc.Round).ToArray();
+					var teams = matches.SelectMany(mtc => new string[]{
 					mtc.AwayId, mtc.VacancyHomeId,
 					mtc.HomeId,mtc.VacancyAwayId
 				}).Distinct().Where(str => !string.IsNullOrEmpty(str)).ToArray();
 
-				foreach (var team in teams)
-				{
-					dictionaryTeam.Add(team, new AuditoryMatch());
-				}
+					foreach (var team in teams)
+					{
+						dictionaryTeam.Add(team, new AuditoryMatch());
+					}
 
-				var totalMatchsPerTeam = teams.Length - 1;
-				var finalRound = totalMatchsPerTeam + teams.Length % 2;
-				if (dto.Stages.Where(stg => stg.Id == group.StageId).FirstOrDefault().DuplicateTurn)
-				{
-					finalRound *= 2;
-					totalMatchsPerTeam *= 2;
-				}
+					var totalMatchsPerTeam = teams.Length - 1;
+					var finalRound = totalMatchsPerTeam + teams.Length % 2;
+					if (dto.Stages.Where(stg => stg.Id == group.StageId).FirstOrDefault().DuplicateTurn)
+					{
+						finalRound *= 2;
+						totalMatchsPerTeam *= 2;
+					}
 
-				string home, away = "";
-				List<string> idsMatchesHasError, errorsTemp;
-				foreach (var match in matches)
-				{
-					if (matches.Where(mtc => mtc.Equals(match) && mtc.Id != match.Id).FirstOrDefault() != null)
+					string home, away = "";
+					List<string> idsMatchesHasError, errorsTemp;
+					foreach (var match in matches)
 					{
-						match.HasError = true;
-						dto.Errors.Add(MatchAuditoryContants.GenerateMessage(
-							MatchAuditoryContants.UNIQUE_MATCH,
-							match.ToString()));
+						if (matches.Where(mtc => mtc.Equals(match) && mtc.Id != match.Id).FirstOrDefault() != null)
+						{
+							match.HasError = true;
+							dto.Errors.Add(MatchAuditoryContants.GenerateMessage(
+								MatchAuditoryContants.UNIQUE_MATCH,
+								match.ToString()));
+						}
+						home = string.IsNullOrEmpty(match.HomeId) ? match.VacancyHomeId : match.HomeId;
+						away = string.IsNullOrEmpty(match.AwayId) ? match.VacancyAwayId : match.AwayId;
+						UpdateTeamAuditory("h", home, match, dictionaryTeam,
+							finalRound, totalMatchsPerTeam, out errorsTemp, out idsMatchesHasError);
+						((List<string>)dto.Errors).AddRange(errorsTemp);
+						foreach (var mtc in matches.Where(mtc => idsMatchesHasError.Contains(mtc.Id)))
+						{
+							mtc.HasError = true;
+						}
+						UpdateTeamAuditory("a", away, match, dictionaryTeam,
+							finalRound, totalMatchsPerTeam, out errorsTemp, out idsMatchesHasError);
+						((List<string>)dto.Errors).AddRange(errorsTemp);
+						foreach (var mtc in matches.Where(mtc => idsMatchesHasError.Contains(mtc.Id)))
+						{
+							mtc.HasError = true;
+						}
 					}
-					home = string.IsNullOrEmpty(match.HomeId) ? match.VacancyHomeId : match.HomeId;
-					away = string.IsNullOrEmpty(match.AwayId) ? match.VacancyAwayId : match.AwayId;
-					UpdateTeamAuditory("h", home, match, dictionaryTeam,
-						finalRound, totalMatchsPerTeam, out errorsTemp, out idsMatchesHasError);
-					((List<string>)dto.Errors).AddRange(errorsTemp);
-					foreach (var mtc in matches.Where(mtc => idsMatchesHasError.Contains(mtc.Id)))
+					var teamsIvalid = dictionaryTeam.Where(t => t.Value.TotalMatches != totalMatchsPerTeam)
+						.ToArray();
+					if (teamsIvalid.Length > 0)
 					{
-						mtc.HasError = true;
-					}
-					UpdateTeamAuditory("a", away, match, dictionaryTeam,
-						finalRound, totalMatchsPerTeam, out errorsTemp, out idsMatchesHasError);
-					((List<string>)dto.Errors).AddRange(errorsTemp);
-					foreach (var mtc in matches.Where(mtc => idsMatchesHasError.Contains(mtc.Id)))
-					{
-						mtc.HasError = true;
+						foreach (var team in teamsIvalid)
+						{
+							dto.Errors.Add(MatchAuditoryContants.GenerateMessage(
+									MatchAuditoryContants.MATCH_COUNT,
+									team.Key,
+									team.Value.TotalMatches
+							));
+						}
 					}
 				}
-				var teamsIvalid = dictionaryTeam.Where(t => t.Value.TotalMatches != totalMatchsPerTeam)
-					.ToArray();
-				if (teamsIvalid.Length > 0)
-				{
-					foreach (var team in teamsIvalid)
-					{
-						dto.Errors.Add(MatchAuditoryContants.GenerateMessage(
-								MatchAuditoryContants.MATCH_COUNT,
-								team.Key,
-								team.Value.TotalMatches
-						));
-					}
-				}
-
 			}
 			return dto;
 		}
@@ -506,6 +508,17 @@ namespace Keeper.Application.Services
 				result.Value = list;
 			}
 			return result;
+		}
+
+		public async Task<MatchEditsScope> GetMatchSchedule(string id)
+		{
+			return _mapper.Map<MatchEditsScope>(
+				await _repoChamp.GetByIdWithMatchWithTeams(id));
+		}
+
+		public Task<MatchEditsScope> UpdateMatches(MatchEditsScope dto)
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

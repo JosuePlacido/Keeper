@@ -77,5 +77,22 @@ namespace Keeper.Api.Controllers
 			return !ModelState.IsValid ? CustomResponse(ModelState) :
 				CustomResponse(await _ChampionshipAppService.UpdatePlayersStatistics(dto));
 		}
+		[HttpGet("Matches/{id}")]
+		public async Task<MatchEditsScope> Matches(string id)
+		{
+			return await _ChampionshipAppService.GetMatchSchedule(id);
+		}
+		[HttpPost("Matches")]
+		public async Task<IActionResult> Matches(MatchEditsScope dto)
+		{
+			return !ModelState.IsValid ? CustomResponse(ModelState) :
+				CustomResponse(await _ChampionshipAppService.UpdateMatches(dto));
+		}
+		[HttpPost("Match/Check")]
+		public async Task<IActionResult> CheackMatches(MatchEditsScope dto)
+		{
+			return !ModelState.IsValid ? CustomResponse(ModelState) :
+				CustomResponse(_ChampionshipAppService.CheckMatches(dto));
+		}
 	}
 }

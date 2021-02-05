@@ -13,5 +13,6 @@ namespace Keeper.Domain.Repository
 		Task<Championship> RenameScopes(Championship championship);
 		Task<Championship> GetByIdWithRank(string championship);
 		Task UpdateStatistics(Statistic[] statistics);
+		Task<Championship> GetByIdWithMatchWithTeams(string id);
 	}
 }

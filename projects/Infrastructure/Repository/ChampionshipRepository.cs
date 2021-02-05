@@ -25,6 +25,22 @@ namespace Keeper.Infrastructure.Repository
 			return obj;
 		}
 
+		public async Task<Championship> GetByIdWithMatchWithTeams(string id)
+		{
+			return await _context.Championships.AsNoTracking().Where(c => c.Id == id)
+				.Include(c => c.Stages)
+					.ThenInclude(s => ((Stage)s).Groups)
+						.ThenInclude(g => ((Group)g).Matchs)
+							.ThenInclude(m => ((Match)m).Home)
+								.ThenInclude(ts => ((TeamSubscribe)ts).Team)
+				.Include(c => c.Stages)
+					.ThenInclude(s => ((Stage)s).Groups)
+						.ThenInclude(g => ((Group)g).Matchs)
+							.ThenInclude(m => ((Match)m).Away)
+								.ThenInclude(ts => ((TeamSubscribe)ts).Team)
+				.FirstOrDefaultAsync();
+		}
+
 		public async Task<Championship> GetByIdWithRank(string championship)
 		{
 			return await _context.Championships.AsNoTracking().Where(c => c.Id == championship)
