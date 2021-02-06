@@ -37,8 +37,8 @@ namespace Keeper.Test.UnitTest.Application.Service
 				IMapper mapper = config.CreateMapper();
 				string champ = repo.GetAll().Result.Where(c => c.Edition == "1993")
 					.FirstOrDefault().Id;
-				result = new ChampionshipService(mapper, new UnitOfWork(context),
-					repo, null, null, null, null, null, null).GetSquads(champ).Result;
+				result = new ChampionshipService(mapper, new UnitOfWork(context))
+					.GetSquads(champ).Result;
 			}
 			Assert.Equal(2, result.Length);
 			Assert.Equal(6, result.SelectMany(ts => ts.Players).Count());
@@ -48,9 +48,7 @@ namespace Keeper.Test.UnitTest.Application.Service
 		{
 			using (var context = Fixture.CreateContext())
 			{
-				ChampionshipRepository repo = new ChampionshipRepository(context);
-				SquadEditDTO[] result = new ChampionshipService(null, new UnitOfWork(context),
-					repo, null, null, null, null, null, null)
+				SquadEditDTO[] result = new ChampionshipService(null, new UnitOfWork(context))
 					.GetSquads("player").Result;
 				Assert.Empty(result);
 			}

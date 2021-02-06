@@ -31,9 +31,7 @@ namespace Keeper.Test.UnitTest.Application.Service
 			string champ = SeedData.Championship.Id;
 			using (var context = Fixture.CreateContext())
 			{
-				TeamRepository repo = new TeamRepository(context);
-				DAOTeam dao = new DAOTeam(context);
-				result = new TeamService(null, null, repo, dao)
+				result = new TeamService(null, new UnitOfWork(context))
 					.GetTeamsAvailablesForChampionship("", champ, 1, 30).Result;
 			}
 			Assert.All(expected, item => Assert.DoesNotContain(item, result.Teams));
@@ -45,9 +43,7 @@ namespace Keeper.Test.UnitTest.Application.Service
 			TeamPaginationDTO result = null;
 			using (var context = Fixture.CreateContext())
 			{
-				TeamRepository repo = new TeamRepository(context);
-				DAOTeam dao = new DAOTeam(context);
-				result = new TeamService(null, new UnitOfWork(context), repo, dao)
+				result = new TeamService(null, new UnitOfWork(context))
 					.GetTeamsAvailablesForChampionship("", "", 1, 30).Result;
 			}
 			Assert.Equal(expected, result.Teams);
@@ -62,9 +58,7 @@ namespace Keeper.Test.UnitTest.Application.Service
 			List<Team> finalList = new List<Team>();
 			using (var context = Fixture.CreateContext())
 			{
-				TeamRepository repo = new TeamRepository(context);
-				DAOTeam dao = new DAOTeam(context);
-				var service = new TeamService(null, new UnitOfWork(context), repo, dao);
+				var service = new TeamService(null, new UnitOfWork(context));
 				for (int p = 1; p <= pages; p++)
 				{
 					result = service.GetTeamsAvailablesForChampionship("", "", page: p, take: 2).Result;
@@ -89,7 +83,7 @@ namespace Keeper.Test.UnitTest.Application.Service
 			using (var context = Fixture.CreateContext())
 			{
 				TeamRepository repo = new TeamRepository(context);
-				var result = new TeamService(null, new UnitOfWork(context), repo, new DAOTeam(context))
+				var result = new TeamService(null, new UnitOfWork(context))
 					.GetTeamsAvailablesForChampionship("TImÉ", "", 1, 10).Result;
 				var expected = SeedData.Teams.Take(4);
 				Assert.Equal(expected.Count(), result.Total);

@@ -9,7 +9,7 @@ using Keeper.Domain.Models;
 using Keeper.Application.Interface;
 using FluentValidation.Results;
 using Keeper.Application.Models;
-using Domain.Core;
+using Keeper.Domain.Core;
 using Keeper.Domain.Enum;
 using Keeper.Application.DAO;
 using Application.Validation;
@@ -18,29 +18,14 @@ namespace Keeper.Application.Services
 {
 	public class ChampionshipService : IChampionshipService
 	{
-		private readonly IRepositoryChampionship _repoChamp;
 		private readonly IMapper _mapper;
-		private readonly IDAOPlayerSubscribe _daoPlayerSubscribe;
-		private readonly IDAOTeamSubscribe _daoTeamSubscribe;
-		private readonly IDAOPlayer _daoPlayer;
-		private readonly IDAOStatistic _daoStat;
-		private readonly IDAOTeam _daoTeam;
-		private readonly IDAOChampionship _dao;
 		private readonly IUnitOfWork _uow;
-		public ChampionshipService(IMapper mapper, IUnitOfWork uow,
-			IRepositoryChampionship repoChamp, IDAOPlayerSubscribe daoPlayerSubscribe,
-			IDAOPlayer daoPlayer, IDAOTeam daoTeam, IDAOChampionship dao, IDAOStatistic daoStat,
-			IDAOTeamSubscribe daoTeamSubscribe)
+		private readonly IRepositoryChampionship _repoChamp;
+		public ChampionshipService(IMapper mapper, IUnitOfWork uow)
 		{
 			_mapper = mapper;
-			_repoChamp = repoChamp;
 			_uow = uow;
-			_daoPlayerSubscribe = daoPlayerSubscribe;
-			_daoPlayer = daoPlayer;
-			_daoTeam = daoTeam;
-			_dao = dao;
-			_daoStat = daoStat;
-			_daoTeamSubscribe = daoTeamSubscribe;
+			_repoChamp = ((IRepositoryChampionship)_uow.GetDAO(typeof(IRepositoryChampionship)));
 		}
 		public async Task<IServiceResult> Create(ChampionshipCreateDTO dto)
 		{
@@ -60,35 +45,39 @@ namespace Keeper.Application.Services
 					}
 				}
 				response.ValidationResult = new CreateChampionshipValidation()
-				.ValidateSecond()
-				.Validate(championship);
-				string[] teamInvalids = await _daoTeam.Exists(championship.Teams.Select(ts => ts.TeamId).ToArray());
-				string[] playerInvalids = await _daoPlayer.Exists(championship
-					.Teams.SelectMany(ts => ts.Players.Select(p => p.PlayerId)).ToArray());
-				if (teamInvalids.Length != 0)
+					.ValidateSecond()
+					.Validate(championship);
+				using (var daoPlayer = ((IDAOPlayer)_uow.GetDAO(typeof(IDAOPlayer))))
 				{
-					foreach (var team in teamInvalids)
+					var daoTeam = ((IDAOTeam)_uow.GetDAO(typeof(IDAOTeam)));
+					string[] teamInvalids = await daoTeam.Exists(championship.Teams.Select(ts => ts.TeamId).ToArray());
+					string[] playerInvalids = await daoPlayer.Exists(championship
+						.Teams.SelectMany(ts => ts.Players.Select(p => p.PlayerId)).ToArray());
+					if (teamInvalids.Length != 0)
 					{
-						response.ValidationResult.Errors.Add(new ValidationFailure(
-							"Teams", $"O time ({team}) não registrado"
-						));
+						foreach (var team in teamInvalids)
+						{
+							response.ValidationResult.Errors.Add(new ValidationFailure(
+								"Teams", $"O time ({team}) não registrado"
+							));
 
+						}
 					}
-				}
-				if (playerInvalids.Length != 0)
-				{
-					foreach (var player in playerInvalids)
+					if (playerInvalids.Length != 0)
 					{
-						response.ValidationResult.Errors.Add(new ValidationFailure(
-							"Player", $"O joogador ({player}) não registrado"
-						));
+						foreach (var player in playerInvalids)
+						{
+							response.ValidationResult.Errors.Add(new ValidationFailure(
+								"Player", $"O joogador ({player}) não registrado"
+							));
+						}
 					}
-				}
-				if (response.ValidationResult.IsValid)
-				{
-					championship = await _repoChamp.Add(championship);
-					await _uow.Commit();
-					response.Value = _mapper.Map<MatchEditsScope>(championship);
+					if (response.ValidationResult.IsValid)
+					{
+						championship = await _repoChamp.Add(championship);
+						await _uow.Commit();
+						response.Value = _mapper.Map<MatchEditsScope>(championship);
+					}
 				}
 			}
 			return response;
@@ -312,7 +301,8 @@ namespace Keeper.Application.Services
 		public async Task<SquadEditDTO[]> GetSquads(string championshipId)
 		{
 			Championship championship = await _repoChamp.GetByIdWithTeamsWithPLayers(championshipId);
-			return championship != null ? _mapper.Map<SquadEditDTO[]>(championship.Teams) : new SquadEditDTO[0];
+			return championship != null ? _mapper.Map<SquadEditDTO[]>(championship.Teams) :
+				new SquadEditDTO[0];
 		}
 
 		public async Task<IServiceResult> UpdateSquad(PLayerSquadPostDTO[] squadsEnter)
@@ -321,29 +311,35 @@ namespace Keeper.Application.Services
 			squadsEnter = squadsEnter.Where(s => !string.IsNullOrEmpty(s.Id) ||
 			!string.IsNullOrEmpty(s.TeamSubscribeId) || s.Status != Status.FreeAgent).ToArray();
 			PlayerSubscribe[] squads = _mapper.Map<PlayerSubscribe[]>(squadsEnter);
-			response.ValidationResult = new ValidationResult();
-			for (int x = 0; x < squads.Length; x++)
+			using (var daoPlayerSubscribe = ((IDAOPlayerSubscribe)_uow.GetDAO(typeof(IDAOPlayerSubscribe))))
 			{
-				PlayerSubscribe player = squads[x];
-				string errorMessage = await _daoPlayerSubscribe.ValidateUpdateOnSquad(player);
-				if (!string.IsNullOrEmpty(errorMessage))
+				response.ValidationResult = new ValidationResult();
+				for (int x = 0; x < squads.Length; x++)
 				{
-					response.ValidationResult.Errors.Add(
-						new ValidationFailure(squadsEnter[x].PlayerName, errorMessage));
-					player = await _repoChamp.UpdatePLayer(player);
-				};
-			}
-			if (response.ValidationResult.IsValid)
-			{
-				await _uow.Commit();
-				response.Value = squads;
+					PlayerSubscribe player = squads[x];
+					string errorMessage = await daoPlayerSubscribe.ValidateUpdateOnSquad(player);
+					if (!string.IsNullOrEmpty(errorMessage))
+					{
+						response.ValidationResult.Errors.Add(
+							new ValidationFailure(squadsEnter[x].PlayerName, errorMessage));
+						player = await _repoChamp.UpdatePLayer(player);
+					};
+				}
+				if (response.ValidationResult.IsValid)
+				{
+					await _uow.Commit();
+					response.Value = squads;
+				}
+
 			}
 			return response;
 		}
 
 		public async Task<ObjectRenameDTO> GetNames(string championship)
 		{
-			return (ObjectRenameDTO)await _dao.GetByIdForRename(championship);
+			return (ObjectRenameDTO)await
+				((IDAOChampionship)_uow.GetDAO(typeof(IDAOChampionship)))
+				.GetByIdForRename(championship);
 		}
 
 		public async Task<IServiceResult> RenameScopes(ObjectRenameDTO dto)
@@ -411,28 +407,31 @@ namespace Keeper.Application.Services
 			if (response.ValidationResult.IsValid)
 			{
 				Statistic stat;
-				foreach (var item in dto)
+				using (var daoStat = ((IDAOStatistic)_uow.GetDAO(typeof(IDAOStatistic))))
 				{
-					stat = await _daoStat.GetById(item.Id);
-					if (stat != null && response.ValidationResult.IsValid)
+					foreach (var item in dto)
 					{
-						stat.UpdateNumbers(item.Games, item.Won, item.Drowns, item.Lost,
-							item.GoalsScores, item.GoalsAgainst, item.GoalsDifference, item.Yellows,
-							item.Reds, item.Points, item.Lastfive, item.Position);
+						stat = await daoStat.GetById(item.Id);
+						if (stat != null && response.ValidationResult.IsValid)
+						{
+							stat.UpdateNumbers(item.Games, item.Won, item.Drowns, item.Lost,
+								item.GoalsScores, item.GoalsAgainst, item.GoalsDifference, item.Yellows,
+								item.Reds, item.Points, item.Lastfive, item.Position);
+						}
+						else
+						{
+							response.ValidationResult.Errors.Add(
+								new ValidationFailure("Id",
+									$"Registro de estatística de id: {item.Id} não existe")
+							);
+						}
 					}
-					else
+					if (response.ValidationResult.IsValid)
 					{
-						response.ValidationResult.Errors.Add(
-							new ValidationFailure("Id",
-								$"Registro de estatística de id: {item.Id} não existe")
-						);
+						response.Value = _repoChamp.UpdateStatistics(list.ToArray());
+						await _uow.Commit();
 					}
 				}
-			}
-			if (response.ValidationResult.IsValid)
-			{
-				response.Value = _repoChamp.UpdateStatistics(list.ToArray());
-				await _uow.Commit();
 			}
 			return response;
 		}
@@ -440,7 +439,7 @@ namespace Keeper.Application.Services
 		public async Task<TeamStatisticDTO[]> TeamStats(string id)
 		{
 			TeamStatisticDTO[] result;
-			result = _mapper.Map<TeamStatisticDTO[]>(await _daoTeamSubscribe
+			result = _mapper.Map<TeamStatisticDTO[]>(await ((IDAOTeamSubscribe)_uow.GetDAO(typeof(IDAOTeamSubscribe)))
 				.GetByChampionshipTeamStatistics(id));
 			return result;
 		}
@@ -448,8 +447,9 @@ namespace Keeper.Application.Services
 		public async Task<PlayerStatisticDTO[]> PlayerStats(string id)
 		{
 			PlayerStatisticDTO[] result;
-			result = _mapper.Map<PlayerStatisticDTO[]>(await _daoPlayerSubscribe
-				.GetByChampionshipPlayerStatistics(id));
+			result = _mapper.Map<PlayerStatisticDTO[]>(
+				await ((IDAOPlayerSubscribe)_uow.GetDAO(typeof(IDAOPlayerSubscribe)))
+					.GetByChampionshipPlayerStatistics(id));
 			return result;
 		}
 
@@ -468,15 +468,18 @@ namespace Keeper.Application.Services
 			TeamSubscribe[] list;
 			if (result.ValidationResult.IsValid)
 			{
-				list = await _daoTeamSubscribe.GetAllById(dto.Select(ts => ts.Id).ToArray());
-				for (int x = 0; x < list.Length; x++)
+				using (var dao = ((IDAOTeamSubscribe)_uow.GetDAO(typeof(IDAOTeamSubscribe))))
 				{
-					list[x].UpdateNumbers(dto[x].Games, dto[x].Drowns, dto[x].GoalsAgainst,
-						dto[x].GoalsDifference, dto[x].GoalsScores, dto[x].Lost, dto[x].Reds,
-						dto[x].Won, dto[x].Yellows);
+					list = await dao.GetAllById(dto.Select(ts => ts.Id).ToArray());
+					for (int x = 0; x < list.Length; x++)
+					{
+						list[x].UpdateNumbers(dto[x].Games, dto[x].Drowns, dto[x].GoalsAgainst,
+							dto[x].GoalsDifference, dto[x].GoalsScores, dto[x].Lost, dto[x].Reds,
+							dto[x].Won, dto[x].Yellows);
+					}
+					dao.UpdateAll(list);
+					await _uow.Commit();
 				}
-				_daoTeamSubscribe.UpdateAll(list);
-				await _uow.Commit();
 				result.Value = list;
 			}
 			return result;
@@ -497,14 +500,18 @@ namespace Keeper.Application.Services
 			PlayerSubscribe[] list;
 			if (result.ValidationResult.IsValid)
 			{
-				list = await _daoPlayerSubscribe.GetAllById(dto.Select(ts => ts.Id).ToArray());
-				for (int x = 0; x < list.Length; x++)
+				using (var dao = ((IDAOPlayerSubscribe)_uow.GetDAO(typeof(IDAOPlayerSubscribe))))
 				{
-					list[x].UpdateNumbers(dto[x].Games, dto[x].Goals, dto[x].MVPs, dto[x].Reds,
-						dto[x].Yellows);
+					list = await dao.GetAllById(dto.Select(ts => ts.Id).ToArray());
+					for (int x = 0; x < list.Length; x++)
+					{
+						list[x].UpdateNumbers(dto[x].Games, dto[x].Goals, dto[x].MVPs, dto[x].Reds,
+							dto[x].Yellows);
+					}
+					dao.UpdateAll(list);
+					await _uow.Commit();
+
 				}
-				_daoPlayerSubscribe.UpdateAll(list);
-				await _uow.Commit();
 				result.Value = list;
 			}
 			return result;
@@ -516,7 +523,7 @@ namespace Keeper.Application.Services
 				await _repoChamp.GetByIdWithMatchWithTeams(id));
 		}
 
-		public Task<MatchEditsScope> UpdateMatches(MatchEditsScope dto)
+		public Task<MatchEditsScope> UpdateMatches(MatchEditedDTO[] dto)
 		{
 			throw new NotImplementedException();
 		}

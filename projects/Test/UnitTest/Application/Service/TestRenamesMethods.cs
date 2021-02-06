@@ -35,7 +35,7 @@ namespace Keeper.Test.UnitTest.Application.Service
 				expected = context.Championships.AsNoTracking()
 					.Where(c => c.Id == "c1").FirstOrDefault();
 				var dao = new DAOChampionship(context);
-				result = new ChampionshipService(null, null, null, null, null, null, dao, null, null)
+				result = new ChampionshipService(null, new UnitOfWork(context))
 					.GetNames("c1").Result;
 			}
 			Assert.NotNull(result);
@@ -49,7 +49,7 @@ namespace Keeper.Test.UnitTest.Application.Service
 			using (var context = Fixture.CreateContext())
 			{
 				var dao = new DAOChampionship(context);
-				result = new ChampionshipService(null, null, null, null, null, null, dao, null, null)
+				result = new ChampionshipService(null, new UnitOfWork(context))
 					.GetNames("no exist").Result;
 			}
 			Assert.Null(result);
@@ -61,10 +61,7 @@ namespace Keeper.Test.UnitTest.Application.Service
 			using (var context = Fixture.CreateContext())
 			{
 				var dao = new DAOChampionship(context);
-				var service = new ChampionshipService(null,
-					new UnitOfWork(context),
-					new ChampionshipRepository(context)
-					, null, null, null, dao, null, null);
+				var service = new ChampionshipService(null, new UnitOfWork(context));
 				var test = service.GetNames("c1").Result;
 				test.Name = test.Name + " edit";
 				foreach (var stage in test.Childs)
@@ -97,10 +94,7 @@ namespace Keeper.Test.UnitTest.Application.Service
 			using (var context = Fixture.CreateContext())
 			{
 				var dao = new DAOChampionship(context);
-				var service = new ChampionshipService(null,
-					new UnitOfWork(context),
-					new ChampionshipRepository(context),
-					null, null, null, dao, null, null);
+				var service = new ChampionshipService(null, new UnitOfWork(context));
 				result = service.RenameScopes(null).Result;
 			}
 			Assert.Null(result.Value);

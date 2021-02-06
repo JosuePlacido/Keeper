@@ -9,27 +9,23 @@ using Application.Validation;
 using Keeper.Application.Models;
 using FluentValidation.Results;
 using Keeper.Application.DAO;
-using Domain.Core;
+using Keeper.Domain.Core;
 
 namespace Keeper.Application.Services
 {
 	public class TeamService : ITeamService
 	{
-		private readonly IRepositoryTeam _repo;
 		private readonly IMapper _mapper;
-		private readonly IDAOTeam _dao;
 		private readonly IUnitOfWork _uow;
-		public TeamService(IMapper mapper, IUnitOfWork uow, IRepositoryTeam repoChamp, IDAOTeam dao)
+		public TeamService(IMapper mapper, IUnitOfWork uow)
 		{
 			_mapper = mapper;
-			_repo = repoChamp;
-			_dao = dao;
 			_uow = uow;
 		}
 		public async Task<Team> Create(TeamCreateDTO dto)
 		{
 			Team Team = _mapper.Map<Team>(dto);
-			Team result = await _repo.Add(Team);
+			Team result = await ((IRepositoryTeam)_uow.GetDAO(typeof(IRepositoryTeam))).Add(Team);
 			await _uow.Commit();
 			return result;
 		}
@@ -37,13 +33,13 @@ namespace Keeper.Application.Services
 		public async Task<IServiceResult> Delete(string id)
 		{
 			ServiceResponse response = new ServiceResponse();
-			TeamViewDTO dto = (TeamViewDTO)await _dao.GetByIdView(id);
+			TeamViewDTO dto = (TeamViewDTO)await ((IDAOTeam)_uow.GetDAO(typeof(IDAOTeam))).GetByIdView(id);
 
 			response.ValidationResult = new TeamDeleteValidation().Validate(dto);
 			if (response.ValidationResult.IsValid)
 			{
 				Team team = _mapper.Map<Team>(dto);
-				response.Value = await _repo.Remove(team);
+				response.Value = await ((IRepositoryTeam)_uow.GetDAO(typeof(IRepositoryTeam))).Remove(team);
 				await _uow.Commit();
 			}
 			return response;
@@ -56,7 +52,7 @@ namespace Keeper.Application.Services
 
 		public async Task<Team> Get(string id)
 		{
-			return await _repo.GetById(id);
+			return await ((IRepositoryTeam)_uow.GetDAO(typeof(IRepositoryTeam))).GetById(id);
 		}
 
 		public async Task<TeamPaginationDTO> GetTeamsAvailablesForChampionship(string terms,
@@ -68,14 +64,14 @@ namespace Keeper.Application.Services
 				Page = page,
 				Take = take,
 				Terms = terms,
-				Total = await _dao.GetTotalFromSearch(terms, notInChampinship),
-				Teams = await _repo.GetAllAvailableForChampionship(terms, notInChampinship, page, take)
+				Total = await ((IDAOTeam)_uow.GetDAO(typeof(IDAOTeam))).GetTotalFromSearch(terms, notInChampinship),
+				Teams = await ((IRepositoryTeam)_uow.GetDAO(typeof(IRepositoryTeam))).GetAllAvailableForChampionship(terms, notInChampinship, page, take)
 			};
 		}
 
 		public async Task<Team[]> List()
 		{
-			return await _repo.GetAll();
+			return await ((IRepositoryTeam)_uow.GetDAO(typeof(IRepositoryTeam))).GetAll();
 		}
 
 		public async Task<IServiceResult> Update(TeamUpdateDTO dto)
@@ -83,10 +79,10 @@ namespace Keeper.Application.Services
 			ServiceResponse response = new ServiceResponse();
 
 			response.ValidationResult = new ValidationResult();
-			if (await _repo.GetById(dto.Id) != null)
+			if (await ((IRepositoryTeam)_uow.GetDAO(typeof(IRepositoryTeam))).GetById(dto.Id) != null)
 			{
 				Team team = _mapper.Map<Team>(dto);
-				response.Value = await _repo.Update(team);
+				response.Value = await ((IRepositoryTeam)_uow.GetDAO(typeof(IRepositoryTeam))).Update(team);
 				await _uow.Commit();
 			}
 			else

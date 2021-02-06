@@ -28,7 +28,6 @@ namespace Keeper.Test.Integration.Application
 			IServiceResult result = null;
 			using (var transaction = Fixture.Connection.BeginTransaction())
 			{
-
 				using (var context = Fixture.CreateContext(transaction))
 				{
 					var repo = new ChampionshipRepository(context);
@@ -39,8 +38,7 @@ namespace Keeper.Test.Integration.Application
 					});
 					var mapper = config.CreateMapper();
 					var test = ChampionshipCreateDTODataExamples.SemiFinal;
-					result = new ChampionshipService(mapper, new UnitOfWork(context), repo,
-						null, new DAOPlayer(context), new DAOTeam(context), null, null, null)
+					result = new ChampionshipService(mapper, new UnitOfWork(context))
 						.Create(test).Result;
 				}
 			}

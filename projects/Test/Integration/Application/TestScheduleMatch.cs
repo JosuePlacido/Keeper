@@ -38,9 +38,7 @@ namespace Keeper.Test.Integration.Application
 			MatchEditsScope result = null;
 			using (var context = Fixture.CreateContext())
 			{
-				ChampionshipRepository repo = new ChampionshipRepository(context);
-				result = new ChampionshipService(_mapper, new UnitOfWork(context), repo,
-					new DAOPlayerSubscribe(context), null, null, null, null, null)
+				result = new ChampionshipService(_mapper, new UnitOfWork(context))
 				.GetMatchSchedule("c1").Result;
 			}
 			Assert.Equal(expected.Select(m => m.Id),
@@ -52,9 +50,7 @@ namespace Keeper.Test.Integration.Application
 			MatchEditsScope result = null;
 			using (var context = Fixture.CreateContext())
 			{
-				ChampionshipRepository repo = new ChampionshipRepository(context);
-				result = new ChampionshipService(_mapper, new UnitOfWork(context), repo,
-					new DAOPlayerSubscribe(context), null, null, null, null, null)
+				result = new ChampionshipService(_mapper, new UnitOfWork(context))
 				.GetMatchSchedule("noexist").Result;
 			}
 			Assert.Null(result);

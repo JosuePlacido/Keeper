@@ -40,9 +40,7 @@ namespace Keeper.Test.UnitTest.Application.Service
 			TeamStatisticDTO[] result;
 			using (var context = Fixture.CreateContext())
 			{
-				result = new ChampionshipService(_mapper, null,
-					new ChampionshipRepository(context), null, null, null, null, null,
-					new DAOTeamSubscribe(context))
+				result = new ChampionshipService(_mapper, new UnitOfWork(context))
 					.TeamStats("c1").Result;
 			}
 			Assert.All(result, r => expected.Contains(r));
@@ -53,9 +51,7 @@ namespace Keeper.Test.UnitTest.Application.Service
 			TeamStatisticDTO[] result;
 			using (var context = Fixture.CreateContext())
 			{
-				result = new ChampionshipService(_mapper, null,
-					new ChampionshipRepository(context), null, null, null, null, null,
-					new DAOTeamSubscribe(context))
+				result = new ChampionshipService(_mapper, new UnitOfWork(context))
 					.TeamStats("noexist").Result;
 			}
 			Assert.Empty(result);
@@ -67,9 +63,7 @@ namespace Keeper.Test.UnitTest.Application.Service
 			PlayerStatisticDTO[] result;
 			using (var context = Fixture.CreateContext())
 			{
-				result = new ChampionshipService(_mapper, null,
-					new ChampionshipRepository(context), new DAOPlayerSubscribe(context),
-					 null, null, null, null, null)
+				result = new ChampionshipService(_mapper, new UnitOfWork(context))
 					.PlayerStats("c1").Result;
 			}
 			Assert.All(result, r => expected.Contains(r));
@@ -80,9 +74,7 @@ namespace Keeper.Test.UnitTest.Application.Service
 			PlayerStatisticDTO[] result;
 			using (var context = Fixture.CreateContext())
 			{
-				result = new ChampionshipService(_mapper, null,
-					new ChampionshipRepository(context), new DAOPlayerSubscribe(context),
-					 null, null, null, null, null)
+				result = new ChampionshipService(_mapper, new UnitOfWork(context))
 					.PlayerStats("noexist").Result;
 			}
 			Assert.Empty(result);
@@ -98,9 +90,7 @@ namespace Keeper.Test.UnitTest.Application.Service
 			};
 			using (var context = Fixture.CreateContext())
 			{
-				var result = new ChampionshipService(_mapper, new UnitOfWork(context),
-					new ChampionshipRepository(context), new DAOPlayerSubscribe(context),
-					 null, null, null, null, null)
+				var result = new ChampionshipService(_mapper, new UnitOfWork(context))
 					.UpdatePlayersStatistics(new PlayerSubscribePost[] { test }).Result;
 				Assert.NotNull(result);
 			}
@@ -115,9 +105,7 @@ namespace Keeper.Test.UnitTest.Application.Service
 			};
 			using (var context = Fixture.CreateContext())
 			{
-				var result = new ChampionshipService(_mapper, new UnitOfWork(context),
-					new ChampionshipRepository(context), new DAOPlayerSubscribe(context),
-					 null, null, null, null, new DAOTeamSubscribe(context))
+				var result = new ChampionshipService(_mapper, new UnitOfWork(context))
 					.UpdateTeamsStatistics(new TeamSubscribePost[] { test }).Result;
 				Assert.NotNull(result);
 			}

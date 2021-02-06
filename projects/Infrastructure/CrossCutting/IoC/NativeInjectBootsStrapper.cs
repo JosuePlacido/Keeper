@@ -8,7 +8,7 @@ using AutoMapper;
 using Keeper.Infrastructure.CrossCutting.Adapter;
 using Keeper.Infrastructure.DAO;
 using Keeper.Application.DAO;
-using Domain.Core;
+using Keeper.Domain.Core;
 using Infrastructure.Data;
 
 namespace Keeper.Infrastructure.CrossCutting.IoC
@@ -24,18 +24,7 @@ namespace Keeper.Infrastructure.CrossCutting.IoC
 
 			services.AddScoped<ApplicationContext>();
 			services.AddScoped<IUnitOfWork, UnitOfWork>();
-			services.AddScoped<IRepositoryChampionship, ChampionshipRepository>();
-			services.AddScoped<IRepositoryTeam, TeamRepository>();
-
-			services.AddScoped<IDAOTeam, DAOTeam>();
-			services.AddScoped<IDAOStatistic, DAOStatistic>();
-			services.AddScoped<IRepositoryPlayer, PlayerRepository>();
-			services.AddScoped<IDAOPlayer, DAOPlayer>();
-			services.AddScoped<IDAOChampionship, DAOChampionship>();
-
 			services.AddScoped<ITeamService, TeamService>();
-			services.AddScoped<IDAOPlayerSubscribe, DAOPlayerSubscribe>();
-			services.AddScoped<IDAOTeamSubscribe, DAOTeamSubscribe>();
 			services.AddScoped<IPlayerService, PlayerService>();
 			services.AddScoped<IChampionshipService, ChampionshipService>();
 		}

@@ -32,7 +32,7 @@ namespace Keeper.Test.UnitTest.Application.Service
 				int LastPage = expected.Length % 5;
 				List<Player> finalList = new List<Player>();
 				DAOPlayer dao = new DAOPlayer(context);
-				var service = new PlayerService(null, new UnitOfWork(context), repo, dao);
+				var service = new PlayerService(null, new UnitOfWork(context));
 				PlayerAvailablePaginationDTO result = null;
 				for (int p = 1; p <= pages; p++)
 				{
@@ -56,8 +56,7 @@ namespace Keeper.Test.UnitTest.Application.Service
 		{
 			using (var context = Fixture.CreateContext())
 			{
-				PlayerRepository repo = new PlayerRepository(context);
-				var result = new PlayerService(null, new UnitOfWork(context), repo, new DAOPlayer(context))
+				var result = new PlayerService(null, new UnitOfWork(context))
 					.GetAvailables("player").Result;
 				var expected = SeedData.Players.Take(4);
 				Assert.True(result.Total == 4);
@@ -76,8 +75,7 @@ namespace Keeper.Test.UnitTest.Application.Service
 			{
 				var prayers = new PlayerRepository(context).GetAll().Result;
 				_output.WriteLine(JsonConvert.SerializeObject(prayers, Formatting.Indented));
-				PlayerRepository repo = new PlayerRepository(context);
-				result = new PlayerService(null, new UnitOfWork(context), repo, new DAOPlayer(context))
+				result = new PlayerService(null, new UnitOfWork(context))
 					.GetAvailables(championship: championship).Result;
 			}
 			Assert.Equal(5, result.Total);

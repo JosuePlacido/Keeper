@@ -39,9 +39,8 @@ namespace Keeper.Test.Integration.Application
 			using (var context = Fixture.CreateContext())
 			{
 				ChampionshipRepository repo = new ChampionshipRepository(context);
-				result = new ChampionshipService(_mapper, new UnitOfWork(context), repo,
-					new DAOPlayerSubscribe(context), null, null, null, null, null)
-				.UpdateSquad(squad).Result;
+				result = new ChampionshipService(_mapper, new UnitOfWork(context))
+					.UpdateSquad(squad).Result;
 			}
 			Assert.True(result.ValidationResult.IsValid);
 		}
@@ -53,9 +52,8 @@ namespace Keeper.Test.Integration.Application
 			using (var context = Fixture.CreateContext())
 			{
 				ChampionshipRepository repo = new ChampionshipRepository(context);
-				result = new ChampionshipService(_mapper, new UnitOfWork(context), repo,
-					new DAOPlayerSubscribe(context), null, null, null, null, null)
-								.UpdateSquad(squad).Result;
+				result = new ChampionshipService(_mapper, new UnitOfWork(context))
+					.UpdateSquad(squad).Result;
 			}
 			Assert.False(result.ValidationResult.IsValid);
 			Assert.Equal(4, result.ValidationResult.Errors.Count);

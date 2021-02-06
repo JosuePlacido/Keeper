@@ -4,12 +4,9 @@ using AutoMapper;
 using Keeper.Domain.Models;
 using Keeper.Infrastructure.CrossCutting.Adapter;
 using Keeper.Application.DTO;
-using Keeper.Infrastructure.Repository;
-using Keeper.Test;
 using Test.DataExamples;
 using Xunit;
 using Xunit.Abstractions;
-using Keeper.Infrastructure.DAO;
 using Infrastructure.Data;
 
 namespace Keeper.Test.Integration.Application
@@ -29,14 +26,13 @@ namespace Keeper.Test.Integration.Application
 			{
 				using (var transaction = context.Database.BeginTransaction())
 				{
-					var repo = new PlayerRepository(context);
 					var config = new MapperConfiguration(cfg =>
 					{
 						cfg.AddProfile<PlayerDTOProfile>();
 					});
 					var mapper = config.CreateMapper();
 					var test = PlayerDTODataExample.PlayerFull;
-					result = new PlayerService(mapper, new UnitOfWork(context), repo, null)
+					result = new PlayerService(mapper, new UnitOfWork(context))
 						.Create(test).Result;
 					Assert.NotNull(result.Id);
 					Assert.NotNull(context.Players.Find(result.Id));
@@ -54,15 +50,13 @@ namespace Keeper.Test.Integration.Application
 				{
 					PlayerUpdateDTO test = PlayerDTODataExample.PlayerUpdateNameOnly;
 					test.Id = SeedData.Players[4].Id;
-
-					PlayerRepository repo = new PlayerRepository(context);
 					MapperConfiguration config = new MapperConfiguration(cfg =>
 					{
 						cfg.AddProfile<PlayerDTOProfile>();
 					});
 					IMapper mapper = config.CreateMapper();
-					var result = new PlayerService(mapper, new UnitOfWork(context), repo,
-						new DAOPlayer(context)).Update(test).Result;
+					var result = new PlayerService(mapper, new UnitOfWork(context))
+						.Update(test).Result;
 					Player finalResult = context.Players.Find(((Player)result.Value).Id);
 					Assert.NotNull(((Player)result.Value).Id);
 					Assert.NotNull(finalResult);
@@ -78,15 +72,14 @@ namespace Keeper.Test.Integration.Application
 			{
 				using (var transaction = context.Database.BeginTransaction())
 				{
-					PlayerRepository repo = new PlayerRepository(context);
 					MapperConfiguration config = new MapperConfiguration(cfg =>
 					{
 						cfg.AddProfile<PlayerDTOProfile>();
 					});
 					IMapper mapper = config.CreateMapper();
 					Player test = SeedData.Players.Last();
-					var result = new PlayerService(mapper, new UnitOfWork(context), repo,
-						new DAOPlayer(context)).Delete(test.Id).Result;
+					var result = new PlayerService(mapper, new UnitOfWork(context))
+						.Delete(test.Id).Result;
 					Player layer = result.Value as Player;
 					Assert.IsType<Player>(layer);
 					Assert.Equal(layer, test);
@@ -100,15 +93,14 @@ namespace Keeper.Test.Integration.Application
 		{
 			using (var context = Fixture.CreateContext())
 			{
-				PlayerRepository repo = new PlayerRepository(context);
 				MapperConfiguration config = new MapperConfiguration(cfg =>
 				{
 					cfg.AddProfile<PlayerDTOProfile>();
 				});
 				IMapper mapper = config.CreateMapper();
 				Player test = SeedData.Players[0];
-				Player result = new PlayerService(mapper, new UnitOfWork(context), repo,
-					new DAOPlayer(context)).Get(test.Id).Result;
+				Player result = new PlayerService(mapper, new UnitOfWork(context))
+					.Get(test.Id).Result;
 				Assert.NotNull(result);
 				Assert.Equal(test, result);
 			}
@@ -118,14 +110,12 @@ namespace Keeper.Test.Integration.Application
 		{
 			using (var context = Fixture.CreateContext())
 			{
-				PlayerRepository repo = new PlayerRepository(context);
 				MapperConfiguration config = new MapperConfiguration(cfg =>
 				{
 					cfg.AddProfile<PlayerDTOProfile>();
 				});
 				IMapper mapper = config.CreateMapper();
-				PlayerSubscribe[] result = new PlayerService(mapper, new UnitOfWork(context),
-					repo, new DAOPlayer(context))
+				PlayerSubscribe[] result = new PlayerService(mapper, new UnitOfWork(context))
 					.GetAvailables().Result.Players;
 				Assert.NotEmpty(result);
 			}

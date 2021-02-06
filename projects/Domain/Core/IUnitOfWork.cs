@@ -1,9 +1,12 @@
+using System;
 using System.Threading.Tasks;
+using Keeper.Application.DAO;
 
-namespace Domain.Core
+namespace Keeper.Domain.Core
 {
 	public interface IUnitOfWork
 	{
 		Task Commit();
+		object GetDAO(Type type);
 	}
 }
