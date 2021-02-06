@@ -1,6 +1,7 @@
 using AutoMapper;
 using Keeper.Domain.Models;
 using Keeper.Application.DTO;
+using Keeper.Application.Services.EditChampionship;
 
 namespace Keeper.Infrastructure.CrossCutting.Adapter
 {

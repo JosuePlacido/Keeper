@@ -1,4 +1,4 @@
-using Keeper.Application.DTO;
+using Keeper.Application.Services.EditChampionship;
 using Keeper.Domain.Enum;
 
 namespace Test.DataExamples

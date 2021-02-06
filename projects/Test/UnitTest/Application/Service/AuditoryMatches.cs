@@ -4,7 +4,9 @@ using Keeper.Application.Services;
 using AutoMapper;
 using Xunit;
 using Xunit.Abstractions;
-using Infrastructure.Data;
+using Keeper.Infrastructure.Data;
+using Keeper.Application.Services.CreateChampionship;
+using Keeper.Application.Services.Match;
 
 namespace Keeper.Test.UnitTest.Application.Service
 {
@@ -18,7 +20,7 @@ namespace Keeper.Test.UnitTest.Application.Service
 		[ClassData(typeof(AuditoryMatchesSetup))]
 		public void TestAuditoryMatchesList(AuditoryMatchesTestModel test)
 		{
-			var result = new ChampionshipService(null, new UnitOfWork(null))
+			var result = new MatchService(null, new UnitOfWork(null))
 				.CheckMatches(test.Case);
 			Assert.True(test.ExpectedErrorsCount == result.Errors.Count);
 			var idsMatchesWithError = result.Stages.SelectMany(stg => stg.Groups.SelectMany(

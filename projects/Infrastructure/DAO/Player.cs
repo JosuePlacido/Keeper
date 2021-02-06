@@ -5,7 +5,7 @@ using Keeper.Application.DTO;
 using Keeper.Infrastructure.DAO;
 using Keeper.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
-using Keeper.Application.DAO;
+using Keeper.Application.Contract;
 using Keeper.Domain.Utils;
 using System.Collections.Generic;
 using Keeper.Domain.Enum;
@@ -33,7 +33,7 @@ namespace Keeper.Infrastructure.DAO
 			return idNotFound.ToArray();
 		}
 
-		public async Task<IDTO> GetByIdView(string id)
+		public async Task<PlayerViewDTO> GetByIdView(string id)
 		{
 			var player = await _context.Players.AsNoTracking()
 				.Where(t => t.Id == id).FirstOrDefaultAsync();

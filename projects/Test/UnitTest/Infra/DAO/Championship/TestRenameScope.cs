@@ -2,13 +2,10 @@ using System.Linq;
 using Xunit;
 using Newtonsoft.Json;
 using Xunit.Abstractions;
-using Keeper.Infrastructure.Repository;
 using Keeper.Domain.Models;
-using Keeper.Application.DAO;
 using Keeper.Infrastructure.DAO;
-using Keeper.Domain.Enum;
-using Keeper.Application.DTO;
 using Microsoft.EntityFrameworkCore;
+using Keeper.Application.Services.EditChampionship;
 
 namespace Keeper.Test.UnitTest.Infra.DAO
 {

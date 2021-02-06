@@ -5,7 +5,7 @@ using Keeper.Application.DTO;
 using Keeper.Infrastructure.DAO;
 using Keeper.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
-using Keeper.Application.DAO;
+using Keeper.Application.Contract;
 using Keeper.Domain.Utils;
 using System.Collections.Generic;
 using Keeper.Domain.Enum;

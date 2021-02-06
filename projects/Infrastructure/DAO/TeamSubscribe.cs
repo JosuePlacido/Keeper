@@ -5,7 +5,7 @@ using Keeper.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
-using Keeper.Application.DAO;
+using Keeper.Application.Contract;
 using System.Linq.Expressions;
 using System;
 using Keeper.Domain.Utils;

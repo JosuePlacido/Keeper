@@ -1,7 +1,7 @@
 using AutoMapper;
 using Keeper.Domain.Enum;
 using Keeper.Domain.Models;
-using Keeper.Application.DTO;
+using Keeper.Application.Services.CreateChampionship;
 using System.Linq;
 
 namespace Keeper.Infrastructure.CrossCutting.Adapter

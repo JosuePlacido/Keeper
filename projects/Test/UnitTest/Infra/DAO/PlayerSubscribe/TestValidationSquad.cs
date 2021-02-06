@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 using Xunit.Abstractions;
 using Keeper.Infrastructure.Repository;
 using Keeper.Domain.Models;
-using Keeper.Application.DAO;
+using Keeper.Application.Contract;
 using Keeper.Infrastructure.DAO;
 using Keeper.Domain.Enum;
 

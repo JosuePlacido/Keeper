@@ -4,12 +4,11 @@ using Keeper.Application.Services;
 using AutoMapper;
 using Xunit;
 using Xunit.Abstractions;
-using Keeper.Application.Interface;
 using Keeper.Domain.Models;
 using Keeper.Domain.Enum;
 using Keeper.Test.DataExamples;
-using Newtonsoft.Json;
 using Keeper.Infrastructure.CrossCutting.Adapter;
+using Keeper.Application.Services.CreateChampionship;
 
 namespace Keeper.Test.UnitTest.Application.Validation
 {

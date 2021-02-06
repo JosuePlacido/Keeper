@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using FluentValidation.Results;
-using Keeper.Application.Interface;
+using Keeper.Application.Contract;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
@@ -46,7 +46,7 @@ namespace Keeper.Api.Controllers
 			return CustomResponse();
 		}
 
-		protected ActionResult CustomResponse(IServiceResult result)
+		protected ActionResult CustomResponse(IServiceResponse result)
 		{
 			return !result.ValidationResult.IsValid ?
 				CustomResponse(result.ValidationResult) :

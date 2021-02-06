@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 using Keeper.Application.DTO;
-using Keeper.Application.Interface;
+using Keeper.Application.Contract;
 using Keeper.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 

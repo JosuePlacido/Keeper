@@ -1,8 +1,8 @@
 using System.Threading.Tasks;
+using Keeper.Application.Services.CreateChampionship;
 using Keeper.Application.DTO;
-using Keeper.Application.Interface;
-using Keeper.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
+using Keeper.Application.Services.EditChampionship;
 
 namespace Keeper.Api.Controllers
 {
@@ -10,89 +10,75 @@ namespace Keeper.Api.Controllers
 	[Route("[controller]")]
 	public class ChampionshipController : ApiController
 	{
-		private readonly IChampionshipService _ChampionshipAppService;
+		private readonly IChampionshipService _createService;
+		private readonly IEditChampionshipService _editService;
 
-		public ChampionshipController(IChampionshipService ChampionshipAppService)
+		public ChampionshipController(IChampionshipService ChampionshipAppService,
+			IEditChampionshipService editService)
 		{
-			_ChampionshipAppService = ChampionshipAppService;
+			_createService = ChampionshipAppService;
+			_editService = editService;
 		}
 		[HttpGet("Squads/{id}")]
 		public async Task<SquadEditDTO[]> Squads(string id)
 		{
-			return await _ChampionshipAppService.GetSquads(id);
+			return await _editService.GetSquads(id);
 		}
 		[HttpPost("Squad")]
 		public async Task<IActionResult> Squad(PLayerSquadPostDTO[] squads)
 		{
 			return !ModelState.IsValid ? CustomResponse(ModelState) :
-				CustomResponse(await _ChampionshipAppService.UpdateSquad(squads));
+				CustomResponse(await _editService.UpdateSquad(squads));
 		}
 		[HttpPost]
 		public async Task<IActionResult> Post(ChampionshipCreateDTO dto)
 		{
 			return !ModelState.IsValid ? CustomResponse(ModelState) :
-				CustomResponse(await _ChampionshipAppService.Create(dto));
+				CustomResponse(await _createService.Create(dto));
 		}
 		[HttpGet("Names/{id}")]
 		public async Task<ObjectRenameDTO> Names(string id)
 		{
-			return await _ChampionshipAppService.GetNames(id);
+			return await _editService.GetNames(id);
 		}
 		[HttpPost("Names")]
 		public async Task<IActionResult> Names(ObjectRenameDTO dto)
 		{
 			return !ModelState.IsValid ? CustomResponse(ModelState) :
-				CustomResponse(await _ChampionshipAppService.RenameScopes(dto));
+				CustomResponse(await _editService.RenameScopes(dto));
 		}
 		[HttpGet("Ranks/{id}")]
 		public async Task<RankDTO> Ranks(string id)
 		{
-			return await _ChampionshipAppService.Rank(id);
+			return await _editService.Rank(id);
 		}
 		[HttpPost("Ranks")]
 		public async Task<IActionResult> Ranks(RankPost[] dto)
 		{
 			return !ModelState.IsValid ? CustomResponse(ModelState) :
-				CustomResponse(await _ChampionshipAppService.UpdateStatistics(dto));
+				CustomResponse(await _editService.UpdateStatistics(dto));
 		}
 		[HttpGet("Teams/{id}")]
 		public async Task<TeamStatisticDTO[]> Teams(string id)
 		{
-			return await _ChampionshipAppService.TeamStats(id);
+			return await _editService.TeamStats(id);
 		}
 		[HttpPost("Teams")]
 		public async Task<IActionResult> Teams(TeamSubscribePost[] dto)
 		{
 			return !ModelState.IsValid ? CustomResponse(ModelState) :
-				CustomResponse(await _ChampionshipAppService.UpdateTeamsStatistics(dto));
+				CustomResponse(await _editService.UpdateTeamsStatistics(dto));
 		}
 		[HttpGet("Players/{id}")]
 		public async Task<PlayerStatisticDTO[]> Player(string id)
 		{
-			return await _ChampionshipAppService.PlayerStats(id);
+			return await _editService.PlayerStats(id);
 		}
 		[HttpPost("Players")]
 		public async Task<IActionResult> Players(PlayerSubscribePost[] dto)
 		{
 			return !ModelState.IsValid ? CustomResponse(ModelState) :
-				CustomResponse(await _ChampionshipAppService.UpdatePlayersStatistics(dto));
-		}
-		[HttpGet("Matches/{id}")]
-		public async Task<MatchEditsScope> Matches(string id)
-		{
-			return await _ChampionshipAppService.GetMatchSchedule(id);
-		}
-		[HttpPost("Matches")]
-		public async Task<IActionResult> Matches(MatchEditsScope dto)
-		{
-			return !ModelState.IsValid ? CustomResponse(ModelState) :
-				CustomResponse(await _ChampionshipAppService.UpdateMatches(dto));
-		}
-		[HttpPost("Match/Check")]
-		public async Task<IActionResult> CheackMatches(MatchEditsScope dto)
-		{
-			return !ModelState.IsValid ? CustomResponse(ModelState) :
-				CustomResponse(_ChampionshipAppService.CheckMatches(dto));
+				CustomResponse(await _editService.UpdatePlayersStatistics(dto));
 		}
 	}
 }

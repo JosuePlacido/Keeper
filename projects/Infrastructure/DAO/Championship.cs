@@ -5,11 +5,12 @@ using Keeper.Application.DTO;
 using Keeper.Infrastructure.DAO;
 using Keeper.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
-using Keeper.Application.DAO;
+using Keeper.Application.Contract;
 using Keeper.Domain.Utils;
 using System.Collections.Generic;
 using Keeper.Domain.Enum;
 using Keeper.Domain.Core;
+using Keeper.Application.Services.EditChampionship;
 
 namespace Keeper.Infrastructure.DAO
 {
@@ -18,7 +19,7 @@ namespace Keeper.Infrastructure.DAO
 		public DAOChampionship(ApplicationContext Context) : base(Context)
 		{
 		}
-		public async Task<IDTO> GetByIdForRename(string id)
+		public async Task<ObjectRenameDTO> GetByIdForRename(string id)
 		{
 			return await _context.Championships.AsNoTracking().Where(c => c.Id == id)
 				.Include(c => c.Stages)

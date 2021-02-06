@@ -1,4 +1,4 @@
-using Keeper.Application.DTO;
+using Keeper.Application.Services.CreateChampionship;
 using Keeper.Domain.Enum;
 using System.Linq;
 
