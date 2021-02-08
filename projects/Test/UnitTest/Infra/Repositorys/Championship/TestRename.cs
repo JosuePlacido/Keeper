@@ -42,7 +42,7 @@ namespace Keeper.Test.UnitTest.Infra.Repositorys
 						group.EditScope(group.Name + " edit");
 						foreach (var match in group.Matchs)
 						{
-							match.EditScope(match.Name + " edit");
+							match.EditScope(name: match.Name + " edit");
 						}
 					}
 				}

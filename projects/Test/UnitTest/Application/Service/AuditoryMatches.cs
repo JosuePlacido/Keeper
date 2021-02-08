@@ -6,7 +6,7 @@ using Xunit;
 using Xunit.Abstractions;
 using Keeper.Infrastructure.Data;
 using Keeper.Application.Services.CreateChampionship;
-using Keeper.Application.Services.Match;
+using Keeper.Application.Services.MatchService;
 
 namespace Keeper.Test.UnitTest.Application.Service
 {
