@@ -23,6 +23,7 @@ namespace Keeper.Infrastructure.Data
 				[typeof(IRepositoryChampionship)] = (ctx) => new ChampionshipRepository(ctx),
 				[typeof(IRepositoryTeam)] = (ctx) => new TeamRepository(ctx),
 				[typeof(IRepositoryPlayer)] = (ctx) => new PlayerRepository(ctx),
+				[typeof(IRepositoryMatch)] = (ctx) => new MatchRepository(ctx),
 			};
 		public UnitOfWork(ApplicationContext context)
 		{

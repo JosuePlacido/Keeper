@@ -1,15 +1,12 @@
 using Microsoft.Extensions.DependencyInjection;
 using Keeper.Application.Services;
-using Keeper.Infrastructure.Repository;
 using Keeper.Infrastructure.Data;
-using Keeper.Application.Interface;
-using Keeper.Domain.Repository;
+using Keeper.Application.Contract;
 using AutoMapper;
 using Keeper.Infrastructure.CrossCutting.Adapter;
-using Keeper.Infrastructure.DAO;
-using Keeper.Application.DAO;
-using Keeper.Domain.Core;
-using Infrastructure.Data;
+using Keeper.Application.Services.CreateChampionship;
+using Keeper.Application.Services.EditChampionship;
+using Keeper.Application.Services.MatchService;
 
 namespace Keeper.Infrastructure.CrossCutting.IoC
 {
@@ -24,8 +21,11 @@ namespace Keeper.Infrastructure.CrossCutting.IoC
 
 			services.AddScoped<ApplicationContext>();
 			services.AddScoped<IUnitOfWork, UnitOfWork>();
+
 			services.AddScoped<ITeamService, TeamService>();
 			services.AddScoped<IPlayerService, PlayerService>();
+			services.AddScoped<IMatchService, MatchService>();
+			services.AddScoped<IEditChampionshipService, EditChampionshipService>();
 			services.AddScoped<IChampionshipService, ChampionshipService>();
 		}
 	}

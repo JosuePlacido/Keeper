@@ -105,7 +105,7 @@ namespace Keeper.Application.Services.EditChampionship
 						if (!string.IsNullOrEmpty(dto.Childs[s].Childs[g].Childs[m].Name))
 						{
 							championship.Stages[s].Groups[g].Matchs[m]
-								.EditScope(dto.Childs[s].Childs[g].Childs[m].Name);
+								.EditScope(name: dto.Childs[s].Childs[g].Childs[m].Name);
 						}
 					}
 				}

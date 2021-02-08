@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 namespace Keeper.Domain.Models
 {
-	public class Match : Entity
+	public class Match : Entity, IAggregateRoot
 	{
 		public string Name { get; private set; }
 		public string Address { get; private set; }
@@ -53,9 +53,48 @@ namespace Keeper.Domain.Models
 			EventGames = new List<EventGame>();
 		}
 
-		public void EditScope(string name)
+		public void EditScope(int? round = null, string status = null, string name = null, string home = null, string away = null,
+			string vacancyHome = null, string vacancyAway = null, DateTime? date = null,
+			string address = "", bool? knockout = null, bool? finalGame = null, bool? penalty = null)
 		{
-			Name = name;
+			if (name != null)
+			{
+				Name = name;
+			}
+			if (round != null)
+			{
+				Round = (int)round;
+			}
+			if (!string.IsNullOrEmpty(status))
+			{
+				Status = status;
+			}
+			if (!string.IsNullOrEmpty(home))
+				HomeId = home;
+
+			if (!string.IsNullOrEmpty(away))
+				AwayId = away;
+
+			if (!string.IsNullOrEmpty(vacancyHome))
+				VacancyHomeId = vacancyHome;
+
+			if (!string.IsNullOrEmpty(vacancyAway))
+				VacancyAwayId = vacancyAway;
+
+			if (date != null)
+				Date = date;
+
+			if (!string.IsNullOrEmpty(address))
+				Address = address;
+
+			if (knockout != null)
+				AggregateGame = (bool)knockout;
+
+			if (finalGame != null)
+				FinalGame = (bool)finalGame;
+
+			if (penalty != null)
+				Penalty = (bool)penalty;
 		}
 
 		public void RegisterResult(int homeGoals, int awayGoals,
