@@ -1,6 +1,9 @@
 ﻿using Keeper.Domain.Core;
+using Keeper.Domain.Enum;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+
 namespace Keeper.Domain.Models
 {
 	public class Match : Entity, IAggregateRoot
@@ -97,6 +100,11 @@ namespace Keeper.Domain.Models
 				Penalty = (bool)penalty;
 		}
 
+		public void UpdateAggregateResult(int goalsHome, int goalsAway)
+		{
+			AggregateGoalsHome = goalsHome;
+			AggregateGoalsAway = goalsAway;
+		}
 		public void RegisterResult(int homeGoals, int awayGoals,
 			int? homePenalties = null, int? awayPenalties = null, EventGame[] events = null)
 		{
@@ -105,8 +113,8 @@ namespace Keeper.Domain.Models
 			GoalsAway = awayGoals;
 			if (AggregateGame)
 			{
-				AggregateGoalsHome += GoalsHome;
-				AggregateGoalsAway += GoalsAway;
+				AggregateGoalsHome = GoalsHome + (AggregateGoalsHome == null ? 0 : AggregateGoalsHome);
+				AggregateGoalsAway = GoalsAway + (AggregateGoalsAway == null ? 0 : AggregateGoalsAway);
 			}
 			if (Penalty && FinalGame &&
 				((AggregateGame && AggregateGoalsAway == AggregateGoalsHome) ||
@@ -115,11 +123,60 @@ namespace Keeper.Domain.Models
 				GoalsPenaltyHome = homePenalties;
 				GoalsPenaltyAway = awayPenalties;
 			}
+			Home.RegisterResult((int)GoalsHome, (int)GoalsAway);
+			Away.RegisterResult((int)GoalsAway, (int)GoalsHome);
+			PlayerSubscribe player;
 			if (events != null)
+			{
+				EventGames = new List<EventGame>();
+				var playersUpdated = new Dictionary<PlayerSubscribe, List<EventGame>>();
 				foreach (var eg in events)
 				{
 					EventGames.Add(eg);
+
+					if (eg.Type == TypeEvent.YellowCard)
+					{
+						if (eg.IsHomeEvent)
+						{
+							Home.AddYellow();
+						}
+						else
+						{
+							Away.AddYellow();
+						}
+					}
+					if (eg.Type == TypeEvent.RedCard)
+					{
+						if (eg.IsHomeEvent)
+						{
+							Home.AddRed();
+						}
+						else
+						{
+							Away.AddRed();
+						}
+					}
+
+					if (!string.IsNullOrEmpty(eg.RegisterPlayerId))
+					{
+						player = eg.IsHomeEvent ?
+							Home.Players.Where(ps => ps.Id == eg.RegisterPlayerId).FirstOrDefault() :
+							Away.Players.Where(ps => ps.Id == eg.RegisterPlayerId).FirstOrDefault();
+						if (playersUpdated.ContainsKey(player))
+						{
+							playersUpdated[player].Add(eg);
+						}
+						else
+						{
+							playersUpdated.Add(player, new List<EventGame>() { eg });
+						}
+					}
 				}
+				foreach (var ps in playersUpdated)
+				{
+					ps.Key.RegisterEvents(ps.Value.ToArray());
+				}
+			}
 		}
 		public static Match Factory(string id, string name, string groupId, int round,
 			string status = Enum.Status.Created,

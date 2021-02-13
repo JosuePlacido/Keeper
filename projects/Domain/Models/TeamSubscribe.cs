@@ -37,7 +37,7 @@ namespace Keeper.Domain.Models
 		public TeamSubscribe RegisterResult(int goalsScore, int goalsAgainst)
 		{
 			Games++;
-			goalsScore += goalsScore;
+			GoalsScores += goalsScore;
 			GoalsAgainst += goalsAgainst;
 			int goalsDifference = goalsScore - goalsAgainst;
 			if (goalsDifference == 0)
@@ -108,6 +108,16 @@ namespace Keeper.Domain.Models
 				Won = (int)won;
 			if (yellows != null)
 				Yellows = (int)yellows;
+		}
+
+		internal void AddYellow()
+		{
+			Yellows++;
+		}
+
+		internal void AddRed()
+		{
+			Reds++;
 		}
 	}
 }

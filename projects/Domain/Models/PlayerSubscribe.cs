@@ -1,7 +1,9 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using Keeper.Domain.Core;
+using Keeper.Domain.Enum;
 
 namespace Keeper.Domain.Models
 {
@@ -74,6 +76,15 @@ namespace Keeper.Domain.Models
 				RedCard = (int)redCard;
 			if (mVPs != null)
 				MVPs = (int)mVPs;
+		}
+
+		internal void RegisterEvents(EventGame[] events)
+		{
+			Games++;
+			Goals += events.Where(ev => ev.Type == TypeEvent.Goal).Count();
+			MVPs += events.Where(ev => ev.Type == TypeEvent.MVP).Count();
+			YellowCard += events.Where(ev => ev.Type == TypeEvent.YellowCard).Count();
+			RedCard += events.Where(ev => ev.Type == TypeEvent.RedCard).Count();
 		}
 	}
 }

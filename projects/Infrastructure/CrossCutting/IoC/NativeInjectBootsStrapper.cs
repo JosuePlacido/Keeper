@@ -7,6 +7,7 @@ using Keeper.Infrastructure.CrossCutting.Adapter;
 using Keeper.Application.Services.CreateChampionship;
 using Keeper.Application.Services.EditChampionship;
 using Keeper.Application.Services.MatchService;
+using Keeper.Application.Services.RegisterResult;
 
 namespace Keeper.Infrastructure.CrossCutting.IoC
 {
@@ -25,6 +26,7 @@ namespace Keeper.Infrastructure.CrossCutting.IoC
 			services.AddScoped<ITeamService, TeamService>();
 			services.AddScoped<IPlayerService, PlayerService>();
 			services.AddScoped<IMatchService, MatchService>();
+			services.AddScoped<IRegisterResultService, RegisterResultService>();
 			services.AddScoped<IEditChampionshipService, EditChampionshipService>();
 			services.AddScoped<IChampionshipService, ChampionshipService>();
 		}

@@ -27,7 +27,7 @@ namespace Keeper.Infrastructure.Mapping
 			builder.HasOne(match => match.Home);
 			builder.HasOne(match => match.Away);
 			builder.HasMany(match => match.EventGames)
-				.WithOne(eventGame => eventGame.Match)
+				.WithOne()
 				.HasForeignKey(eventGame => eventGame.MatchId)
 				.OnDelete(DeleteBehavior.Cascade);
 		}

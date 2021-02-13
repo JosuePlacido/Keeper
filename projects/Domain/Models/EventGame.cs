@@ -12,11 +12,21 @@ namespace Keeper.Domain.Models
 		public string Description { get; private set; }
 		public TypeEvent Type { get; private set; }
 		public bool IsHomeEvent { get; private set; }
-		public string MatchId { get; set; }
-		public Match Match { get; set; }
-		public string RegisterPlayerId { get; set; }
-		public PlayerSubscribe RegisterPlayer { get; set; }
+		public string MatchId { get; private set; }
+		public string RegisterPlayerId { get; private set; }
+		public PlayerSubscribe RegisterPlayer { get; private set; }
 		private EventGame() { }
+
+		public EventGame(int order, string description, TypeEvent type, bool isHomeEvent,
+			string matchId, string registerPlayerId)
+		{
+			Order = order;
+			Description = description;
+			Type = type;
+			IsHomeEvent = isHomeEvent;
+			MatchId = matchId;
+			RegisterPlayerId = registerPlayerId;
+		}
 
 		public override string ToString()
 		{
@@ -25,8 +35,7 @@ namespace Keeper.Domain.Models
 
 		public static EventGame Factory(string id, int order, string description,
 			TypeEvent type, bool isHomeEvent,
-			string matchId, string registerPlayerId,
-			Match match = null, PlayerSubscribe registerPlayer = null)
+			string matchId, string registerPlayerId, PlayerSubscribe registerPlayer = null)
 		{
 			return new EventGame
 			{
@@ -36,7 +45,6 @@ namespace Keeper.Domain.Models
 				Type = type,
 				IsHomeEvent = isHomeEvent,
 				MatchId = matchId,
-				Match = match,
 				RegisterPlayerId = registerPlayerId,
 				RegisterPlayer = registerPlayer,
 			};

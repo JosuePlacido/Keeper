@@ -7,5 +7,7 @@ namespace Keeper.Domain.Repository
 {
 	public interface IRepositoryMatch : IRepositoryBase<Match>
 	{
+		Task<Match> GetByIdWithTeamsAndPlayers(string id);
+		Task<Match> RegisterResult(Match match);
 	}
 }
