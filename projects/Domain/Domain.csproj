@@ -6,6 +6,8 @@
 
   <ItemGroup>
     <PackageReference Include="fluentvalidation" Version="9.4.0" />
+    <PackageReference Include="mediatr" Version="9.0.0" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
   </ItemGroup>
 

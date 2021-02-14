@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using FluentValidation.Results;
+using MediatR;
 
 namespace Keeper.Domain.Core
 {
@@ -25,6 +27,24 @@ namespace Keeper.Domain.Core
 				return false;
 			Entity item = (Entity)obj;
 			return item.Id == this.Id;
+		}
+		[JsonIgnore]
+		private List<INotification> _domainEvents;
+		public IReadOnlyCollection<INotification> DomainEvents => _domainEvents?.AsReadOnly();
+
+		public void AddDomainEvent(INotification eventItem)
+		{
+			_domainEvents = _domainEvents ?? new List<INotification>();
+			_domainEvents.Add(eventItem);
+		}
+
+		public void RemoveDomainEvent(INotification eventItem)
+		{
+			_domainEvents?.Remove(eventItem);
+		}
+		public void ClearDomainEvents()
+		{
+			_domainEvents?.Clear();
 		}
 
 		public override int GetHashCode()

@@ -28,7 +28,6 @@ namespace Keeper.Application.Services.RegisterResult
 
 		public async Task<Match> GetMatch(string id)
 		{
-			var test = await _repo.GetByIdWithTeamsAndPlayers(id);
 			return await _repo.GetByIdWithTeamsAndPlayers(id);
 		}
 
@@ -60,7 +59,6 @@ namespace Keeper.Application.Services.RegisterResult
 				if (response.ValidationResult.IsValid)
 				{
 					response.Value = await _repo.RegisterResult(match);
-					// Registrar domain event
 					await _uow.Commit();
 				}
 			}

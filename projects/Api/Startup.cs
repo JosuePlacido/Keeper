@@ -33,6 +33,7 @@ namespace Keeper.Api
 													 //.AddInvalidRequestLogging()
 													 //.AddCurrencyExchange(this.Configuration)
 				.AddSQLServer(this.Configuration)
+				.AddMediatRConfiguration()
 				//.AddHealthChecks(this.Configuration)
 				//.AddAuthentication(this.Configuration)
 				//.AddVersioning()
@@ -62,7 +63,6 @@ namespace Keeper.Api
 				app.UseDeveloperExceptionPage();
 			}
 			app.UseGlobalExceptionHandlerMiddleware();
-
 			app
 				//.UseProxy(this.Configuration)
 				//.UseHealthChecks()

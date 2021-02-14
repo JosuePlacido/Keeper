@@ -1,5 +1,6 @@
 ﻿using Keeper.Domain.Core;
 using Keeper.Domain.Enum;
+using Keeper.Domain.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,7 +32,7 @@ namespace Keeper.Domain.Models
 		public int? AggregateGoalsHome { get; private set; }
 		public string Status { get; private set; }
 		public string GroupId { get; private set; }
-		public IList<EventGame> EventGames { get; set; }
+		public IList<EventGame> EventGames { get; private set; }
 		private Match() { }
 		public Match(int round, string status, string name, string home = null, string away = null,
 			string vacancyHome = null, string vacancyAway = null, DateTime? date = null,
@@ -177,6 +178,7 @@ namespace Keeper.Domain.Models
 					ps.Key.RegisterEvents(ps.Value.ToArray());
 				}
 			}
+			this.AddDomainEvent(new RegisterResultEvent(this));
 		}
 		public static Match Factory(string id, string name, string groupId, int round,
 			string status = Enum.Status.Created,

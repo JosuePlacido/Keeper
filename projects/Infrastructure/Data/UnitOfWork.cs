@@ -5,12 +5,14 @@ using Keeper.Domain.Repository;
 using Keeper.Infrastructure.DAO;
 using Keeper.Infrastructure.Repository;
 using Keeper.Application.Contract;
+using MediatR;
 
 namespace Keeper.Infrastructure.Data
 {
 	public class UnitOfWork : IUnitOfWork, IDisposable
 	{
 		private readonly ApplicationContext _context;
+		private readonly IMediator _mediator;
 		private readonly IDictionary<Type, Func<ApplicationContext, object>> _daos =
 			new Dictionary<Type, Func<ApplicationContext, object>>
 			{
@@ -25,12 +27,14 @@ namespace Keeper.Infrastructure.Data
 				[typeof(IRepositoryPlayer)] = (ctx) => new PlayerRepository(ctx),
 				[typeof(IRepositoryMatch)] = (ctx) => new MatchRepository(ctx),
 			};
-		public UnitOfWork(ApplicationContext context)
+		public UnitOfWork(ApplicationContext context, IMediator mediator)
 		{
 			_context = context;
+			_mediator = mediator;
 		}
 		public async Task Commit()
 		{
+			await _mediator.DispatchDomainEventsAsync(_context);
 			await _context.SaveChangesAsync();
 		}
 		private bool disposed = false;
