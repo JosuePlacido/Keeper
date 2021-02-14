@@ -37,7 +37,7 @@ namespace Keeper.Test.Integration.Application
 				expected = _context.Championships.AsNoTracking()
 					.Where(c => c.Id == "c1").FirstOrDefault();
 				var dao = new DAOChampionship(_context);
-				result = new EditChampionshipService(null, new UnitOfWork(_context))
+				result = new EditChampionshipService(null, new UnitOfWork(_context, null))
 					.GetNames("c1").Result;
 			}
 			Assert.NotNull(result);
@@ -51,7 +51,7 @@ namespace Keeper.Test.Integration.Application
 
 			{
 				var dao = new DAOChampionship(_context);
-				result = new EditChampionshipService(null, new UnitOfWork(_context))
+				result = new EditChampionshipService(null, new UnitOfWork(_context, null))
 					.GetNames("no exist").Result;
 			}
 			Assert.Null(result);
@@ -63,7 +63,7 @@ namespace Keeper.Test.Integration.Application
 
 			{
 				var dao = new DAOChampionship(_context);
-				var service = new EditChampionshipService(null, new UnitOfWork(_context));
+				var service = new EditChampionshipService(null, new UnitOfWork(_context, null));
 				var test = service.GetNames("c1").Result;
 				test.Name = test.Name + " edit";
 				foreach (var stage in test.Childs)
@@ -96,7 +96,7 @@ namespace Keeper.Test.Integration.Application
 
 			{
 				var dao = new DAOChampionship(_context);
-				var service = new EditChampionshipService(null, new UnitOfWork(_context));
+				var service = new EditChampionshipService(null, new UnitOfWork(_context, null));
 				result = service.RenameScopes(null).Result;
 			}
 			Assert.Null(result.Value);

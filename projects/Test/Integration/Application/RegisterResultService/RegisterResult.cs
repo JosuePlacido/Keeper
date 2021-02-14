@@ -3,11 +3,13 @@ using System.Linq;
 using Xunit;
 using Xunit.Abstractions;
 using Keeper.Domain.Models;
-using Keeper.Application.DTO;
 using Keeper.Infrastructure.Data;
 using Keeper.Application.Services.RegisterResult;
 using Keeper.Domain.Enum;
 using Keeper.Application.Contract;
+using MediatR;
+using Keeper.Domain.Events;
+using System.Threading.Tasks;
 
 namespace Keeper.Test.Integration.Application
 {
@@ -24,7 +26,7 @@ namespace Keeper.Test.Integration.Application
 			Match match;
 			using (var context = Fixture.CreateContext())
 			{
-				var service = new RegisterResultService(null, new UnitOfWork(context));
+				var service = new RegisterResultService(null, new UnitOfWork(context, null));
 				match = service.GetMatch("m1").Result;
 			}
 			Assert.Equal(SeedData.Matches[0], match);
@@ -35,7 +37,7 @@ namespace Keeper.Test.Integration.Application
 			Match match;
 			using (var context = Fixture.CreateContext())
 			{
-				var service = new RegisterResultService(null, new UnitOfWork(context));
+				var service = new RegisterResultService(null, new UnitOfWork(context, null));
 				match = service.GetMatch("noexist").Result;
 			}
 			Assert.Null(match);
@@ -70,7 +72,7 @@ namespace Keeper.Test.Integration.Application
 			IServiceResponse result;
 			using (var context = Fixture.CreateContext())
 			{
-				var service = new RegisterResultService(null, new UnitOfWork(context));
+				var service = new RegisterResultService(null, new UnitOfWork(context, new Moq.Mock<IMediator>().Object));
 				result = service.RegisterResult(test).Result;
 				player = context.PlayerSubscribe.Where(ps => ps.Id == "ps1").FirstOrDefault();
 				team = context.TeamSubscribes.Where(ps => ps.Id == "ts1").FirstOrDefault();
@@ -83,5 +85,20 @@ namespace Keeper.Test.Integration.Application
 			Assert.Equal(2, team.GoalsScores);
 			Assert.Equal(2, team.GoalsDifference);
 		}
+		/*		Teste pré implementado para handlers dos domain events
+				[Fact]
+				public void TestRegisterResultHandler()
+				{
+					Match match = SeedData.Matches[1];
+					RegisterResultDomainEventHandler handler;
+					RegisterResultEvent eventHandler = new RegisterResultEvent(match);
+					using (var context = Fixture.CreateContext())
+					{
+						handler = new RegisterResultDomainEventHandler(new UnitOfWork(context, new Moq.Mock<IMediator>().Object));
+					}
+					//Act
+					var cltToken = new System.Threading.CancellationToken();
+					Task.Run(async () => await handler.Handle(eventHandler, cltToken));
+				}*/
 	}
 }

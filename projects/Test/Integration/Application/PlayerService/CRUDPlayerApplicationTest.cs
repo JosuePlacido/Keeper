@@ -7,7 +7,7 @@ using Keeper.Application.DTO;
 using Test.DataExamples;
 using Xunit;
 using Xunit.Abstractions;
-using  Keeper.Infrastructure.Data;
+using Keeper.Infrastructure.Data;
 
 namespace Keeper.Test.Integration.Application
 {
@@ -32,7 +32,7 @@ namespace Keeper.Test.Integration.Application
 					});
 					var mapper = config.CreateMapper();
 					var test = PlayerDTODataExample.PlayerFull;
-					result = new PlayerService(mapper, new UnitOfWork(context))
+					result = new PlayerService(mapper, new UnitOfWork(context, null))
 						.Create(test).Result;
 					Assert.NotNull(result.Id);
 					Assert.NotNull(context.Players.Find(result.Id));
@@ -55,7 +55,7 @@ namespace Keeper.Test.Integration.Application
 						cfg.AddProfile<PlayerDTOProfile>();
 					});
 					IMapper mapper = config.CreateMapper();
-					var result = new PlayerService(mapper, new UnitOfWork(context))
+					var result = new PlayerService(mapper, new UnitOfWork(context, null))
 						.Update(test).Result;
 					Player finalResult = context.Players.Find(((Player)result.Value).Id);
 					Assert.NotNull(((Player)result.Value).Id);
@@ -78,7 +78,7 @@ namespace Keeper.Test.Integration.Application
 					});
 					IMapper mapper = config.CreateMapper();
 					Player test = SeedData.Players.Last();
-					var result = new PlayerService(mapper, new UnitOfWork(context))
+					var result = new PlayerService(mapper, new UnitOfWork(context, null))
 						.Delete(test.Id).Result;
 					Player layer = result.Value as Player;
 					Assert.IsType<Player>(layer);
@@ -99,7 +99,7 @@ namespace Keeper.Test.Integration.Application
 				});
 				IMapper mapper = config.CreateMapper();
 				Player test = SeedData.Players[0];
-				Player result = new PlayerService(mapper, new UnitOfWork(context))
+				Player result = new PlayerService(mapper, new UnitOfWork(context, null))
 					.Get(test.Id).Result;
 				Assert.NotNull(result);
 				Assert.Equal(test, result);
@@ -115,7 +115,7 @@ namespace Keeper.Test.Integration.Application
 					cfg.AddProfile<PlayerDTOProfile>();
 				});
 				IMapper mapper = config.CreateMapper();
-				PlayerSubscribe[] result = new PlayerService(mapper, new UnitOfWork(context))
+				PlayerSubscribe[] result = new PlayerService(mapper, new UnitOfWork(context, null))
 					.GetAvailables().Result.Players;
 				Assert.NotEmpty(result);
 			}

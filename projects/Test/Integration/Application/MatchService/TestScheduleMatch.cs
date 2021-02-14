@@ -34,7 +34,7 @@ namespace Keeper.Test.Integration.Application
 			MatchEditsScope result = null;
 
 			{
-				result = new MatchService(_mapper, new UnitOfWork(_context))
+				result = new MatchService(_mapper, new UnitOfWork(_context, null))
 				.GetMatchSchedule("c1").Result;
 			}
 			Assert.Equal(expected.Select(m => m.Id),
@@ -46,7 +46,7 @@ namespace Keeper.Test.Integration.Application
 			MatchEditsScope result = null;
 
 			{
-				result = new MatchService(_mapper, new UnitOfWork(_context))
+				result = new MatchService(_mapper, new UnitOfWork(_context, null))
 				.GetMatchSchedule("noexist").Result;
 			}
 			Assert.Null(result);
@@ -68,7 +68,7 @@ namespace Keeper.Test.Integration.Application
 					Name = "alterado"
 				}
 			};
-			var result = new MatchService(_mapper, new UnitOfWork(_context))
+			var result = new MatchService(_mapper, new UnitOfWork(_context, null))
 				.UpdateMatches(test).Result;
 			Match[] expected = _context.Matchs.ToArray();
 			Assert.All(expected, e => Assert.Equal("alterado", e.Name));

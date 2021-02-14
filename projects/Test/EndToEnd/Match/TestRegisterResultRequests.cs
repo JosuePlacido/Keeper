@@ -1,12 +1,14 @@
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 using Keeper.Api;
 using Keeper.Application.Services.RegisterResult;
 using Keeper.Domain.Enum;
 using Keeper.Domain.Models;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Newtonsoft.Json;
+using Test.Utils;
 using Xunit;
 
 namespace Keeper.Test.EndToEnd
@@ -27,8 +29,15 @@ namespace Keeper.Test.EndToEnd
 			HttpResponseMessage actualResponse = client
 				.GetAsync("Match/m1")
 				.Result;
-			var result = JsonConvert.DeserializeObject<Match>(
-				actualResponse.Content.ReadAsStringAsync().Result);
+
+			string json = actualResponse.Content.ReadAsStringAsync().Result;
+
+			var result = JsonConvert.DeserializeObject<Match>(json,
+				new JsonSerializerSettings()
+				{
+					ContractResolver = new PrivateResolver(),
+					ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor
+				});
 			actualResponse.EnsureSuccessStatusCode();
 			Assert.Equal(HttpStatusCode.OK, actualResponse.StatusCode);
 			Assert.IsType<Match>(result);
@@ -72,7 +81,12 @@ namespace Keeper.Test.EndToEnd
 				.PostAsync("Match", content)
 				.Result;
 			var result = JsonConvert.DeserializeObject<Match>(
-				actualResponse.Content.ReadAsStringAsync().Result);
+				actualResponse.Content.ReadAsStringAsync().Result,
+				new JsonSerializerSettings()
+				{
+					ContractResolver = new PrivateResolver(),
+					ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor
+				});
 			actualResponse.EnsureSuccessStatusCode();
 			Assert.Equal(HttpStatusCode.OK, actualResponse.StatusCode);
 			Assert.IsType<Match>(result);

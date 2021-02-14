@@ -42,7 +42,7 @@ namespace Keeper.Test.Integration.Application
 		{
 			TeamStatisticDTO[] expected = _mapper.Map<TeamStatisticDTO[]>(SeedData.TeamsSubscribes);
 			TeamStatisticDTO[] result;
-			result = new EditChampionshipService(_mapper, new UnitOfWork(_context))
+			result = new EditChampionshipService(_mapper, new UnitOfWork(_context, null))
 				.TeamStats("c1").Result;
 			Assert.All(result, r => expected.Contains(r));
 		}
@@ -52,7 +52,7 @@ namespace Keeper.Test.Integration.Application
 			TeamStatisticDTO[] result;
 
 			{
-				result = new EditChampionshipService(_mapper, new UnitOfWork(_context))
+				result = new EditChampionshipService(_mapper, new UnitOfWork(_context, null))
 					.TeamStats("noexist").Result;
 			}
 			Assert.Empty(result);
@@ -64,7 +64,7 @@ namespace Keeper.Test.Integration.Application
 			PlayerStatisticDTO[] result;
 
 			{
-				result = new EditChampionshipService(_mapper, new UnitOfWork(_context))
+				result = new EditChampionshipService(_mapper, new UnitOfWork(_context, null))
 					.PlayerStats("c1").Result;
 			}
 			Assert.All(result, r => expected.Contains(r));
@@ -75,7 +75,7 @@ namespace Keeper.Test.Integration.Application
 			PlayerStatisticDTO[] result;
 
 			{
-				result = new EditChampionshipService(_mapper, new UnitOfWork(_context))
+				result = new EditChampionshipService(_mapper, new UnitOfWork(_context, null))
 					.PlayerStats("noexist").Result;
 			}
 			Assert.Empty(result);
@@ -91,7 +91,7 @@ namespace Keeper.Test.Integration.Application
 			};
 
 			{
-				var result = new EditChampionshipService(_mapper, new UnitOfWork(_context))
+				var result = new EditChampionshipService(_mapper, new UnitOfWork(_context, null))
 					.UpdatePlayersStatistics(new PlayerSubscribePost[] { test }).Result;
 				Assert.NotNull(result);
 			}
@@ -105,7 +105,7 @@ namespace Keeper.Test.Integration.Application
 				Games = 5
 			};
 			{
-				var result = new EditChampionshipService(_mapper, new UnitOfWork(_context))
+				var result = new EditChampionshipService(_mapper, new UnitOfWork(_context, null))
 					.UpdateTeamsStatistics(new TeamSubscribePost[] { test }).Result;
 				Assert.NotNull(result);
 			}

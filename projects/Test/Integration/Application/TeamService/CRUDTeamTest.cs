@@ -10,7 +10,7 @@ using Test.DataExamples;
 using Xunit;
 using Xunit.Abstractions;
 using Keeper.Infrastructure.DAO;
-using  Keeper.Infrastructure.Data;
+using Keeper.Infrastructure.Data;
 using Keeper.Application.Contract;
 
 namespace Keeper.Test.Integration.Application
@@ -37,7 +37,7 @@ namespace Keeper.Test.Integration.Application
 					});
 					var mapper = config.CreateMapper();
 					var test = TeamDTODataExample.TeamFull;
-					result = new TeamService(mapper, new UnitOfWork(context)).Create(test).Result;
+					result = new TeamService(mapper, new UnitOfWork(context, null)).Create(test).Result;
 					Assert.NotNull(result.Id);
 					Assert.NotNull(context.Teams.Find(result.Id));
 				}
@@ -61,7 +61,7 @@ namespace Keeper.Test.Integration.Application
 						cfg.AddProfile<TeamDTOProfile>();
 					});
 					IMapper mapper = config.CreateMapper();
-					result = new TeamService(mapper, new UnitOfWork(context))
+					result = new TeamService(mapper, new UnitOfWork(context, null))
 						.Update(test).Result;
 					finalResult = context.Teams.Find(((Team)result.Value).Id);
 				}
@@ -85,7 +85,7 @@ namespace Keeper.Test.Integration.Application
 					});
 					IMapper mapper = config.CreateMapper();
 					test = SeedData.Teams.Last();
-					var result = new TeamService(mapper, new UnitOfWork(context))
+					var result = new TeamService(mapper, new UnitOfWork(context, null))
 						.Delete(test.Id).Result;
 					team = result.Value as Team;
 					Assert.Null(context.Teams.Find(team.Id));
@@ -106,7 +106,7 @@ namespace Keeper.Test.Integration.Application
 				});
 				IMapper mapper = config.CreateMapper();
 				Team test = SeedData.Teams[0];
-				Team result = new TeamService(mapper, new UnitOfWork(context)).Get(test.Id).Result;
+				Team result = new TeamService(mapper, new UnitOfWork(context, null)).Get(test.Id).Result;
 				Assert.NotNull(result);
 				Assert.Equal(test, result);
 			}
@@ -122,7 +122,7 @@ namespace Keeper.Test.Integration.Application
 					cfg.AddProfile<TeamDTOProfile>();
 				});
 				IMapper mapper = config.CreateMapper();
-				Team[] result = new TeamService(mapper, new UnitOfWork(context)).List().Result;
+				Team[] result = new TeamService(mapper, new UnitOfWork(context, null)).List().Result;
 				Assert.NotEmpty(result);
 			}
 		}

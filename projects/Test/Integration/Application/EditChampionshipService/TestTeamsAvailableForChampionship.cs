@@ -12,7 +12,7 @@ using Keeper.Application.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Keeper.Infrastructure.CrossCutting.Adapter;
 using Newtonsoft.Json;
-using  Keeper.Infrastructure.Data;
+using Keeper.Infrastructure.Data;
 
 namespace Keeper.Test.Integration.Application
 {
@@ -31,7 +31,7 @@ namespace Keeper.Test.Integration.Application
 			string champ = SeedData.Championship.Id;
 			using (var context = Fixture.CreateContext())
 			{
-				result = new TeamService(null, new UnitOfWork(context))
+				result = new TeamService(null, new UnitOfWork(context, null))
 					.GetTeamsAvailablesForChampionship("", champ, 1, 30).Result;
 			}
 			Assert.All(expected, item => Assert.DoesNotContain(item, result.Teams));
@@ -43,7 +43,7 @@ namespace Keeper.Test.Integration.Application
 			TeamPaginationDTO result = null;
 			using (var context = Fixture.CreateContext())
 			{
-				result = new TeamService(null, new UnitOfWork(context))
+				result = new TeamService(null, new UnitOfWork(context, null))
 					.GetTeamsAvailablesForChampionship("", "", 1, 30).Result;
 			}
 			Assert.Equal(expected, result.Teams);
@@ -58,7 +58,7 @@ namespace Keeper.Test.Integration.Application
 			List<Team> finalList = new List<Team>();
 			using (var context = Fixture.CreateContext())
 			{
-				var service = new TeamService(null, new UnitOfWork(context));
+				var service = new TeamService(null, new UnitOfWork(context, null));
 				for (int p = 1; p <= pages; p++)
 				{
 					result = service.GetTeamsAvailablesForChampionship("", "", page: p, take: 2).Result;
@@ -83,7 +83,7 @@ namespace Keeper.Test.Integration.Application
 			using (var context = Fixture.CreateContext())
 			{
 				TeamRepository repo = new TeamRepository(context);
-				var result = new TeamService(null, new UnitOfWork(context))
+				var result = new TeamService(null, new UnitOfWork(context, null))
 					.GetTeamsAvailablesForChampionship("TImÉ", "", 1, 10).Result;
 				var expected = SeedData.Teams.Take(4);
 				Assert.Equal(expected.Count(), result.Total);

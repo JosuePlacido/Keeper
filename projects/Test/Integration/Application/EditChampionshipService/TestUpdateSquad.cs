@@ -40,7 +40,7 @@ namespace Keeper.Test.Integration.Application
 			using (var context = Fixture.CreateContext())
 			{
 				ChampionshipRepository repo = new ChampionshipRepository(context);
-				result = new EditChampionshipService(_mapper, new UnitOfWork(context))
+				result = new EditChampionshipService(_mapper, new UnitOfWork(context, null))
 					.UpdateSquad(squad).Result;
 			}
 			Assert.True(result.ValidationResult.IsValid);
@@ -53,7 +53,7 @@ namespace Keeper.Test.Integration.Application
 			using (var context = Fixture.CreateContext())
 			{
 				ChampionshipRepository repo = new ChampionshipRepository(context);
-				result = new EditChampionshipService(_mapper, new UnitOfWork(context))
+				result = new EditChampionshipService(_mapper, new UnitOfWork(context, null))
 					.UpdateSquad(squad).Result;
 			}
 			Assert.False(result.ValidationResult.IsValid);

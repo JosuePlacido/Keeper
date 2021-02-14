@@ -44,7 +44,7 @@ namespace Keeper.Test.Integration.Application
 			{
 				expected = context.Championships.AsNoTracking()
 					.Where(c => c.Id == "c1").FirstOrDefault();
-				result = new EditChampionshipService(_mapper, new UnitOfWork(context))
+				result = new EditChampionshipService(_mapper, new UnitOfWork(context, null))
 					.Rank("c1").Result;
 			}
 			Assert.NotNull(result);
@@ -56,7 +56,7 @@ namespace Keeper.Test.Integration.Application
 			RankDTO result;
 			using (var context = Fixture.CreateContext())
 			{
-				result = new EditChampionshipService(_mapper, new UnitOfWork(context))
+				result = new EditChampionshipService(_mapper, new UnitOfWork(context, null))
 					.Rank("no exist").Result;
 			}
 			Assert.Null(result);
@@ -73,7 +73,7 @@ namespace Keeper.Test.Integration.Application
 			using (var context = Fixture.CreateContext())
 			{
 				var dao = new DAOChampionship(context);
-				var service = new EditChampionshipService(null, new UnitOfWork(context));
+				var service = new EditChampionshipService(null, new UnitOfWork(context, null));
 				result = service.UpdateStatistics(
 					new RankPost[] { statistic }
 				).Result;
@@ -89,7 +89,7 @@ namespace Keeper.Test.Integration.Application
 			using (var context = Fixture.CreateContext())
 			{
 				var dao = new DAOChampionship(context);
-				var service = new EditChampionshipService(null, new UnitOfWork(context));
+				var service = new EditChampionshipService(null, new UnitOfWork(context, null));
 				result = service.UpdateStatistics(null).Result;
 			}
 			Assert.Null(result.Value);

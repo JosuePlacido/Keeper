@@ -32,7 +32,7 @@ namespace Keeper.Test.Integration.Application
 				IMapper mapper = config.CreateMapper();
 				string champ = repo.GetAll().Result.Where(c => c.Edition == "1993")
 					.FirstOrDefault().Id;
-				result = new EditChampionshipService(mapper, new UnitOfWork(context))
+				result = new EditChampionshipService(mapper, new UnitOfWork(context, null))
 					.GetSquads(champ).Result;
 			}
 			Assert.Equal(2, result.Length);
@@ -43,7 +43,7 @@ namespace Keeper.Test.Integration.Application
 		{
 			using (var context = Fixture.CreateContext())
 			{
-				SquadEditDTO[] result = new EditChampionshipService(null, new UnitOfWork(context))
+				SquadEditDTO[] result = new EditChampionshipService(null, new UnitOfWork(context, null))
 					.GetSquads("player").Result;
 				Assert.Empty(result);
 			}

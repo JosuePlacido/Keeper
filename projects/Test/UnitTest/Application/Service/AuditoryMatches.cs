@@ -20,7 +20,7 @@ namespace Keeper.Test.UnitTest.Application.Service
 		[ClassData(typeof(AuditoryMatchesSetup))]
 		public void TestAuditoryMatchesList(AuditoryMatchesTestModel test)
 		{
-			var result = new MatchService(null, new UnitOfWork(null))
+			var result = new MatchService(null, new UnitOfWork(null, null))
 				.CheckMatches(test.Case);
 			Assert.True(test.ExpectedErrorsCount == result.Errors.Count);
 			var idsMatchesWithError = result.Stages.SelectMany(stg => stg.Groups.SelectMany(

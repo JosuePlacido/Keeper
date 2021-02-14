@@ -39,7 +39,7 @@ namespace Keeper.Test.Integration.Application
 					});
 					var mapper = config.CreateMapper();
 					var test = ChampionshipCreateDTODataExamples.SemiFinal;
-					result = new ChampionshipService(mapper, new UnitOfWork(context))
+					result = new ChampionshipService(mapper, new UnitOfWork(context, null))
 						.Create(test).Result;
 				}
 			}
