@@ -1,7 +1,6 @@
 using System.Net;
 using System.Net.Http;
 using System.Text;
-using System.Threading.Tasks;
 using Keeper.Api;
 using Keeper.Application.Services.RegisterResult;
 using Keeper.Domain.Enum;
@@ -51,7 +50,7 @@ namespace Keeper.Test.EndToEnd
 				GoalsHome = 0,
 				GoalsAway = 0,
 				GoalsPenaltyAway = 4,
-				GoalsPenaltyHome = 0,
+				GoalsPenaltyHome = 2,
 				Events = new EventGameDTO[]{
 					new EventGameDTO{
 						Description = "Lesão visitante",

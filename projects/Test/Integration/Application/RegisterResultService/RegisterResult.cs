@@ -10,6 +10,7 @@ using Keeper.Application.Contract;
 using MediatR;
 using Keeper.Domain.Events;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace Keeper.Test.Integration.Application
 {
@@ -68,37 +69,67 @@ namespace Keeper.Test.Integration.Application
 				}
 			};
 			PlayerSubscribe player;
-			TeamSubscribe team;
+			TeamSubscribe[] team;
 			IServiceResponse result;
 			using (var context = Fixture.CreateContext())
 			{
 				var service = new RegisterResultService(null, new UnitOfWork(context, new Moq.Mock<IMediator>().Object));
 				result = service.RegisterResult(test).Result;
 				player = context.PlayerSubscribe.Where(ps => ps.Id == "ps1").FirstOrDefault();
-				team = context.TeamSubscribes.Where(ps => ps.Id == "ts1").FirstOrDefault();
+				team = context.TeamSubscribes.Where(ps => ps.Id == "ts1" || ps.Id == "ts2")
+					.ToArray();
 			}
 			Assert.True(result.ValidationResult.IsValid);
 			Match match = (Match)result.Value;
 			Assert.Equal(2, player.Goals);
+			Assert.Equal(2, player.Games);
+			Assert.Equal(1, player.YellowCard);
+
+			Assert.Equal(1, team[0].Won);
+			Assert.Equal(1, team[0].Drowns);
+			Assert.Equal(2, team[0].Games);
+			Assert.Equal(2, team[0].GoalsScores);
+			Assert.Equal(2, team[0].GoalsDifference);
+			Assert.Equal(1, team[1].Lost);
+			Assert.Equal(1, team[1].Drowns);
+			Assert.Equal(2, team[1].Games);
+			Assert.Equal(2, team[1].GoalsAgainst);
+			Assert.Equal(-2, team[1].GoalsDifference);
+
 			Assert.Equal(2, match.GoalsAway);
-			Assert.Equal(1, team.Won);
-			Assert.Equal(2, team.GoalsScores);
-			Assert.Equal(2, team.GoalsDifference);
+			Assert.Equal(2, match.AggregateGoalsAway);
 		}
-		/*		Teste pré implementado para handlers dos domain events
-				[Fact]
-				public void TestRegisterResultHandler()
-				{
-					Match match = SeedData.Matches[1];
-					RegisterResultDomainEventHandler handler;
-					RegisterResultEvent eventHandler = new RegisterResultEvent(match);
-					using (var context = Fixture.CreateContext())
-					{
-						handler = new RegisterResultDomainEventHandler(new UnitOfWork(context, new Moq.Mock<IMediator>().Object));
-					}
-					//Act
-					var cltToken = new System.Threading.CancellationToken();
-					Task.Run(async () => await handler.Handle(eventHandler, cltToken));
-				}*/
+		[Fact]
+		public void TestRegisterResultHandler_UpdateTeamStatistics()
+		{
+			Match match = SeedData.Matches[1];
+			match.RegisterResult(0, 2);
+			RegisterResultDomainEventHandler handler;
+			RegisterResultEvent eventHandler = new RegisterResultEvent(match);
+			using (var context = Fixture.CreateContext())
+			{
+				handler = new RegisterResultDomainEventHandler(new UnitOfWork(context, new Moq.Mock<IMediator>().Object));
+				var cltToken = new System.Threading.CancellationToken();
+				Task.Run(async () => await handler.Handle(eventHandler, cltToken)).Wait();
+				context.SaveChanges();
+				var cru = context.Statistics.Where(g => g.Id == "s2").FirstOrDefault();
+				var spfc = context.Statistics.Where(g => g.Id == "s1").FirstOrDefault();
+				Assert.Equal(2, cru.Position);
+				Assert.Equal(1, spfc.Position);
+
+				Assert.Equal(1, cru.Lost);
+				Assert.Equal(1, cru.Drowns);
+				Assert.Equal(2, cru.Games);
+				Assert.Equal(2, cru.GoalsAgainst);
+				Assert.Equal(-2, cru.GoalsDifference);
+
+				Assert.Equal(1, spfc.Won);
+				Assert.Equal(1, spfc.Drowns);
+				Assert.Equal(2, spfc.Games);
+				Assert.Equal(2, spfc.GoalsScores);
+				Assert.Equal(2, spfc.GoalsDifference);
+
+			}
+		}
 	}
 }

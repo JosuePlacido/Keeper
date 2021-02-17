@@ -32,47 +32,83 @@ namespace Keeper.Test.UnitTest.Domain
 		}
 
 		[Fact]
-		public void TestTiebreakCriterionOrdering()
+		public void TestSimplesTiebreakCriterionOrdering()
 		{
-			var teste = criterionList[0].Order(example.Select((e, i) =>
-			{
-				e.Reorder(1);
-				return e;
-			}).ToArray());
+			var testCase = example.Select((e, i) => e.Reorder(1)).ToArray();
+			var teste = criterionList[0].Order(testCase);
 			for (int x = 1; x < criterionList.Length; x++)
 			{
 				teste = criterionList[x].Order(teste);
 			}
-			Statistic[] result = teste.ToArray();
-			int c = 0;
-			int position = 0;
-			int range = 1;
-			bool allDraw = true;
-			for (int x = 0; x < result.Length; x++)
-			{
-				c = 0;
-				allDraw = x > 0;
-				while (allDraw && c < criterionList.Length)
-				{
-					allDraw = criterionList[c].Criterion.Invoke(result[x]) ==
-						criterionList[c].Criterion.Invoke(result[x - 1]);
-					c++;
-				}
-				if (allDraw)
-				{
-					range++;
-				}
-				else
-				{
-					position += range;
-					range = 1;
-				}
-				result[x].Reorder(position);
-			}
 			PrintResult(teste.ToArray());
+			var positions = teste.Select(t => t.Position).ToArray();
 			Assert.Equal(example.OrderBy(s => s.Position), teste.ToArray());
 		}
-		private TiebreackCriterion[] criterionList = TiebreackCriterion.GetAll<TiebreackCriterion>().Take(7).ToArray();
+		[Fact]
+		public void TestRandomCriterion()
+		{
+			var preRandom = example.Select(t => t.Position).ToArray();
+			var teste = TiebreackCriterion.Random.Order(example.OrderBy(s => s.Position).ToArray());
+			//PrintResult(teste.ToArray());
+			var positions = teste.Select(t => t.Position).ToArray();
+			Assert.Equal(new int[] { 1, 2, 3, 4, 5, 6, 7, 8 }, positions);
+		}
+		[Fact]
+		public void TestPenaltiesCriterion()
+		{
+			var preRandom = example.Select(t => t.Position).ToArray();
+			var teste = TiebreackCriterion.Random.Order(
+				example.Where(s => s.Position == 3).ToArray(),
+				((id, ids) => new Match[]{
+				Match.Factory("m1","final","group",1,Status.Finish,
+					aggregateGame:true,penalty:true, finalGame: true,
+					homeId:"4",goalsHome:0,aggregateGoalsHome:0,goalsPenaltyHome:3,
+					awayId:"3",goalsAway:0,aggregateGoalsAway:0,goalsPenaltyAway:1)
+			}));
+			var positions = teste.Select(t => t.Position).ToArray();
+			Assert.Equal(3, teste[0].Position);
+			Assert.Equal(4, teste[1].Position);
+		}
+		[Fact]
+		public void TestGoalsAwayCriterion()
+		{
+			var preRandom = example.Select(t => t.Position).ToArray();
+			var teste = TiebreackCriterion.Random.Order(
+				example.Where(s => s.Position == 3).ToArray(),
+				((id, ids) => new Match[]{
+				Match.Factory("m1","final ida","group",1,Status.Finish,
+					aggregateGame:true,
+					homeId:"3",goalsHome:2,aggregateGoalsHome:4,
+					awayId:"4",goalsAway:4,aggregateGoalsAway:4),
+				Match.Factory("m2","final volta","group",1,Status.Finish,
+					aggregateGame:true,penalty:true, finalGame: true,
+					homeId:"4",goalsHome:0,aggregateGoalsHome:4,
+					awayId:"3",goalsAway:2,aggregateGoalsAway:4)
+			}));
+			var positions = teste.Select(t => t.Position).ToArray();
+			Assert.Equal(3, teste[0].Position);
+			Assert.Equal(4, teste[1].Position);
+		}
+		[Fact]
+		public void TestDirectMatchCriterion()
+		{
+			var preRandom = example.Select(t => t.Position).ToArray();
+			var teste = TiebreackCriterion.Random.Order(
+				example.Where(s => s.Position == 3).ToArray(),
+				((id, ids) => new Match[]{
+				Match.Factory("m1","jogo 1","group",1,Status.Finish,
+					homeId:"3",goalsHome:2,
+					awayId:"4",goalsAway:4),
+				Match.Factory("m2","jogo 2","group",1,Status.Finish,
+					homeId:"4",goalsHome:2,
+					awayId:"3",goalsAway:2)
+			}));
+			var positions = teste.Select(t => t.Position).ToArray();
+			Assert.Equal(3, teste[0].Position);
+			Assert.Equal(4, teste[1].Position);
+		}
+		private TiebreackCriterion[] criterionList = TiebreackCriterion
+			.GetAll<TiebreackCriterion>().Take(7).ToArray();
 		private Statistic[] example = new Statistic[]{
 				Statistic.Factory("8","HHH","group",points: 6,won:0,goalsScores:6,
 					goalsAgainst:6,goalsDifference:0,yellows: 20,reds:0,position:8),
