@@ -9,5 +9,6 @@ namespace Keeper.Domain.Repository
 	{
 		Task<Match> GetByIdWithTeamsAndPlayers(string id);
 		Task<Match> RegisterResult(Match match);
+		Task<Match[]> GetByGroupAndTeams(string group, string[] teams);
 	}
 }

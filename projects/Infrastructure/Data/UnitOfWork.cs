@@ -16,6 +16,8 @@ namespace Keeper.Infrastructure.Data
 		private readonly IDictionary<Type, Func<ApplicationContext, object>> _daos =
 			new Dictionary<Type, Func<ApplicationContext, object>>
 			{
+				[typeof(IDAOStage)] = (ctx) => new DAOStage(ctx),
+				[typeof(IDAOGroup)] = (ctx) => new DAOGroup(ctx),
 				[typeof(IDAOChampionship)] = (ctx) => new DAOChampionship(ctx),
 				[typeof(IDAOTeam)] = (ctx) => new DAOTeam(ctx),
 				[typeof(IDAOPlayer)] = (ctx) => new DAOPlayer(ctx),

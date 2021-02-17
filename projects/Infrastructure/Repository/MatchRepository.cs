@@ -13,6 +13,14 @@ namespace Keeper.Infrastructure.Repository
 	public class MatchRepository : RepositoryBase<Match>, IRepositoryMatch
 	{
 		public MatchRepository(ApplicationContext Context) : base(Context) { }
+
+		public async Task<Match[]> GetByGroupAndTeams(string group, string[] teams)
+		{
+			return await _context.Matchs.AsNoTracking().Where(m => m.GroupId == group)
+				.Where(m => teams.Contains(m.HomeId) && teams.Contains(m.AwayId))
+				.OrderBy(m => m.Round).ToArrayAsync();
+		}
+
 		public async Task<Match> GetByIdWithTeamsAndPlayers(string id)
 		{
 			return await _context.Matchs.AsNoTracking().Where(m => m.Id == id)

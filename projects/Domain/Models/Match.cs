@@ -109,6 +109,17 @@ namespace Keeper.Domain.Models
 		public void RegisterResult(int homeGoals, int awayGoals,
 			int? homePenalties = null, int? awayPenalties = null, EventGame[] events = null)
 		{
+
+			UpdateTeamsStatistics(homeGoals, awayGoals);
+
+			UpdatePlayerStatistics(events);
+
+			EventGames = new List<EventGame>();
+			if (events != null && events.Length > 0)
+			{
+				((List<EventGame>)EventGames).AddRange(events);
+			}
+
 			Status = Enum.Status.Finish;
 			GoalsHome = homeGoals;
 			GoalsAway = awayGoals;
@@ -117,69 +128,122 @@ namespace Keeper.Domain.Models
 				AggregateGoalsHome = GoalsHome + (AggregateGoalsHome == null ? 0 : AggregateGoalsHome);
 				AggregateGoalsAway = GoalsAway + (AggregateGoalsAway == null ? 0 : AggregateGoalsAway);
 			}
-			if (Penalty && FinalGame &&
-				((AggregateGame && AggregateGoalsAway == AggregateGoalsHome) ||
+			if (Penalty && ((AggregateGame && AggregateGoalsAway == AggregateGoalsHome) ||
 				GoalsPenaltyHome == GoalsPenaltyAway))
 			{
 				GoalsPenaltyHome = homePenalties;
 				GoalsPenaltyAway = awayPenalties;
 			}
-			Home.RegisterResult((int)GoalsHome, (int)GoalsAway);
-			Away.RegisterResult((int)GoalsAway, (int)GoalsHome);
-			PlayerSubscribe player;
-			if (events != null)
-			{
-				EventGames = new List<EventGame>();
-				var playersUpdated = new Dictionary<PlayerSubscribe, List<EventGame>>();
-				foreach (var eg in events)
-				{
-					EventGames.Add(eg);
 
-					if (eg.Type == TypeEvent.YellowCard)
-					{
-						if (eg.IsHomeEvent)
-						{
-							Home.AddYellow();
-						}
-						else
-						{
-							Away.AddYellow();
-						}
-					}
-					if (eg.Type == TypeEvent.RedCard)
-					{
-						if (eg.IsHomeEvent)
-						{
-							Home.AddRed();
-						}
-						else
-						{
-							Away.AddRed();
-						}
-					}
-
-					if (!string.IsNullOrEmpty(eg.RegisterPlayerId))
-					{
-						player = eg.IsHomeEvent ?
-							Home.Players.Where(ps => ps.Id == eg.RegisterPlayerId).FirstOrDefault() :
-							Away.Players.Where(ps => ps.Id == eg.RegisterPlayerId).FirstOrDefault();
-						if (playersUpdated.ContainsKey(player))
-						{
-							playersUpdated[player].Add(eg);
-						}
-						else
-						{
-							playersUpdated.Add(player, new List<EventGame>() { eg });
-						}
-					}
-				}
-				foreach (var ps in playersUpdated)
-				{
-					ps.Key.RegisterEvents(ps.Value.ToArray());
-				}
-			}
 			this.AddDomainEvent(new RegisterResultEvent(this));
 		}
+
+		private void UpdatePlayerStatistics(EventGame[] events)
+		{
+			int goalsAux;
+			int mvpsAux;
+			int yellowsAux;
+			int redsAux;
+			EventGame[] eventsAux;
+			bool isHome;
+			string[] players;
+			if (events != null)
+			{
+				int homeYellows = events.Where(ev => ev.IsHomeEvent)
+					.Where(ev => ev.Type == TypeEvent.YellowCard).Count();
+				int homeReds = events.Where(ev => ev.IsHomeEvent)
+					.Where(ev => ev.Type == TypeEvent.RedCard).Count();
+				int awayYellows = events.Where(ev => !ev.IsHomeEvent)
+					.Where(ev => ev.Type == TypeEvent.YellowCard).Count();
+				int awayReds = events.Where(ev => !ev.IsHomeEvent)
+					.Where(ev => ev.Type == TypeEvent.RedCard).Count();
+				if (Status == Enum.Status.Finish)
+				{
+					homeYellows -= EventGames.Where(ev => ev.IsHomeEvent)
+						.Where(ev => ev.Type == TypeEvent.YellowCard).Count();
+					homeReds -= EventGames.Where(ev => ev.IsHomeEvent)
+						.Where(ev => ev.Type == TypeEvent.RedCard).Count();
+					awayYellows -= EventGames.Where(ev => !ev.IsHomeEvent)
+						.Where(ev => ev.Type == TypeEvent.YellowCard).Count();
+					awayReds -= EventGames.Where(ev => !ev.IsHomeEvent)
+						.Where(ev => ev.Type == TypeEvent.RedCard).Count();
+
+					players = events.Select(ev => ev.RegisterPlayerId)
+						.Distinct().ToArray();
+
+					foreach (var player in players)
+					{
+						isHome = Home.Players.Any(ps => ps.Id == player);
+						eventsAux = EventGames.Where(ev => ev.RegisterPlayerId == player).ToArray();
+						goalsAux = eventsAux.Where(ev => ev.Type == TypeEvent.Goal).Count();
+						yellowsAux = eventsAux.Where(ev => ev.Type == TypeEvent.YellowCard).Count();
+						redsAux = eventsAux.Where(ev => ev.Type == TypeEvent.RedCard).Count();
+						mvpsAux = eventsAux.Where(ev => ev.Type == TypeEvent.MVP).Count();
+						if (isHome)
+						{
+							Home.Players.Where(ps => ps.Id == player)
+								.FirstOrDefault().UpdateResult(-goalsAux, -yellowsAux, -redsAux,
+									-mvpsAux, Status == Enum.Status.Finish);
+						}
+						else
+						{
+							Away.Players.Where(ps => ps.Id == player)
+								.FirstOrDefault().UpdateResult(-goalsAux, -yellowsAux, -redsAux,
+									-mvpsAux, Status == Enum.Status.Finish);
+						}
+					}
+				}
+				Home.UpdateCards(homeYellows, homeReds);
+				Away.UpdateCards(awayYellows, awayReds);
+
+				players = events.Select(ev => ev.RegisterPlayerId)
+					.Distinct().ToArray();
+
+				foreach (var player in players)
+				{
+					isHome = Home.Players.Any(ps => ps.Id == player);
+					eventsAux = events.Where(ev => ev.RegisterPlayerId == player).ToArray();
+					goalsAux = eventsAux.Where(ev => ev.Type == TypeEvent.Goal).Count();
+					yellowsAux = eventsAux.Where(ev => ev.Type == TypeEvent.YellowCard).Count();
+					redsAux = eventsAux.Where(ev => ev.Type == TypeEvent.RedCard).Count();
+					mvpsAux = eventsAux.Where(ev => ev.Type == TypeEvent.MVP).Count();
+					if (isHome)
+					{
+						Home.Players.Where(ps => ps.Id == player)
+							.FirstOrDefault().UpdateResult(goalsAux,
+							yellowsAux, redsAux, mvpsAux, Status == Enum.Status.Finish);
+					}
+					else
+					{
+						Away.Players.Where(ps => ps.Id == player)
+							.FirstOrDefault().UpdateResult(goalsAux, yellowsAux, redsAux,
+								mvpsAux, Status == Enum.Status.Finish);
+					}
+				}
+			}
+		}
+
+		private void UpdateTeamsStatistics(int homeGoals, int awayGoals)
+		{
+			if (Status == Enum.Status.Finish)
+			{
+				Home.UpdateResult(homeGoals - (int)GoalsHome,
+					awayGoals - (int)GoalsAway,
+					(int)GoalsHome - (int)GoalsAway,
+					homeGoals - awayGoals);
+				Away.UpdateResult(awayGoals - (int)GoalsAway,
+					homeGoals - (int)GoalsHome,
+					-(int)GoalsHome + (int)GoalsAway,
+					-homeGoals + awayGoals
+					);
+			}
+			else
+			{
+				Home.RegisterResult((int)homeGoals, (int)awayGoals);
+				Away.RegisterResult((int)awayGoals, (int)homeGoals);
+			}
+		}
+
 		public static Match Factory(string id, string name, string groupId, int round,
 			string status = Enum.Status.Created,
 			string vacancyHomeId = null, string vacancyAwayId = null,

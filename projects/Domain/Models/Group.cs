@@ -29,6 +29,20 @@ namespace Keeper.Domain.Models
 			}
 			return this;
 		}
+		public void UpdateRank(TiebreackCriterion[] criterionList,
+			Func<string, string[], Match[]> loadMatches = null)
+		{
+			Statistic[] statsTemp = criterionList[0].Order(Statistics.ToArray());
+			for (int x = 1; x < criterionList.Length; x++)
+			{
+				statsTemp = criterionList[x].Order(statsTemp, loadMatches);
+			}
+			Statistics = statsTemp;
+			//TODO disparar EVENTo acabou rodada e atualizar o RankMovement
+			//TODO Quando tiver acabado o grupo
+			//TODO Atualiza status dos times envolvidos
+		}
+
 		public IList<Match> RoundRobinMatches(bool duplicateTurn = false, bool mirrorTurn = false)
 		{
 			Matchs = new List<Match>();

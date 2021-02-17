@@ -22,5 +22,13 @@ namespace Keeper.Infrastructure.DAO
 			return await _context.Statistics.AsNoTracking()
 				.Where(s => s.Id == id).FirstOrDefaultAsync();
 		}
+
+		public void UpdateAll(Statistic[] statistics)
+		{
+			foreach (var stat in statistics)
+			{
+				_context.Entry(stat).State = EntityState.Modified;
+			}
+		}
 	}
 }

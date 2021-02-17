@@ -86,5 +86,18 @@ namespace Keeper.Domain.Models
 			YellowCard += events.Where(ev => ev.Type == TypeEvent.YellowCard).Count();
 			RedCard += events.Where(ev => ev.Type == TypeEvent.RedCard).Count();
 		}
+
+		internal void UpdateResult(int goalsAux, int yellowsAux,
+			int redsAux, int mvpsAux, bool isUpdate)
+		{
+			if (!isUpdate)
+			{
+				Games++;
+			}
+			Goals += goalsAux;
+			YellowCard += yellowsAux;
+			RedCard += redsAux;
+			MVPs += mvpsAux;
+		}
 	}
 }

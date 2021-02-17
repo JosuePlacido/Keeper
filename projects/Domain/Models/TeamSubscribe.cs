@@ -4,21 +4,12 @@ using Keeper.Domain.Core;
 
 namespace Keeper.Domain.Models
 {
-	public class TeamSubscribe : Entity
+	public class TeamSubscribe : StatsManager
 	{
 		public string ChampionshipId { get; private set; }
 		public string Status { get; private set; }
 		public string TeamId { get; private set; }
 		public Team Team { get; private set; }
-		public int Games { get; private set; }
-		public int Won { get; private set; }
-		public int Drowns { get; private set; }
-		public int Lost { get; private set; }
-		public int GoalsScores { get; private set; }
-		public int GoalsAgainst { get; private set; }
-		public int GoalsDifference { get; private set; }
-		public int Yellows { get; private set; }
-		public int Reds { get; private set; }
 		public IList<PlayerSubscribe> Players { get; private set; }
 		private TeamSubscribe() { }
 		public TeamSubscribe AddPlayer(PlayerSubscribe player)
@@ -31,26 +22,6 @@ namespace Keeper.Domain.Models
 			foreach (var player in players)
 			{
 				AddPlayer(player);
-			}
-			return this;
-		}
-		public TeamSubscribe RegisterResult(int goalsScore, int goalsAgainst)
-		{
-			Games++;
-			GoalsScores += goalsScore;
-			GoalsAgainst += goalsAgainst;
-			int goalsDifference = goalsScore - goalsAgainst;
-			if (goalsDifference == 0)
-			{
-				Drowns++;
-			}
-			else
-			{
-				if (goalsDifference > 0)
-					Won++;
-				else
-					Lost++;
-				GoalsDifference += goalsDifference;
 			}
 			return this;
 		}
@@ -108,16 +79,6 @@ namespace Keeper.Domain.Models
 				Won = (int)won;
 			if (yellows != null)
 				Yellows = (int)yellows;
-		}
-
-		internal void AddYellow()
-		{
-			Yellows++;
-		}
-
-		internal void AddRed()
-		{
-			Reds++;
 		}
 	}
 }

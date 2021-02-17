@@ -1,33 +1,68 @@
+using System.Linq;
+using Domain.Models;
 using Keeper.Domain.Core;
 using Keeper.Domain.Enum;
 
 namespace Keeper.Domain.Models
 {
-	public class Statistic : Entity
+	public class Statistic : StatsManager
 	{
 		public string GroupId { get; private set; }
 		public string TeamSubscribeId { get; private set; }
 		public TeamSubscribe TeamSubscribe { get; private set; }
-		public int Games { get; private set; }
-		public int Won { get; private set; }
-		public int Drowns { get; private set; }
-		public int Lost { get; private set; }
-		public int GoalsScores { get; private set; }
 		public int Position { get; private set; }
-		public int GoalsAgainst { get; private set; }
-		public int GoalsDifference { get; private set; }
-		public int Yellows { get; private set; }
-		public int Reds { get; private set; }
 		public int Points { get; private set; }
 		public string Lastfive { get; private set; }
 		public int RankMovement { get; private set; }
 		private Statistic() { }
-		public Statistic(string team)
+		public Statistic(string team) : base()
 		{
 			TeamSubscribeId = team;
 			Position = 1;
 		}
+		public Statistic RegisterResult(int goalsScore, int goalsAgainst)
+		{
+			base.RegisterResult(goalsScore, goalsAgainst);
 
+			if (goalsScore == goalsAgainst)
+			{
+				Lastfive += ",draw";
+				Points++;
+			}
+			else if (goalsScore > goalsAgainst)
+			{
+				Lastfive += ",win";
+				Points += 3;
+			}
+			else
+			{
+				Lastfive += ",lose";
+			}
+
+			string[] lastResults = Lastfive.Split(",");
+			if (lastResults.Length > 5)
+			{
+				Lastfive = string.Join(",", lastResults.Skip(1).ToArray());
+			}
+			return this;
+		}
+
+		public Statistic UpdateResult(int goalsScoredDifference, int goalsAgainstDifference,
+			int oldResult, int newResult)
+		{
+			base.UpdateResult(goalsScoredDifference, goalsAgainstDifference, oldResult, newResult);
+
+			int pointDifference = (newResult > 0) ? 3 :
+				(newResult == 0) ? 1 : 0;
+
+			pointDifference -= (oldResult > 0) ? 3 :
+				(oldResult == 0) ? 1 : 0;
+
+			Points += pointDifference;
+			// TODO AB#403 Atualizar LastFize com as rodadas
+
+			return this;
+		}
 		public Statistic UpdateNumbers(int? games = null, int? won = null, int? drowns = null,
 			int? lost = null, int? goalsScores = null, int? goalsAgainst = null,
 			int? goalsDifference = null, int? yellows = null, int? reds = null, int? points = null,
@@ -63,11 +98,11 @@ namespace Keeper.Domain.Models
 			return this;
 		}
 		public Statistic Reorder(int newPosition)
-		{
+		{/*
 			if (Games > 1)
 			{
 				RankMovement = Position - newPosition;
-			}
+			}*/
 			Position = newPosition;
 			return this;
 		}
