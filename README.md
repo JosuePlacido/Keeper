@@ -83,10 +83,11 @@ Estão listadas abaixo algumas funcionalidades previstas e o andamento delas par
 -   [x] Gerenciar Jogadores
 -   [x] Gerenciar Times
 -   [x] Alterar estatísticas e rank
--   [ ] Editar Agenda de jogos
--   [ ] Renomear itens gerados Grupos, Fases e jogos
--   [ ] Registrar súmula
--   [ ] Atualiar campeonato automaticamente conforme for necessário após o registro de súmula
+-   [x] Editar Agenda de jogos
+-   [x] Renomear itens gerados Grupos, Fases e jogos
+-   [x] Registrar súmula
+-   [x] Atualiar campeonato automaticamente conforme for necessário após o registro de súmula
+-   [x] Montar fases posteriores
 
 ### Frontend
 
