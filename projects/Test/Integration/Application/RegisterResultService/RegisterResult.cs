@@ -122,14 +122,45 @@ namespace Keeper.Test.Integration.Application
 				Assert.Equal(2, cru.Games);
 				Assert.Equal(2, cru.GoalsAgainst);
 				Assert.Equal(-2, cru.GoalsDifference);
+				Assert.Equal("draw,lose", cru.Lastfive);
+				Assert.Equal(-1, cru.RankMovement);
 
 				Assert.Equal(1, spfc.Won);
 				Assert.Equal(1, spfc.Drowns);
 				Assert.Equal(2, spfc.Games);
 				Assert.Equal(2, spfc.GoalsScores);
 				Assert.Equal(2, spfc.GoalsDifference);
+				Assert.Equal("draw,win", spfc.Lastfive);
+				Assert.Equal(0, spfc.RankMovement);
 
 			}
+		}
+		[Fact]
+		public void TestRegisterResultHandler_UpdateChampionship()
+		{
+			Championship champ;
+			TeamSubscribe cru;
+			TeamSubscribe spfc;
+			Group group;
+			Match match = SeedData.Matches[1];
+			match.RegisterResult(0, 2);
+			UpdateChampionshipDomainEventHandler handler;
+			UpdateChampionshipEvent eventHandler = new UpdateChampionshipEvent("g1", 2);
+			using (var context = Fixture.CreateContext())
+			{
+				handler = new UpdateChampionshipDomainEventHandler(new UnitOfWork(context, new Moq.Mock<IMediator>().Object));
+				var cltToken = new System.Threading.CancellationToken();
+				Task.Run(async () => await handler.Handle(eventHandler, cltToken)).Wait();
+				context.SaveChanges();
+				champ = context.Championships.Where(g => g.Id == "c1").FirstOrDefault();
+				spfc = context.TeamSubscribes.Where(g => g.Id == "ts1").FirstOrDefault();
+				cru = context.TeamSubscribes.Where(g => g.Id == "ts2").FirstOrDefault();
+				group = context.Groups.Where(g => g.Id == "g1").FirstOrDefault();
+			}
+			Assert.Equal(Status.Finish, champ.Status);
+			Assert.Equal(Status.Eliminated, cru.Status);
+			Assert.Equal(Status.Champion, spfc.Status);
+			Assert.Equal(2, group.CurrentRound);
 		}
 	}
 }

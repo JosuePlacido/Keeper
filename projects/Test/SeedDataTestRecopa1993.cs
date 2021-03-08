@@ -82,7 +82,7 @@ namespace Keeper.Test
 
 		public static Group[] Groups = new Group[]
 		{
-			Group.Factory("g1","Final", Stages[0].Id)
+			Group.Factory("g1","Final", Stages[0].Id,currentRound: 2)
 		};
 
 		public static Vacancy[] Vacancys = new Vacancy[] {
