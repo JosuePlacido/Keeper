@@ -57,6 +57,11 @@ namespace Keeper.Domain.Models
 			};
 		}
 
+		public void ChangeStatus(string status)
+		{
+			Status = status;
+		}
+
 		public void UpdateNumbers(int? games = null, int? drowns = null, int? goalsAgainst = null,
 			int? goalsDifference = null, int? goalsScores = null, int? lost = null,
 			int? reds = null, int? won = null, int? yellows = null)

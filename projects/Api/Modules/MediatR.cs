@@ -14,6 +14,8 @@ public static class MEdiatRExtension
 
 		services.AddScoped<INotificationHandler<RegisterResultEvent>,
 			RegisterResultDomainEventHandler>();
+		services.AddScoped<INotificationHandler<UpdateChampionshipEvent>,
+			UpdateChampionshipDomainEventHandler>();
 		return services;
 	}
 }

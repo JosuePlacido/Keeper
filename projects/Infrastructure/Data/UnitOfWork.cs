@@ -24,6 +24,7 @@ namespace Keeper.Infrastructure.Data
 				[typeof(IDAOPlayerSubscribe)] = (ctx) => new DAOPlayerSubscribe(ctx),
 				[typeof(IDAOStatistic)] = (ctx) => new DAOStatistic(ctx),
 				[typeof(IDAOTeamSubscribe)] = (ctx) => new DAOTeamSubscribe(ctx),
+				[typeof(IDAOMatch)] = (ctx) => new DAOMatch(ctx),
 				[typeof(IRepositoryChampionship)] = (ctx) => new ChampionshipRepository(ctx),
 				[typeof(IRepositoryTeam)] = (ctx) => new TeamRepository(ctx),
 				[typeof(IRepositoryPlayer)] = (ctx) => new PlayerRepository(ctx),

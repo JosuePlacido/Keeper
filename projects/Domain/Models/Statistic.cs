@@ -14,14 +14,17 @@ namespace Keeper.Domain.Models
 		public int Points { get; private set; }
 		public string Lastfive { get; private set; }
 		public int RankMovement { get; private set; }
+		public int LastPosition { get; private set; }
 		private Statistic() { }
 		public Statistic(string team) : base()
 		{
 			TeamSubscribeId = team;
 			Position = 1;
+			LastPosition = 1;
 		}
 		public Statistic RegisterResult(int goalsScore, int goalsAgainst)
 		{
+			LastPosition = Position;
 			base.RegisterResult(goalsScore, goalsAgainst);
 
 			if (goalsScore == goalsAgainst)
@@ -48,25 +51,36 @@ namespace Keeper.Domain.Models
 		}
 
 		public Statistic UpdateResult(int goalsScoredDifference, int goalsAgainstDifference,
-			int oldResult, int newResult)
+			int oldResult, int newResult, int roundMatch)
 		{
 			base.UpdateResult(goalsScoredDifference, goalsAgainstDifference, oldResult, newResult);
+			string resultNewStatus = newResult == 0 ? "draw" : newResult > 0 ? "win" : "lose";
+			string resultOldStatus = oldResult == 0 ? "draw" : oldResult > 0 ? "win" : "lose";
+			if (resultNewStatus != resultOldStatus)
+			{
+				int pointDifference = (newResult > 0) ? 3 :
+					(newResult == 0) ? 1 : 0;
 
-			int pointDifference = (newResult > 0) ? 3 :
-				(newResult == 0) ? 1 : 0;
+				pointDifference -= (oldResult > 0) ? 3 :
+					(oldResult == 0) ? 1 : 0;
 
-			pointDifference -= (oldResult > 0) ? 3 :
-				(oldResult == 0) ? 1 : 0;
+				Points += pointDifference;
 
-			Points += pointDifference;
-			// TODO AB#403 Atualizar LastFize com as rodadas
+				string[] history = Lastfive.Split(",");
+				if (Games - roundMatch < history.Length)
+				{
+					history[history.Length - (Games - roundMatch)] = resultNewStatus;
+					Lastfive = string.Join(",", history);
+				}
+			}
+
 
 			return this;
 		}
 		public Statistic UpdateNumbers(int? games = null, int? won = null, int? drowns = null,
 			int? lost = null, int? goalsScores = null, int? goalsAgainst = null,
 			int? goalsDifference = null, int? yellows = null, int? reds = null, int? points = null,
-			string lastfive = null, int? position = null)
+			int? position = null)
 		{
 			if (games != null)
 				Games = (int)games;
@@ -80,8 +94,7 @@ namespace Keeper.Domain.Models
 				GoalsScores = (int)goalsScores;
 			if (position != null)
 			{
-				RankMovement = RankMovement + (Position - (int)position);
-				Position = (int)position;
+				Reorder((int)position);
 			}
 			if (goalsAgainst != null)
 				GoalsAgainst = (int)goalsAgainst;
@@ -93,19 +106,18 @@ namespace Keeper.Domain.Models
 				Reds = (int)reds;
 			if (points != null)
 				Points = (int)points;
-			if (!string.IsNullOrEmpty(lastfive))
-				Lastfive = lastfive;
 			return this;
 		}
 		public Statistic Reorder(int newPosition)
-		{/*
+		{
 			if (Games > 1)
 			{
-				RankMovement = Position - newPosition;
-			}*/
+				RankMovement = LastPosition - newPosition;
+			}
 			Position = newPosition;
 			return this;
 		}
+
 		public override string ToString()
 		{
 			return (TeamSubscribe == null) ? base.ToString() : $"{TeamSubscribe.Team.Name}";
@@ -115,7 +127,7 @@ namespace Keeper.Domain.Models
 			 TeamSubscribe teamSubscribe = null, int games = 0, int won = 0, int drowns = 0, int lost = 0,
 			 int goalsScores = 0, int position = 1, int goalsAgainst = 0,
 			 int goalsDifference = 0, int yellows = 0, int reds = 0, int points = 0,
-			 string lastfive = "", int rankMovement = 0)
+			 string lastfive = "", int LastPosition = 1, int rankMovement = 0)
 		{
 			return new Statistic()
 			{
@@ -136,6 +148,7 @@ namespace Keeper.Domain.Models
 				Points = points,
 				Lastfive = lastfive,
 				RankMovement = rankMovement,
+				LastPosition = LastPosition,
 			};
 		}
 	}

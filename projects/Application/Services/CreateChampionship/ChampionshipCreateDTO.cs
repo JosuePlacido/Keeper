@@ -34,6 +34,9 @@ namespace Keeper.Application.Services.CreateChampionship
 
 	public class GroupDTO
 	{
+		public int CurrentRound { get; set; }
+		public int VacancyForNextStage { get; set; }
+		public int SharedVacancyForNextStage { get; set; }
 		public string Name { get; set; }
 		public VacancyDTO[] Vacancys { get; set; }
 		public string[] Teams { get; set; }

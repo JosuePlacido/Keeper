@@ -63,5 +63,10 @@ namespace Keeper.Domain.Models
 				Teams = teams,
 			};
 		}
+
+		public void ChangeStatus(string status)
+		{
+			Status = status;
+		}
 	}
 }

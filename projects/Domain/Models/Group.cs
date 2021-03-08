@@ -10,6 +10,9 @@ namespace Keeper.Domain.Models
 	{
 		public string Name { get; private set; }
 		public string StageId { get; private set; }
+		public int CurrentRound { get; private set; }
+		public int VacancyForNextStage { get; private set; }
+		public int SharedVacancyForNextStage { get; private set; }
 		public IList<Match> Matchs { get; private set; }
 		public IList<Vacancy> Vacancys { get; private set; }
 		public IList<Statistic> Statistics { get; private set; }
@@ -20,6 +23,7 @@ namespace Keeper.Domain.Models
 			Statistics = new List<Statistic>();
 			Vacancys = new List<Vacancy>();
 			Matchs = new List<Match>();
+			CurrentRound = 1;
 		}
 		public Group AddMatches(Match[] matches)
 		{
@@ -38,9 +42,11 @@ namespace Keeper.Domain.Models
 				statsTemp = criterionList[x].Order(statsTemp, loadMatches);
 			}
 			Statistics = statsTemp;
-			//TODO disparar EVENTo acabou rodada e atualizar o RankMovement
-			//TODO Quando tiver acabado o grupo
-			//TODO Atualiza status dos times envolvidos
+		}
+
+		public void NextRound(int round)
+		{
+			CurrentRound = round;
 		}
 
 		public IList<Match> RoundRobinMatches(bool duplicateTurn = false, bool mirrorTurn = false)
@@ -154,7 +160,8 @@ namespace Keeper.Domain.Models
 
 		public static Group Factory(string id, string name,
 			string stageId, IList<Match> matchs = null,
-			IList<Vacancy> vacancys = null, IList<Statistic> statistics = null)
+			IList<Vacancy> vacancys = null, IList<Statistic> statistics = null,
+			int currentRound = 1, int vacancyNextStage = 0, int sharedVacancy = 0)
 		{
 			return new Group
 			{
@@ -163,7 +170,10 @@ namespace Keeper.Domain.Models
 				Matchs = matchs,
 				Vacancys = vacancys,
 				Statistics = statistics,
-				Name = name
+				Name = name,
+				CurrentRound = currentRound,
+				VacancyForNextStage = vacancyNextStage,
+				SharedVacancyForNextStage = sharedVacancy,
 			};
 		}
 	}

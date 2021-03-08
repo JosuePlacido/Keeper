@@ -136,6 +136,7 @@ namespace Keeper.Domain.Models
 			}
 
 			this.AddDomainEvent(new RegisterResultEvent(this));
+			this.AddDomainEvent(new UpdateChampionshipEvent(GroupId, Round));
 		}
 
 		private void UpdatePlayerStatistics(EventGame[] events)

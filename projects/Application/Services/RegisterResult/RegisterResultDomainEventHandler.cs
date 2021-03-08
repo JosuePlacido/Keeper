@@ -56,12 +56,14 @@ namespace Keeper.Application.Services.RegisterResult
 				group.Statistics.Where(s => s.TeamSubscribeId == matchAnalyse.HomeId)
 					.FirstOrDefault().UpdateResult(goalsHome, goalsAway,
 						(int)oldMatchState.GoalsHome - (int)oldMatchState.GoalsAway,
-						(int)matchAnalyse.GoalsHome - (int)matchAnalyse.GoalsAway)
+						(int)matchAnalyse.GoalsHome - (int)matchAnalyse.GoalsAway,
+						matchAnalyse.Round)
 					.UpdateCards(yellowsHome, redsHome);
 				group.Statistics.Where(s => s.TeamSubscribeId == matchAnalyse.AwayId)
 					.FirstOrDefault().UpdateResult(goalsAway, goalsHome,
 						-(int)oldMatchState.GoalsHome + (int)oldMatchState.GoalsAway,
-						-(int)matchAnalyse.GoalsHome + (int)matchAnalyse.GoalsAway)
+						-(int)matchAnalyse.GoalsHome + (int)matchAnalyse.GoalsAway,
+						matchAnalyse.Round)
 					.UpdateCards(yellowsAway, redsAway);
 			}
 			else
@@ -74,7 +76,6 @@ namespace Keeper.Application.Services.RegisterResult
 					.UpdateCards(yellowsAway, redsAway);
 
 			}
-
 
 			Stage stage = await ((IDAOStage)_uow.GetDAO(typeof(IDAOStage))).GetById(group.StageId);
 
@@ -94,14 +95,8 @@ namespace Keeper.Application.Services.RegisterResult
 					return result;
 				}).Result;
 			});
-
 			(((IDAOStatistic)_uow.GetDAO(typeof(IDAOStatistic))))
 				.UpdateAll(group.Statistics.ToArray());
-			//TODO Se a Próxima Fase Tiver regulamento Pré definido já inscreve os times nos lugares
-			//TODO Se A Fase tiver Terminado e a próxima tiver regulamento melhores vs piores faz o
-			//TODO ranking e inscreve os times nos devidos lugares
-			//TODO libera operação de Realizar Sorteio
-			//TODO Se fase terminou Caso seja ultima partida do campeonato atualiza o STATUS
 		}
 	}
 }

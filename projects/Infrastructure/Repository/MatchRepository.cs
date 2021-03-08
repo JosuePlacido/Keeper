@@ -7,6 +7,7 @@ using Keeper.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using Keeper.Domain.Utils;
+using Keeper.Domain.Enum;
 
 namespace Keeper.Infrastructure.Repository
 {
@@ -38,6 +39,12 @@ namespace Keeper.Infrastructure.Repository
 						.ThenInclude(ev => ev.RegisterPlayer)
 							.ThenInclude(ps => ps.Player)
 				.FirstOrDefaultAsync();
+		}
+
+		public async Task<bool> HasPendentMatches(string id)
+		{
+			return await _context.Matchs.AsNoTracking().AnyAsync(m => m.GroupId == id && m.Status
+				!= Status.Finish);
 		}
 
 		public async Task<Match> RegisterResult(Match match)

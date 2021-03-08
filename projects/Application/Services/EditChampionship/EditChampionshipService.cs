@@ -147,7 +147,7 @@ namespace Keeper.Application.Services.EditChampionship
 						{
 							stat.UpdateNumbers(item.Games, item.Won, item.Drowns, item.Lost,
 								item.GoalsScores, item.GoalsAgainst, item.GoalsDifference, item.Yellows,
-								item.Reds, item.Points, item.Lastfive, item.Position);
+								item.Reds, item.Points, item.Position);
 						}
 						else
 						{
