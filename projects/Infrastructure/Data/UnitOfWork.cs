@@ -62,5 +62,8 @@ namespace Keeper.Infrastructure.Data
 		{
 			return _daos[type](_context);
 		}
+
+		public async Task DispatchEvents() =>
+			await _mediator.DispatchDomainEventsAsync(_context);
 	}
 }

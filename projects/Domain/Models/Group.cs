@@ -125,7 +125,7 @@ namespace Keeper.Domain.Models
 
 		public void AddTeam(string teamId)
 		{
-			Statistics.Add(new Statistic(teamId));
+			Statistics.Add(new Statistic(teamId, Id));
 		}
 
 		private void AddMatch(int round, int game, string home, string away, bool homeVacancy, bool awayVacancy)

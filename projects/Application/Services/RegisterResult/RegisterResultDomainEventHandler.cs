@@ -22,12 +22,13 @@ namespace Keeper.Application.Services.RegisterResult
 		}
 		public async Task Handle(RegisterResultEvent notification, CancellationToken cancellationToken)
 		{
+			IDAOGroup daoGroup = (IDAOGroup)_uow.GetDAO(typeof(IDAOGroup));
 			var matchAnalyse = notification.Match;
 			var repoMatch = ((IRepositoryMatch)_uow.GetDAO(typeof(IRepositoryMatch)));
 			Match oldMatchState = await repoMatch.GetByIdWithTeamsAndPlayers(matchAnalyse.Id);
 
 			var dao = (IDAOGroup)_uow.GetDAO(typeof(IDAOGroup));
-			Group group = await dao.GetByIdWithStatistics(matchAnalyse.GroupId);
+			Group group = await dao.GetByIdWithStatisticsAndTeamSubscribe(matchAnalyse.GroupId);
 
 			int goalsHome = (int)matchAnalyse.GoalsHome;
 			int goalsAway = (int)matchAnalyse.GoalsAway;
@@ -74,7 +75,6 @@ namespace Keeper.Application.Services.RegisterResult
 				group.Statistics.Where(s => s.TeamSubscribeId == matchAnalyse.AwayId)
 					.FirstOrDefault().RegisterResult(goalsAway, goalsHome)
 					.UpdateCards(yellowsAway, redsAway);
-
 			}
 
 			Stage stage = await ((IDAOStage)_uow.GetDAO(typeof(IDAOStage))).GetById(group.StageId);
@@ -95,8 +95,20 @@ namespace Keeper.Application.Services.RegisterResult
 					return result;
 				}).Result;
 			});
-			(((IDAOStatistic)_uow.GetDAO(typeof(IDAOStatistic))))
+			await (((IDAOStatistic)_uow.GetDAO(typeof(IDAOStatistic))))
 				.UpdateAll(group.Statistics.ToArray());
+
+			if (group.CurrentRound < matchAnalyse.Round &&
+				await daoGroup.HasPenndentMatchesWithDateInRound(group))
+			{
+				group.NextRound(matchAnalyse.Round);
+				daoGroup.Update(group);
+			}
+			if (!await daoGroup.IsOpenGroup(group.Id))
+			{
+				group.AddDomainEvent(new UpdateChampionshipEvent(group, matchAnalyse.Round));
+				await _uow.DispatchEvents();
+			}
 		}
 	}
 }

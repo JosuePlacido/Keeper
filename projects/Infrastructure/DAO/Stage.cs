@@ -21,6 +21,10 @@ namespace Keeper.Infrastructure.DAO
 		{
 			return await _context.Stages.AsNoTracking().Where(s => s.ChampionshipId == championshipId)
 				.Where(s => s.Order == sequence)
+				.Include(s => s.Groups)
+					.ThenInclude(g => ((Group)g).Vacancys)
+				.Include(s => s.Groups)
+					.ThenInclude(g => ((Group)g).Statistics)
 				.FirstOrDefaultAsync();
 		}
 
@@ -38,6 +42,11 @@ namespace Keeper.Infrastructure.DAO
 
 			return await _context.Matchs.AsNoTracking().AnyAsync(m => groups.Contains(m.GroupId)
 				&& m.Status != Status.Finish);
+		}
+
+		public void Update(Stage nextStage)
+		{
+			_context.Entry(nextStage).State = EntityState.Modified;
 		}
 	}
 }

@@ -23,12 +23,12 @@ namespace Keeper.Infrastructure.DAO
 				.Where(s => s.Id == id).FirstOrDefaultAsync();
 		}
 
-		public void UpdateAll(Statistic[] statistics)
+		public async Task UpdateAll(Statistic[] statistics)
 		{
-			foreach (var stat in statistics)
-			{
-				_context.Entry(stat).State = EntityState.Modified;
-			}
+			Statistic[] newStats = statistics.Where(s => string.IsNullOrEmpty(s.Id)).ToArray();
+			Statistic[] updateStats = statistics.Where(s => string.IsNullOrEmpty(s.Id)).ToArray();
+			await _context.Statistics.AddRangeAsync(newStats);
+			_context.Statistics.UpdateRange(updateStats);
 		}
 	}
 }

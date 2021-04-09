@@ -11,6 +11,8 @@ using MediatR;
 using Keeper.Domain.Events;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System;
 
 namespace Keeper.Test.Integration.Application
 {
@@ -141,11 +143,22 @@ namespace Keeper.Test.Integration.Application
 			Championship champ;
 			TeamSubscribe cru;
 			TeamSubscribe spfc;
-			Group group;
+			Group group = Group.Factory(SeedData.Groups[0].Id, SeedData.Groups[0].Name,
+				SeedData.Groups[0].StageId, null, null,
+				new Statistic[]{
+					Statistic.Factory(SeedData2.Statistics[0].Id,
+						SeedData2.Statistics[0].TeamSubscribeId,SeedData2.Statistics[0].GroupId,
+						SeedData2.TeamsSubscribes[0]),
+					Statistic.Factory(SeedData2.Statistics[1].Id,
+						SeedData2.Statistics[1].TeamSubscribeId,SeedData2.Statistics[1].GroupId,
+						SeedData2.TeamsSubscribes[2])
+				},
+				SeedData.Groups[0].CurrentRound, SeedData.Groups[0].VacancyForNextStage,
+				SeedData.Groups[0].SharedVacancyForNextStage);
 			Match match = SeedData.Matches[1];
 			match.RegisterResult(0, 2);
 			UpdateChampionshipDomainEventHandler handler;
-			UpdateChampionshipEvent eventHandler = new UpdateChampionshipEvent("g1", 2);
+			UpdateChampionshipEvent eventHandler = new UpdateChampionshipEvent(group, match.Round);
 			using (var context = Fixture.CreateContext())
 			{
 				handler = new UpdateChampionshipDomainEventHandler(new UnitOfWork(context, new Moq.Mock<IMediator>().Object));
@@ -161,6 +174,36 @@ namespace Keeper.Test.Integration.Application
 			Assert.Equal(Status.Eliminated, cru.Status);
 			Assert.Equal(Status.Champion, spfc.Status);
 			Assert.Equal(2, group.CurrentRound);
+		}
+		[Fact]
+		public void Test_InsertTeam_PreConfiguredStage()
+		{
+			Group final = null;
+			TeamSubscribe finalist = SeedData2.TeamsSubscribes[0];
+			UpdateChampionshipDomainEventHandler handler;
+
+			using (var context = Fixture.CreateContext())
+			{
+				Group semi = context.Groups
+					.Where(g => g.Id == SeedData2.Groups[0].Id).Include(g => g.Statistics)
+						.ThenInclude(s => s.TeamSubscribe).FirstOrDefault();
+
+				UpdateChampionshipEvent eventHandler = new UpdateChampionshipEvent(semi, 1);
+
+				handler = new UpdateChampionshipDomainEventHandler(new UnitOfWork(context, new Moq.Mock<IMediator>().Object));
+				var cltToken = new System.Threading.CancellationToken();
+				Task.Run(async () => await handler.Handle(eventHandler, cltToken)).Wait();
+				//! Problema do affected rows 0
+				Console.WriteLine(context.ChangeTracker.DebugView.LongView);
+				context.SaveChanges();
+				final = context.Groups.Where(g => g.Id == SeedData2.Groups[2].Id)
+					.Include(g => g.Statistics)
+					.Include(g => g.Matchs).FirstOrDefault();
+			}
+
+			Assert.NotNull(final.Statistics[0]);
+			Assert.Equal(finalist.Id, final.Statistics[0].TeamSubscribeId);
+			Assert.Equal(finalist.Id, final.Matchs[0].HomeId);
 		}
 	}
 }

@@ -8,5 +8,6 @@ namespace Keeper.Application.Contract
 		Task<Stage> GetById(string id);
 		Task<bool> IsOpenStage(string currentStage, string exceptGroup);
 		Task<Stage> GetByChampionshipAndSequence(string championshipId, int sequence);
+		void Update(Stage nextStage);
 	}
 }

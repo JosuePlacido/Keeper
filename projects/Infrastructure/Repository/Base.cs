@@ -37,7 +37,7 @@ namespace Keeper.Infrastructure.Repository
 
 		public virtual async Task<TEntity> Update(TEntity obj)
 		{
-			await Task.Run(() => _context.Entry(obj).State = EntityState.Modified);
+			await Task.Run(() => _context.Set<TEntity>().Update(obj));
 			return obj;
 		}
 

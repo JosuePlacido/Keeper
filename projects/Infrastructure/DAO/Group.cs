@@ -10,6 +10,7 @@ using Keeper.Domain.Utils;
 using System.Collections.Generic;
 using Keeper.Domain.Enum;
 using Keeper.Domain.Core;
+using System;
 
 namespace Keeper.Infrastructure.DAO
 {
@@ -32,9 +33,34 @@ namespace Keeper.Infrastructure.DAO
 				.FirstOrDefaultAsync();
 		}
 
+		public async Task SetTeamOnVacancy(Vacancy vacancy, string teamSubscribeId)
+		{
+			Match[] matches = await _context.Matchs.AsNoTracking()
+				.Where(m => m.VacancyAwayId == vacancy.Id || m.VacancyHomeId == vacancy.Id)
+				.ToArrayAsync();
+			foreach (var match in matches)
+			{
+				match.SetTeam(teamSubscribeId, match.VacancyHomeId == vacancy.Id);
+				_context.Matchs.Update(match);
+				//_context.Vacancys.Remove(vacancy);
+			}
+		}
+
 		public void Update(Group group)
 		{
-			_context.Entry(group).State = EntityState.Modified;
+			_context.Groups.Update(group);
+		}
+		public async Task<bool> HasPenndentMatchesWithDateInRound(Group group)
+		{
+			return await _context.Matchs.AsNoTracking().AnyAsync(m => m.GroupId == group.Id
+				&& m.Status != Status.Finish
+				&& m.Date != null && m.Round == group.CurrentRound);
+		}
+
+		public async Task<bool> IsOpenGroup(string group)
+		{
+			return await _context.Matchs.AsNoTracking().AnyAsync(m => m.GroupId == group && m.Status
+				!= Status.Finish);
 		}
 	}
 }

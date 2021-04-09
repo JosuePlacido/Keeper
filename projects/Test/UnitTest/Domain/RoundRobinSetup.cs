@@ -9,13 +9,13 @@ namespace Keeper.Test.Domain
 		public RoundRobinSetup()
 		{
 			var TeamPair = Group.Factory(null, "TeamPair", null, statistics: new Statistic[]{
-					new Statistic("AAA"),
-					new Statistic("BBB")
+					new Statistic("AAA",""),
+					new Statistic("BBB","")
 				});
 			var TeamNotPair = Group.Factory(null, "TeamNotPair", null, statistics: new Statistic[]{
-					new Statistic("AAA"),
-					new Statistic("BBB"),
-					new Statistic("CCC"),
+					new Statistic("AAA",""),
+					new Statistic("BBB",""),
+					new Statistic("CCC",""),
 				});
 			var VacancyPair = Group.Factory(null, "VacancyPair", null, statistics: new Statistic[0],
 				vacancys: new Vacancy[]{
@@ -36,10 +36,10 @@ namespace Keeper.Test.Domain
 			);
 			var HybridPair = Group.Factory(null, "HybridPair", null,
 				statistics: new Statistic[]{
-					new Statistic("AAA"),
-					new Statistic("BBB"),
-					new Statistic("CCC"),
-					new Statistic("DDD"),
+					new Statistic("AAA",""),
+					new Statistic("BBB",""),
+					new Statistic("CCC",""),
+					new Statistic("DDD",""),
 				},
 				vacancys: new Vacancy[]{
 					new Vacancy("ZZZ", Classifieds.BestVsWorst),
@@ -50,11 +50,11 @@ namespace Keeper.Test.Domain
 			);
 			var HybridNotPair = Group.Factory(null, "HybridNotPair", null,
 				statistics: new Statistic[]{
-					new Statistic("AAA"),
-					new Statistic("BBB"),
-					new Statistic("CCC"),
-					new Statistic("DDD"),
-					new Statistic("EEE"),
+					new Statistic("AAA",""),
+					new Statistic("BBB",""),
+					new Statistic("CCC",""),
+					new Statistic("DDD",""),
+					new Statistic("EEE",""),
 				},
 				vacancys: new Vacancy[]{
 					new Vacancy("ZZZ", Classifieds.BestVsWorst),

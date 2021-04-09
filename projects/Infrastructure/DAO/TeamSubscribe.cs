@@ -33,18 +33,7 @@ namespace Keeper.Infrastructure.DAO
 
 		public void UpdateAll(TeamSubscribe[] list)
 		{
-			foreach (var item in list)
-			{
-				try
-				{
-					if (_context.Entry(item).State != EntityState.Modified)
-						_context.Entry(item).State = EntityState.Modified;
-				}
-				catch (Exception ex)
-				{
-					string id = item.Id;
-				}
-			}
+			_context.TeamSubscribes.UpdateRange(list);
 		}
 	}
 }

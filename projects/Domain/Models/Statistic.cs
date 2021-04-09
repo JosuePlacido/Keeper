@@ -16,11 +16,12 @@ namespace Keeper.Domain.Models
 		public int RankMovement { get; private set; }
 		public int LastPosition { get; private set; }
 		private Statistic() { }
-		public Statistic(string team) : base()
+		public Statistic(string team, string group) : base()
 		{
 			TeamSubscribeId = team;
 			Position = 1;
 			LastPosition = 1;
+			GroupId = group;
 		}
 		public Statistic RegisterResult(int goalsScore, int goalsAgainst)
 		{
@@ -117,12 +118,15 @@ namespace Keeper.Domain.Models
 			Position = newPosition;
 			return this;
 		}
-
+		public string SetTeamOnVacancy(string teamId)
+		{
+			TeamSubscribeId = teamId;
+			return Id;
+		}
 		public override string ToString()
 		{
 			return (TeamSubscribe == null) ? base.ToString() : $"{TeamSubscribe.Team.Name}";
 		}
-
 		public static Statistic Factory(string id, string teamSubscribeId, string groupId = null,
 			 TeamSubscribe teamSubscribe = null, int games = 0, int won = 0, int drowns = 0, int lost = 0,
 			 int goalsScores = 0, int position = 1, int goalsAgainst = 0,

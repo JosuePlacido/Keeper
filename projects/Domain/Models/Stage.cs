@@ -16,16 +16,20 @@ namespace Keeper.Domain.Models
 		public Classifieds Regulation { get; private set; }
 		public string ChampionshipId { get; private set; }
 		public IList<Group> Groups { get; private set; }
+		public bool NeedRandomTeams { get; private set; }
 		private Stage() { }
 
 		public override string ToString()
 		{
 			return Name;
 		}
-
+		public void AvailableForRandom()
+		{
+			NeedRandomTeams = true;
+		}
 		public static Stage Factory(string id, string championshipId, int order, string name, bool duplicateTurn = false,
 			bool mirrorTurn = false, TypeStage typeStage = TypeStage.League, string criterias = "",
-			Classifieds regulation = Classifieds.Random, IList<Group> groups = null)
+			Classifieds regulation = Classifieds.Random, IList<Group> groups = null, bool needRandomTeams = false)
 		{
 			return new Stage
 			{
@@ -39,6 +43,7 @@ namespace Keeper.Domain.Models
 				Regulation = regulation,
 				ChampionshipId = championshipId,
 				Groups = groups,
+				NeedRandomTeams = needRandomTeams
 			};
 		}
 

@@ -32,6 +32,19 @@ namespace Keeper.Domain.Models
 		public int? AggregateGoalsHome { get; private set; }
 		public string Status { get; private set; }
 		public string GroupId { get; private set; }
+
+		public void SetTeam(string teamSubscribeId, bool isHome)
+		{
+			if (isHome)
+			{
+				HomeId = teamSubscribeId;
+			}
+			else
+			{
+				AwayId = teamSubscribeId;
+			}
+		}
+
 		public IList<EventGame> EventGames { get; private set; }
 		private Match() { }
 		public Match(int round, string status, string name, string home = null, string away = null,
@@ -136,7 +149,6 @@ namespace Keeper.Domain.Models
 			}
 
 			this.AddDomainEvent(new RegisterResultEvent(this));
-			this.AddDomainEvent(new UpdateChampionshipEvent(GroupId, Round));
 		}
 
 		private void UpdatePlayerStatistics(EventGame[] events)

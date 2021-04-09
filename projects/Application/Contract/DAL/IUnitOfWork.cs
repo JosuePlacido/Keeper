@@ -7,5 +7,6 @@ namespace Keeper.Application.Contract
 	{
 		Task Commit();
 		object GetDAO(Type type);
+		Task DispatchEvents();
 	}
 }

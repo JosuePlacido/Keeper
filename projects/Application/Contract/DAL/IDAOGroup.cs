@@ -8,5 +8,8 @@ namespace Keeper.Application.Contract
 		Task<Group> GetByIdWithStatistics(string id);
 		void Update(Group group);
 		Task<Group> GetByIdWithStatisticsAndTeamSubscribe(string group);
+		Task SetTeamOnVacancy(Vacancy vacancy, string teamSubscribeId);
+		Task<bool> HasPenndentMatchesWithDateInRound(Group group);
+		Task<bool> IsOpenGroup(string id);
 	}
 }

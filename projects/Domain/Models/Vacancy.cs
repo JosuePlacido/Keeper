@@ -34,7 +34,6 @@ namespace Keeper.Domain.Models
 		{
 			FromGroupId = fromGroup;
 		}
-
 		public static Vacancy Factory(string id, string description, string groupId,
 		 Classifieds ocupationType = Classifieds.Random, string fromGroupId = null,
 		 int? fromStageOrder = null, int? fromPosition = null)
