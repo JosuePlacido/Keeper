@@ -4,24 +4,17 @@
 
 <p align="center">
   <img alt="GitHub language count" src="https://img.shields.io/github/languages/count/josueplacido/keeper?color=%2304D361">
-
   <img alt="Repository size" src="https://img.shields.io/github/repo-size/josueplacido/keeper">
-
   <a href="https://github.com/josueplacido/keeper/commits/master">
     <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/josueplacido/keeper">
   </a>
-
   <img alt="License" src="https://img.shields.io/github/license/josueplacido/keeper">
    <a href="https://github.com/tgmarinho/nlw1/stargazers">
     <img alt="Stargazers" src="https://img.shields.io/github/stars/josueplacido/keeper?style=social">
   </a>
-
   <img alt="Github issues" src="https://img.shields.io/github/issues/JosuePlacido/keeper?color=56BEB8" />
-
   <img alt="Github forks" src="https://img.shields.io/github/forks/JosuePlacido/keeper?color=56BEB8" />
-
 <img alt="Status" src="https://img.shields.io/static/v1?label=status&message=Em%20Desenvolvimento&color=orange&style=flat"/>
-
 <img alt="Status" src="https://juzao.visualstudio.com/61c713ff-3c97-4bf5-a734-54883d06ab60/bc79f462-8764-44f5-86f8-5214a7183931/_apis/work/boardbadge/053e7275-ab1d-4f0b-83d9-ecfec19d98f7?columnOptions=1">
 
 </p>
@@ -139,22 +132,36 @@ Ajuste a connectionStrings no arquivo "appsettings.development.json" que está n
 # Clone este repositório
 $ git clone git@github.com:josueplacido/keeper.git
 
-# Instale as dependências globalmente do Monorepo
-$ npm install
-
 # Acesse a pasta do projeto no terminal/cmd
 $ cd projects/api
 
-# Execute a aplicação em modo de desenvolvimento
-$ dotnet run
+# Instale as dependências
+$ npm install
 
-# O servidor inciará na porta:5000 ou 5001 - acesse http://localhost:5000
+# Execute a aplicação em modo de desenvolvimento
+$ npm run start
 
 ```
 
 #### Rodando o Frontend
 
-🚧 Em construção 🚧
+```bash
+
+# Clone este repositório
+$ git clone git@github.com:josueplacido/keeper.git
+
+# Acesse a pasta do projeto no terminal/cmd
+$ cd projects/web
+
+# Instale as dependências
+$ npm install
+
+# Execute a aplicação em modo de desenvolvimento
+$ npm run start
+
+# verifique o endereco da api e a porta em src/services/api.ts
+# o padrao é localhost:3333
+```
 
 #### Rodando o Mobile
 

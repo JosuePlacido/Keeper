@@ -446,3 +446,5 @@ yarn-error.log
 **/yarn-error.log
 **/bin
 **/obj
+
+package-lock.json
