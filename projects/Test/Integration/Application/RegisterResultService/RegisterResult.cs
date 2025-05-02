@@ -10,7 +10,6 @@ using Keeper.Application.Contract;
 using MediatR;
 using Keeper.Domain.Events;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 
 namespace Keeper.Test.Integration.Application
 {
@@ -19,16 +18,23 @@ namespace Keeper.Test.Integration.Application
 		private readonly ITestOutputHelper _output;
 		public SharedDatabaseFixture Fixture { get; }
 		public TestRegisterResultApplication(SharedDatabaseFixture fixture, ITestOutputHelper output)
-			=> (_output, Fixture) = (output, fixture);
+		{
+			_output = output;
+			Fixture = fixture;
+		}
 
 		[Fact]
 		public void GetMatch()
 		{
 			Match match;
-			using (var context = Fixture.CreateContext())
+
+			using (var transaction = Fixture.Connection.BeginTransaction())
 			{
-				var service = new RegisterResultService(null, new UnitOfWork(context, null));
-				match = service.GetMatch("m1").Result;
+				using (var context = Fixture.CreateContext(transaction))
+				{
+					var service = new RegisterResultService(null, new UnitOfWork(context, null));
+					match = service.GetMatch("m1").Result;
+				}
 			}
 			Assert.Equal(SeedData.Matches[0], match);
 		}
@@ -36,10 +42,13 @@ namespace Keeper.Test.Integration.Application
 		public void Get_Invalid_Match()
 		{
 			Match match;
-			using (var context = Fixture.CreateContext())
+			using (var transaction = Fixture.Connection.BeginTransaction())
 			{
-				var service = new RegisterResultService(null, new UnitOfWork(context, null));
-				match = service.GetMatch("noexist").Result;
+				using (var context = Fixture.CreateContext(transaction))
+				{
+					var service = new RegisterResultService(null, new UnitOfWork(context, null));
+					match = service.GetMatch("noexist").Result;
+				}
 			}
 			Assert.Null(match);
 		}
@@ -71,13 +80,16 @@ namespace Keeper.Test.Integration.Application
 			PlayerSubscribe player;
 			TeamSubscribe[] team;
 			IServiceResponse result;
-			using (var context = Fixture.CreateContext())
+			using (var transaction = Fixture.Connection.BeginTransaction())
 			{
-				var service = new RegisterResultService(null, new UnitOfWork(context, new Moq.Mock<IMediator>().Object));
-				result = service.RegisterResult(test).Result;
-				player = context.PlayerSubscribe.Where(ps => ps.Id == "ps1").FirstOrDefault();
-				team = context.TeamSubscribes.Where(ps => ps.Id == "ts1" || ps.Id == "ts2")
-					.ToArray();
+				using (var context = Fixture.CreateContext(transaction))
+				{
+					var service = new RegisterResultService(null, new UnitOfWork(context, new Moq.Mock<IMediator>().Object));
+					result = service.RegisterResult(test).Result;
+					player = context.PlayerSubscribe.Where(ps => ps.Id == "ps1").FirstOrDefault();
+					team = context.TeamSubscribes.Where(ps => ps.Id == "ts1" || ps.Id == "ts2")
+						.ToArray();
+				}
 			}
 			Assert.True(result.ValidationResult.IsValid);
 			Match match = (Match)result.Value;
@@ -106,33 +118,37 @@ namespace Keeper.Test.Integration.Application
 			match.RegisterResult(0, 2);
 			RegisterResultDomainEventHandler handler;
 			RegisterResultEvent eventHandler = new RegisterResultEvent(match);
-			using (var context = Fixture.CreateContext())
+			using (var transaction = Fixture.Connection.BeginTransaction())
 			{
-				handler = new RegisterResultDomainEventHandler(new UnitOfWork(context, new Moq.Mock<IMediator>().Object));
-				var cltToken = new System.Threading.CancellationToken();
-				Task.Run(async () => await handler.Handle(eventHandler, cltToken)).Wait();
-				context.SaveChanges();
-				var cru = context.Statistics.Where(g => g.Id == "s2").FirstOrDefault();
-				var spfc = context.Statistics.Where(g => g.Id == "s1").FirstOrDefault();
-				Assert.Equal(2, cru.Position);
-				Assert.Equal(1, spfc.Position);
 
-				Assert.Equal(1, cru.Lost);
-				Assert.Equal(1, cru.Drowns);
-				Assert.Equal(2, cru.Games);
-				Assert.Equal(2, cru.GoalsAgainst);
-				Assert.Equal(-2, cru.GoalsDifference);
-				Assert.Equal("draw,lose", cru.Lastfive);
-				Assert.Equal(-1, cru.RankMovement);
+				using (var context = Fixture.CreateContext(transaction))
+				{
+					handler = new RegisterResultDomainEventHandler(new UnitOfWork(context, new Moq.Mock<IMediator>().Object));
+					var cltToken = new System.Threading.CancellationToken();
+					Task.Run(async () => await handler.Handle(eventHandler, cltToken)).Wait();
+					context.SaveChanges();
+					var cru = context.Statistics.Where(g => g.Id == "s2").FirstOrDefault();
+					var spfc = context.Statistics.Where(g => g.Id == "s1").FirstOrDefault();
+					Assert.Equal(2, cru.Position);
+					Assert.Equal(1, spfc.Position);
 
-				Assert.Equal(1, spfc.Won);
-				Assert.Equal(1, spfc.Drowns);
-				Assert.Equal(2, spfc.Games);
-				Assert.Equal(2, spfc.GoalsScores);
-				Assert.Equal(2, spfc.GoalsDifference);
-				Assert.Equal("draw,win", spfc.Lastfive);
-				Assert.Equal(0, spfc.RankMovement);
+					Assert.Equal(1, cru.Lost);
+					Assert.Equal(1, cru.Drowns);
+					Assert.Equal(2, cru.Games);
+					Assert.Equal(2, cru.GoalsAgainst);
+					Assert.Equal(-2, cru.GoalsDifference);
+					Assert.Equal("draw,lose", cru.Lastfive);
+					Assert.Equal(-1, cru.RankMovement);
 
+					Assert.Equal(1, spfc.Won);
+					Assert.Equal(1, spfc.Drowns);
+					Assert.Equal(2, spfc.Games);
+					Assert.Equal(2, spfc.GoalsScores);
+					Assert.Equal(2, spfc.GoalsDifference);
+					Assert.Equal("draw,win", spfc.Lastfive);
+					Assert.Equal(0, spfc.RankMovement);
+
+				}
 			}
 		}
 		[Fact]
@@ -146,16 +162,19 @@ namespace Keeper.Test.Integration.Application
 			match.RegisterResult(0, 2);
 			UpdateChampionshipDomainEventHandler handler;
 			UpdateChampionshipEvent eventHandler = new UpdateChampionshipEvent("g1", 2);
-			using (var context = Fixture.CreateContext())
+			using (var transaction = Fixture.Connection.BeginTransaction())
 			{
-				handler = new UpdateChampionshipDomainEventHandler(new UnitOfWork(context, new Moq.Mock<IMediator>().Object));
-				var cltToken = new System.Threading.CancellationToken();
-				Task.Run(async () => await handler.Handle(eventHandler, cltToken)).Wait();
-				context.SaveChanges();
-				champ = context.Championships.Where(g => g.Id == "c1").FirstOrDefault();
-				spfc = context.TeamSubscribes.Where(g => g.Id == "ts1").FirstOrDefault();
-				cru = context.TeamSubscribes.Where(g => g.Id == "ts2").FirstOrDefault();
-				group = context.Groups.Where(g => g.Id == "g1").FirstOrDefault();
+				using (var context = Fixture.CreateContext(transaction))
+				{
+					handler = new UpdateChampionshipDomainEventHandler(new UnitOfWork(context, new Moq.Mock<IMediator>().Object));
+					var cltToken = new System.Threading.CancellationToken();
+					Task.Run(async () => await handler.Handle(eventHandler, cltToken)).Wait();
+					context.SaveChanges();
+					champ = context.Championships.Where(g => g.Id == "c1").FirstOrDefault();
+					spfc = context.TeamSubscribes.Where(g => g.Id == "ts1").FirstOrDefault();
+					cru = context.TeamSubscribes.Where(g => g.Id == "ts2").FirstOrDefault();
+					group = context.Groups.Where(g => g.Id == "g1").FirstOrDefault();
+				}
 			}
 			Assert.Equal(Status.Finish, champ.Status);
 			Assert.Equal(Status.Eliminated, cru.Status);

@@ -3,23 +3,24 @@ using Keeper.Infrastructure.Data;
 using Keeper.Test;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualBasic;
 using System;
 using System.Data.Common;
+using System.Linq;
 
 namespace Keeper.Test
 {
 	public class SharedDatabaseFixture : IDisposable
 	{
-		private static readonly object _lock = new object();
-		private static bool _databaseInitialized;
-
+		public DbConnection Connection { get; }
 		public SharedDatabaseFixture()
 		{
-			Connection = new SqliteConnection("Filename=db_test.db");
-			Seed();
+			Connection = new SqliteConnection("Filename=:memory:");
 			Connection.Open();
+			var context = CreateContext();
+			context.Database.EnsureCreated();
+			Seed(context);
 		}
-		public DbConnection Connection { get; }
 
 		public ApplicationContext CreateContext(DbTransaction transaction = null)
 		{
@@ -34,36 +35,23 @@ namespace Keeper.Test
 			return context;
 		}
 
-		private void Seed()
+		private void Seed(ApplicationContext context)
 		{
-			lock (_lock)
-			{
-				if (!_databaseInitialized)
-				{
-					using (var context = CreateContext())
-					{
-						context.Database.EnsureDeleted();
-						context.Database.EnsureCreated();
-						context.Set<Team>().AddRange(SeedData.Teams);
-						context.Set<Player>().AddRange(SeedData.Players);
-						context.Set<PlayerSubscribe>().AddRange(SeedData.PlayersSubscribe);
-						context.Set<Category>().AddRange(SeedData.Categorys);
-						context.Set<Championship>().Add(SeedData.Championship);
-						context.Set<TeamSubscribe>().AddRange(SeedData.TeamsSubscribes);
-						context.Set<Stage>().AddRange(SeedData.Stages);
-						context.Set<Group>().AddRange(SeedData.Groups);
-						context.Set<Vacancy>().AddRange(SeedData.Vacancys);
-						context.Set<Statistic>().AddRange(SeedData.Statistics);
-						context.Set<Match>().AddRange(SeedData.Matches);
-						context.Set<EventGame>().AddRange(SeedData.EventGames);
-						context.Set<Championship>().Add(Championship.Factory("remove",
-							"remove", "remove"));
-						context.SaveChanges();
-					}
-
-					_databaseInitialized = true;
-				}
-			}
+			context.Set<Team>().AddRange(SeedData.Teams);
+			context.Set<Player>().AddRange(SeedData.Players);
+			context.Set<PlayerSubscribe>().AddRange(SeedData.PlayersSubscribe);
+			context.Set<Category>().AddRange(SeedData.Categorys);
+			context.Set<Championship>().Add(SeedData.Championship);
+			context.Set<TeamSubscribe>().AddRange(SeedData.TeamsSubscribes);
+			context.Set<Stage>().AddRange(SeedData.Stages);
+			context.Set<Group>().AddRange(SeedData.Groups);
+			context.Set<Vacancy>().AddRange(SeedData.Vacancys);
+			context.Set<Statistic>().AddRange(SeedData.Statistics);
+			context.Set<Match>().AddRange(SeedData.Matches);
+			context.Set<EventGame>().AddRange(SeedData.EventGames);
+			context.Set<Championship>().Add(Championship.Factory("remove",
+				"remove", "remove"));
+			context.SaveChanges();
 		}
 
 		public void Dispose() => Connection.Dispose();

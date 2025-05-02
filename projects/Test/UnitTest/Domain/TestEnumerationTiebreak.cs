@@ -17,10 +17,6 @@ namespace Keeper.Test.UnitTest.Domain
 		public TestEnumerationTiebreak(ITestOutputHelper output)
 			=> _output = output;
 
-		private void Print(object item)
-		{
-			_output.WriteLine(JsonConvert.SerializeObject(item, Formatting.Indented));
-		}
 		private void PrintResult(Statistic[] ranking)
 		{
 			_output.WriteLine("---- RANK ----");
@@ -28,7 +24,8 @@ namespace Keeper.Test.UnitTest.Domain
 			{
 				_output.WriteLine($"{item.Position} {item.TeamSubscribeId} {item.Points} "
 				+ $"{item.Won} {item.Yellows}");
-			};
+			}
+			;
 		}
 
 		[Fact]

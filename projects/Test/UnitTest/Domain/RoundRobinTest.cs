@@ -14,10 +14,6 @@ namespace Keeper.Domain
 		public RoundRobinTest(ITestOutputHelper output)
 			=> _output = output;
 
-		private void Print(object item)
-		{
-			_output.WriteLine(JsonConvert.SerializeObject(item, Formatting.Indented));
-		}
 		private string[] NormalizeTeams(MatchShortFormat[] matchList)
 		{
 			var teams = matchList.Select(j => j.Home).Distinct().ToList();

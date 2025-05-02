@@ -46,7 +46,7 @@ namespace Keeper.Test.UnitTest.Infra.Repositorys
 						}
 					}
 				}
-				expected = new ChampionshipRepository(context).RenameScopes(expected).Result;
+				expected = new ChampionshipRepository(context).RenameScopes(expected);
 				newNames.Add(expected.Name);
 				newNames.AddRange(expected.Stages.Select(s => s.Name));
 				newNames.AddRange(expected.Stages.SelectMany(s => s.Groups.Select(g => g.Name)));
