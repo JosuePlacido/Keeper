@@ -22,7 +22,7 @@ namespace Keeper.Domain.Models
 			Position = 1;
 			LastPosition = 1;
 		}
-		public Statistic RegisterResult(int goalsScore, int goalsAgainst)
+		public new Statistic RegisterResult(int goalsScore, int goalsAgainst)
 		{
 			LastPosition = Position;
 			base.RegisterResult(goalsScore, goalsAgainst);

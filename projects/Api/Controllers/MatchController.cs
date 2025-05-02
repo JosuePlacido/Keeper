@@ -33,7 +33,7 @@ namespace Keeper.Api.Controllers
 				CustomResponse(await _service.UpdateMatches(dto));
 		}
 		[HttpPost("Check")]
-		public async Task<IActionResult> CheackMatches(MatchEditsScope dto)
+		public IActionResult CheackMatches(MatchEditsScope dto)
 		{
 			return !ModelState.IsValid ? CustomResponse(ModelState) :
 				CustomResponse(_service.CheckMatches(dto));

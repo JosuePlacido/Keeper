@@ -35,15 +35,8 @@ namespace Keeper.Infrastructure.DAO
 		{
 			foreach (var item in list)
 			{
-				try
-				{
-					if (_context.Entry(item).State != EntityState.Modified)
-						_context.Entry(item).State = EntityState.Modified;
-				}
-				catch (Exception ex)
-				{
-					string id = item.Id;
-				}
+				if (_context.Entry(item).State != EntityState.Modified)
+					_context.Entry(item).State = EntityState.Modified;
 			}
 		}
 	}

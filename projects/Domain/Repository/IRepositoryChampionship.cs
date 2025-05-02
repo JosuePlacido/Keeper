@@ -10,7 +10,7 @@ namespace Keeper.Domain.Repository
 		Task<Championship> GetByIdWithTeamsWithPLayers(string championship);
 		Task<Championship> GetByIdWithStageGroupsAndMatches(string championship);
 		Task<PlayerSubscribe> UpdatePLayer(PlayerSubscribe player);
-		Task<Championship> RenameScopes(Championship championship);
+		Championship RenameScopes(Championship championship);
 		Task<Championship> GetByIdWithRank(string championship);
 		Task UpdateStatistics(Statistic[] statistics);
 		Task<Championship> GetByIdWithMatchWithTeams(string id);

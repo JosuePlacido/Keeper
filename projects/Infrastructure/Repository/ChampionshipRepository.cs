@@ -70,7 +70,7 @@ namespace Keeper.Infrastructure.Repository
 						.ThenInclude(ps => ((PlayerSubscribe)ps).Player).FirstOrDefaultAsync();
 		}
 
-		public async Task<Championship> RenameScopes(Championship championship)
+		public Championship RenameScopes(Championship championship)
 		{
 			_context.Championships.Attach(championship)
 				.Property(x => x.Name).IsModified = true;

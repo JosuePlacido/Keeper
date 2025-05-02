@@ -1,5 +1,6 @@
 using System.Reflection;
 using Keeper.Api;
+using Keeper.Application.EventHandler;
 using Keeper.Application.Services.RegisterResult;
 using Keeper.Domain.Events;
 using MediatR;
@@ -16,6 +17,8 @@ public static class MEdiatRExtension
 			RegisterResultDomainEventHandler>();
 		services.AddScoped<INotificationHandler<UpdateChampionshipEvent>,
 			UpdateChampionshipDomainEventHandler>();
+		services.AddScoped<INotificationHandler<RankingEvent>,
+			RankingEventHandler>();
 		return services;
 	}
 }

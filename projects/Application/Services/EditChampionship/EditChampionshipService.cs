@@ -54,7 +54,8 @@ namespace Keeper.Application.Services.EditChampionship
 						response.ValidationResult.Errors.Add(
 							new ValidationFailure(squadsEnter[x].PlayerName, errorMessage));
 						player = await _repoChamp.UpdatePLayer(player);
-					};
+					}
+					;
 				}
 				if (response.ValidationResult.IsValid)
 				{
@@ -110,7 +111,7 @@ namespace Keeper.Application.Services.EditChampionship
 					}
 				}
 			}
-			response.Value = await _repoChamp.RenameScopes(championship);
+			response.Value = _repoChamp.RenameScopes(championship);
 			await _uow.Commit();
 			return response;
 		}
