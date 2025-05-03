@@ -23,7 +23,7 @@ namespace Application.Services.EditChampionship
 		public string Team { get; set; }
 		public int Games { get; set; }
 		public int Won { get; set; }
-		public int Drowns { get; set; }
+		public int Draw { get; set; }
 		public int Lost { get; set; }
 		public int GoalsScores { get; set; }
 		public int Position { get; set; }
@@ -41,7 +41,7 @@ namespace Application.Services.EditChampionship
 		public string Id { get; set; }
 		public int? Games { get; set; }
 		public int? Won { get; set; }
-		public int? Drowns { get; set; }
+		public int? Draw { get; set; }
 		public int? Lost { get; set; }
 		public int? GoalsScores { get; set; }
 		public int? Position { get; set; }

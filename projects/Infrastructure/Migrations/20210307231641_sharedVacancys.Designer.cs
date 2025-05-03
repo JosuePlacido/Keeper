@@ -341,7 +341,7 @@ namespace Infrastructure.Migrations
                         .HasColumnType("nvarchar(450)")
                         .HasColumnName("Id");
 
-                    b.Property<int>("Drowns")
+                    b.Property<int>("Draw")
                         .HasColumnType("int");
 
                     b.Property<int>("Games")
@@ -438,7 +438,7 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("Drowns")
+                    b.Property<int>("Draw")
                         .HasColumnType("int");
 
                     b.Property<int>("Games")

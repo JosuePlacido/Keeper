@@ -32,7 +32,7 @@ namespace Domain.Models
 		}
 		public static TeamSubscribe Factory(string id, string teamId,
 			string championshipId = null, string status = Enum.Status.Matching, Team team = null,
-			int games = 0, int won = 0, int drowns = 0, int lost = 0, int goalsScores = 0,
+			int games = 0, int won = 0, int draw = 0, int lost = 0, int goalsScores = 0,
 			int goalsAgainst = 0, int goalsDifference = 0, int yellows = 0, int reds = 0,
 			IList<PlayerSubscribe> players = null)
 		{
@@ -44,7 +44,7 @@ namespace Domain.Models
 				Team = team,
 				Games = games,
 				Won = won,
-				Drowns = drowns,
+				Draw = draw,
 				Lost = lost,
 				GoalsScores = goalsScores,
 				GoalsAgainst = goalsAgainst,
@@ -61,14 +61,14 @@ namespace Domain.Models
 			Status = status;
 		}
 
-		public void UpdateNumbers(int? games = null, int? drowns = null, int? goalsAgainst = null,
+		public void UpdateNumbers(int? games = null, int? draw = null, int? goalsAgainst = null,
 			int? goalsDifference = null, int? goalsScores = null, int? lost = null,
 			int? reds = null, int? won = null, int? yellows = null)
 		{
 			if (games != null)
 				Games = (int)games;
-			if (drowns != null)
-				Drowns = (int)drowns;
+			if (draw != null)
+				Draw = (int)draw;
 			if (goalsAgainst != null)
 				GoalsAgainst = (int)goalsAgainst;
 			if (goalsDifference != null)

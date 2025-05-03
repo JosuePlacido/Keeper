@@ -18,7 +18,7 @@ namespace Models.Entities
         public virtual Register Register { get; set; }
         public virtual int Games { get; set; }
         public virtual int Won { get; set; }
-        public virtual int Drowns { get; set; }
+        public virtual int Draw { get; set; }
         public virtual int Lost { get; set; }
         public virtual int GoalsScores { get; set; }
         public virtual int Position { get; set; }

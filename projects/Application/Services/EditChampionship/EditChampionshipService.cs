@@ -147,7 +147,7 @@ namespace Application.Services.EditChampionship
 						stat = await daoStat.GetById(item.Id);
 						if (stat != null && response.ValidationResult.IsValid)
 						{
-							stat.UpdateNumbers(item.Games, item.Won, item.Drowns, item.Lost,
+							stat.UpdateNumbers(item.Games, item.Won, item.Draw, item.Lost,
 								item.GoalsScores, item.GoalsAgainst, item.GoalsDifference, item.Yellows,
 								item.Reds, item.Points, item.Position);
 						}
@@ -206,7 +206,7 @@ namespace Application.Services.EditChampionship
 					list = await dao.GetAllById(dto.Select(ts => ts.Id).ToArray());
 					for (int x = 0; x < list.Length; x++)
 					{
-						list[x].UpdateNumbers(dto[x].Games, dto[x].Drowns, dto[x].GoalsAgainst,
+						list[x].UpdateNumbers(dto[x].Games, dto[x].Draw, dto[x].GoalsAgainst,
 							dto[x].GoalsDifference, dto[x].GoalsScores, dto[x].Lost, dto[x].Reds,
 							dto[x].Won, dto[x].Yellows);
 					}

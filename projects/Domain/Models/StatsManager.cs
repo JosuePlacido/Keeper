@@ -6,7 +6,7 @@ namespace Domain.Models
 	{
 		public int Games { get; protected set; }
 		public int Won { get; protected set; }
-		public int Drowns { get; protected set; }
+		public int Draw { get; protected set; }
 		public int Lost { get; protected set; }
 		private int _goalsScores;
 		public int GoalsScores
@@ -46,7 +46,7 @@ namespace Domain.Models
 
 			if (goalsScore == goalsAgainst)
 			{
-				Drowns++;
+				Draw++;
 			}
 			else if (goalsScore > goalsAgainst)
 			{
@@ -67,7 +67,7 @@ namespace Domain.Models
 			Won += newResult > 0 && oldResult <= 0 ? 1 :
 				(newResult < 0 && oldResult > 0) ? -1 : 0;
 
-			Drowns += newResult == 0 && oldResult != 0 ? 1 :
+			Draw += newResult == 0 && oldResult != 0 ? 1 :
 				(newResult != 0 && oldResult == 0) ? -1 : 0;
 
 			Lost += newResult < 0 && oldResult >= 0 ? 1 :
