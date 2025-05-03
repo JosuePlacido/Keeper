@@ -1,8 +1,7 @@
-using Keeper.Domain.Core;
-using Keeper.Domain.Models;
+using Domain.Models;
 using MediatR;
 
-namespace Keeper.Domain.Events
+namespace Domain.Events
 {
 	public class RegisterResultEvent : INotification
 	{

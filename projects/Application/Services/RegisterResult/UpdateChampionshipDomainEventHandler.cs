@@ -1,16 +1,15 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Keeper.Application.Contract;
-using Keeper.Domain.Enum;
-using Keeper.Domain.Events;
-using Keeper.Domain.Models;
-using Keeper.Domain.Repository;
+using Application.Contract.DAL;
+using Application.Contract.Repository;
+using Domain.Enum;
+using Domain.Events;
+using Domain.Models;
 using MediatR;
 
-namespace Keeper.Application.Services.RegisterResult
+namespace Application.Services.RegisterResult
 {
 	public class UpdateChampionshipDomainEventHandler : INotificationHandler<UpdateChampionshipEvent>
 	{

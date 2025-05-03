@@ -1,5 +1,3 @@
-using Keeper.Domain.Models;
-
 namespace Domain.Models
 {
 	public class SortTeamModelHelper

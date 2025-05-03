@@ -1,10 +1,6 @@
 using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Keeper.Domain.Core;
-using Keeper.Domain.Models;
 
-namespace Keeper.Application.Contract
+namespace Application.Contract.DAL
 {
 	public interface IDAO : IDisposable
 	{

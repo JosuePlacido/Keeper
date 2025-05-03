@@ -1,9 +1,9 @@
-using Keeper.Domain.Enum;
-using Keeper.Domain.Models;
+using Domain.Enum;
+using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Keeper.Infrastructure.Mapping
+namespace Infrastructure.Mapping
 {
 	public class TeamSubscribeMap : IEntityTypeConfiguration<TeamSubscribe>
 	{

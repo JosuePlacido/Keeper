@@ -1,12 +1,11 @@
 using System.Threading.Tasks;
-using AutoMapper;
-using Keeper.Domain.Repository;
-using Keeper.Domain.Models;
-using Keeper.Infrastructure.Data;
+using Domain.Models;
+using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using Application.Contract.Repository;
 
-namespace Keeper.Infrastructure.Repository
+namespace Infrastructure.Repository
 {
 	public class ChampionshipRepository : RepositoryBase<Championship>, IRepositoryChampionship
 	{

@@ -1,11 +1,11 @@
-﻿using Keeper.Domain.Core;
-using Keeper.Domain.Enum;
-using Keeper.Domain.Events;
+﻿using Domain.Core;
+using Domain.Enum;
+using Domain.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Keeper.Domain.Models
+namespace Domain.Models
 {
 	public class Match : Entity, IAggregateRoot
 	{

@@ -1,13 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Keeper.Domain.Repository;
-using Keeper.Infrastructure.DAO;
-using Keeper.Infrastructure.Repository;
-using Keeper.Application.Contract;
+using Infrastructure.DAO;
+using Infrastructure.Repository;
+using Application.Contract.DAL;
 using MediatR;
+using Application.Contract.Repository;
 
-namespace Keeper.Infrastructure.Data
+namespace Infrastructure.Data
 {
 	public class UnitOfWork : IUnitOfWork, IDisposable
 	{

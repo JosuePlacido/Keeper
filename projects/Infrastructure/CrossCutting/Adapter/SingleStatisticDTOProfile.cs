@@ -1,8 +1,8 @@
 using AutoMapper;
-using Keeper.Domain.Models;
-using Keeper.Application.Services.EditChampionship;
+using Domain.Models;
+using Application.Services.EditChampionship;
 
-namespace Keeper.Infrastructure.CrossCutting.Adapter
+namespace Infrastructure.CrossCutting.Adapter
 {
 	public class SingleStatisticDTOProfile : Profile
 	{

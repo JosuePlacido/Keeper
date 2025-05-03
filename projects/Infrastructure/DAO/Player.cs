@@ -1,17 +1,16 @@
 using System.Linq;
 using System.Threading.Tasks;
-using Keeper.Domain.Models;
-using Keeper.Application.DTO;
-using Keeper.Infrastructure.DAO;
-using Keeper.Infrastructure.Data;
+using Domain.Models;
+using Application.DTO;
+using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
-using Keeper.Application.Contract;
-using Keeper.Domain.Utils;
+using Application.Contract.DAL;
+using Domain.Utils;
 using System.Collections.Generic;
-using Keeper.Domain.Enum;
-using Keeper.Domain.Core;
+using Domain.Enum;
+using Domain.Core;
 
-namespace Keeper.Infrastructure.DAO
+namespace Infrastructure.DAO
 {
 	public class DAOPlayer : DAO, IDAOPlayer
 	{

@@ -1,10 +1,7 @@
-﻿using Keeper.Domain.Enum;
-using Keeper.Domain.Core;
-using System;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using Domain.Enum;
+using Domain.Core;
 
-namespace Keeper.Domain.Models
+namespace Domain.Models
 {
 	public class EventGame : Entity
 	{

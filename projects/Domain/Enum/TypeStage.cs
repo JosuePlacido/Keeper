@@ -1,7 +1,6 @@
-﻿using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace Keeper.Domain.Enum
+namespace Domain.Enum
 {
 	public enum TypeStage
 	{

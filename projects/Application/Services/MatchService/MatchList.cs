@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
 
-namespace Keeper.Application.Services.MatchService
+namespace Application.Services.MatchService
+
 {
 	public static class MatchAuditoryContants
 	{

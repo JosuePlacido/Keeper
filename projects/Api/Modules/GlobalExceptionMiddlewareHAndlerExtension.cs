@@ -1,9 +1,9 @@
 
-using Keeper.Api.Middlewares;
+using Api.Middleware;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Keeper.Api.Extensions
+namespace Api.Extensions
 {
 	public static class GlobalExceptionHandlerMiddlewareExtensions
 	{

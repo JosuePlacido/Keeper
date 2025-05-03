@@ -1,4 +1,4 @@
-namespace Keeper.Domain.Core
+namespace Domain.Core
 {
 	public interface IAggregateRoot
 	{

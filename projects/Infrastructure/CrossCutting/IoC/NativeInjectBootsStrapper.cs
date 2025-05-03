@@ -1,15 +1,19 @@
 using Microsoft.Extensions.DependencyInjection;
-using Keeper.Application.Services;
-using Keeper.Infrastructure.Data;
-using Keeper.Application.Contract;
+using Infrastructure.Data;
+using Application.Contract.DAL;
 using AutoMapper;
-using Keeper.Infrastructure.CrossCutting.Adapter;
-using Keeper.Application.Services.CreateChampionship;
-using Keeper.Application.Services.EditChampionship;
-using Keeper.Application.Services.MatchService;
-using Keeper.Application.Services.RegisterResult;
+using Infrastructure.CrossCutting.Adapter;
+using Application.Services.CreateChampionship;
+using Application.Services.EditChampionship;
+using Application.Services.MatchService;
+using Application.Services.RegisterResult;
+using Domain.Rules.TiebreakCriterion;
+using Application.Services.CRUDTeam;
+using Application.Services.CRUDPlayer;
+using Domain.Provider;
+using Application.Adapter;
 
-namespace Keeper.Infrastructure.CrossCutting.IoC
+namespace Infrastructure.CrossCutting.IoC
 {
 	public static class NativeInjectorBootStrapper
 	{

@@ -1,6 +1,6 @@
-using Keeper.Domain.Core;
+using Domain.Core;
 
-namespace Keeper.Domain.Models
+namespace Domain.Models
 {
 	public class StatsManager : Entity
 	{

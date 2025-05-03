@@ -1,9 +1,8 @@
 
 using System.Threading.Tasks;
-using Keeper.Domain.Core;
-using Keeper.Domain.Models;
+using Domain.Models;
 
-namespace Keeper.Domain.Repository
+namespace Application.Contract.Repository
 {
 	public interface IRepositoryTeam : IRepositoryBase<Team>
 	{

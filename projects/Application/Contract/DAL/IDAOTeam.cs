@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
-using Keeper.Application.DTO;
+using Application.Services.CRUDTeam;
 
-namespace Keeper.Application.Contract
+namespace Application.Contract.DAL
 {
 	public interface IDAOTeam : IDAO
 	{

@@ -1,10 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System;
-using Keeper.Domain.Core;
-using Keeper.Domain.Enum;
+using Domain.Core;
+using Domain.Enum;
+using Domain.Events;
 
-namespace Keeper.Domain.Models
+namespace Domain.Models
 {
 	public class Group : Entity
 	{

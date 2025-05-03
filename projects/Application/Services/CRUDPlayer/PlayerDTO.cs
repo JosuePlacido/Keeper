@@ -1,8 +1,7 @@
 using System.ComponentModel.DataAnnotations;
-using Keeper.Domain.Core;
-using Keeper.Domain.Models;
+using Domain.Models;
 
-namespace Keeper.Application.DTO
+namespace Application.Services.CRUDPlayer
 {
 	public class PlayerCreateDTO
 	{

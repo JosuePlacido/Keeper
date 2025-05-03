@@ -1,10 +1,8 @@
-using System.Reflection;
-using Keeper.Api;
-using Keeper.Application.EventHandler;
-using Keeper.Application.Services.RegisterResult;
-using Keeper.Domain.Events;
+using Api;
+using Application.EventHandler;
+using Application.Services.RegisterResult;
+using Domain.Events;
 using MediatR;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 public static class MEdiatRExtension

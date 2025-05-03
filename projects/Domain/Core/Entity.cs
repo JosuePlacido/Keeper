@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
-using FluentValidation.Results;
 using MediatR;
 
-namespace Keeper.Domain.Core
+namespace Domain.Core
 {
 	public abstract class Entity
 	{

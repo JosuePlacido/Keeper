@@ -1,9 +1,9 @@
 using System;
 using System.Threading.Tasks;
-using Keeper.Domain.Models;
-using Keeper.Application.DTO;
+using Domain.Models;
+using Application.Contract;
 
-namespace Keeper.Application.Contract
+namespace Application.Services.CRUDTeam
 {
 	public interface ITeamService : IDisposable
 	{

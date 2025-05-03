@@ -1,7 +1,7 @@
 
 using FluentValidation.Results;
 
-namespace Keeper.Application.Contract
+namespace Application.Contract
 {
 	public interface IServiceResponse
 	{

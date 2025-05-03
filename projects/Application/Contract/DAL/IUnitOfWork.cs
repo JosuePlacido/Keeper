@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace Keeper.Application.Contract
+namespace Application.Contract.DAL
 {
 	public interface IUnitOfWork
 	{

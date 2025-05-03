@@ -1,9 +1,9 @@
 using System;
 using System.Threading.Tasks;
-using Keeper.Application.Contract;
-using Keeper.Domain.Models;
+using Application.Contract;
+using Domain.Models;
 
-namespace Keeper.Application.Services.RegisterResult
+namespace Application.Services.RegisterResult
 {
 	public interface IRegisterResultService : IDisposable
 	{

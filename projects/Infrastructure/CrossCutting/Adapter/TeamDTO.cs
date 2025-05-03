@@ -1,8 +1,8 @@
 using AutoMapper;
-using Keeper.Domain.Models;
-using Keeper.Application.DTO;
+using Domain.Models;
+using Application.Services.CRUDTeam;
 
-namespace Keeper.Infrastructure.CrossCutting.Adapter
+namespace Infrastructure.CrossCutting.Adapter
 {
 	public class TeamDTOProfile : Profile
 	{

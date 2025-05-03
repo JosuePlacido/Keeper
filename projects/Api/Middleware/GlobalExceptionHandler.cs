@@ -4,7 +4,7 @@ using System;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
-namespace Keeper.Api.Middlewares
+namespace Api.Middleware
 {
 	public class GlobalExceptionHandlerMiddleware : IMiddleware
 	{

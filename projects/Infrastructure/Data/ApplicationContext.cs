@@ -1,9 +1,9 @@
 using System;
-using Keeper.Domain.Models;
-using Keeper.Domain.Utils;
+using Domain.Models;
+using Domain.Utils;
 using Microsoft.EntityFrameworkCore;
 
-namespace Keeper.Infrastructure.Data
+namespace Infrastructure.Data
 {
 	public sealed class ApplicationContext : DbContext
 	{

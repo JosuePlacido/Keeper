@@ -1,12 +1,10 @@
 using System.Threading.Tasks;
-using Keeper.Application.DTO;
-using Keeper.Application.Contract;
-using Keeper.Domain.Models;
+using Application.DTO;
 using Microsoft.AspNetCore.Mvc;
-using Keeper.Application.Services.MatchService;
-using Keeper.Application.Services.RegisterResult;
+using Application.Services.MatchService;
+using Application.Services.RegisterResult;
 
-namespace Keeper.Api.Controllers
+namespace Api.Controllers
 {
 	//[Authorize]
 	[Route("[controller]")]

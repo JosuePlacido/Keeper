@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Keeper.Application.DTO
+namespace Application.DTO
 {
 	public class MatchEditsScope
 	{

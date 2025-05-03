@@ -1,17 +1,11 @@
 using System.Linq;
 using System.Threading.Tasks;
-using Keeper.Domain.Models;
-using Keeper.Application.DTO;
-using Keeper.Infrastructure.DAO;
-using Keeper.Infrastructure.Data;
+using Domain.Models;
+using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
-using Keeper.Application.Contract;
-using Keeper.Domain.Utils;
-using System.Collections.Generic;
-using Keeper.Domain.Enum;
-using Keeper.Domain.Core;
+using Application.Contract.DAL;
 
-namespace Keeper.Infrastructure.DAO
+namespace Infrastructure.DAO
 {
 	public class DAOStatistic : DAO, IDAOStatistic
 	{

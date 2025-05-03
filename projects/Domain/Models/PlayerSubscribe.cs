@@ -1,11 +1,9 @@
 using System;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using Keeper.Domain.Core;
-using Keeper.Domain.Enum;
+using Domain.Core;
+using Domain.Enum;
 
-namespace Keeper.Domain.Models
+namespace Domain.Models
 {
 	public class PlayerSubscribe : Entity
 	{

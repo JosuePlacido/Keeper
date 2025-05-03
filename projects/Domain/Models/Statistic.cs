@@ -1,9 +1,6 @@
 using System.Linq;
-using Domain.Models;
-using Keeper.Domain.Core;
-using Keeper.Domain.Enum;
 
-namespace Keeper.Domain.Models
+namespace Domain.Models
 {
 	public class Statistic : StatsManager
 	{

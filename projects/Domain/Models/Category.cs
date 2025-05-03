@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using Keeper.Domain.Core;
+﻿using System.Collections.Generic;
+using Domain.Core;
 
-namespace Keeper.Domain.Models
+namespace Domain.Models
 {
 	public sealed class Category : ValueObject<Category>
 	{

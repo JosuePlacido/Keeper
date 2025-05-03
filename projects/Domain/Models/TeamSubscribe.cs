@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
-using Keeper.Domain.Core;
 
-namespace Keeper.Domain.Models
+namespace Domain.Models
 {
 	public class TeamSubscribe : StatsManager
 	{

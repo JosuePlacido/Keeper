@@ -1,11 +1,10 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Keeper.Application.DTO;
-using Keeper.Application.Contract;
-using Keeper.Domain.Models;
+using Application.Services.CRUDTeam;
+using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Keeper.Api.Controllers
+namespace Api.Controllers
 {
 	//[Authorize]
 	[Route("[controller]")]

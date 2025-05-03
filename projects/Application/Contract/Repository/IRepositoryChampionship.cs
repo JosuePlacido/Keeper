@@ -1,9 +1,7 @@
-using Keeper.Domain.Repository;
-using Keeper.Domain.Core;
-using Keeper.Domain.Models;
+using Domain.Models;
 using System.Threading.Tasks;
 
-namespace Keeper.Domain.Repository
+namespace Application.Contract.Repository
 {
 	public interface IRepositoryChampionship : IRepositoryBase<Championship>
 	{

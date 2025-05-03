@@ -1,22 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Api.Modules;
 using Api.Modules.FeatureFlags;
-using Keeper.Api.Extensions;
-using Keeper.Api.Modules;
+using Api.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.OpenApi.Models;
 
-namespace Keeper.Api
+namespace Api
 {
 	public class Startup
 	{
@@ -33,6 +25,7 @@ namespace Keeper.Api
 													 //.AddInvalidRequestLogging()
 													 //.AddCurrencyExchange(this.Configuration)
 				.AddSQLServer(this.Configuration)
+				//.AddSqlLite(this.Configuration)
 				.AddMediatRConfiguration()
 				//.AddHealthChecks(this.Configuration)
 				//.AddAuthentication(this.Configuration)

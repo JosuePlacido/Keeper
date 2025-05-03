@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace Keeper.Application.Services.RegisterResult
+namespace Application.Services.RegisterResult
 {
 	public class RegisterResultValidation : AbstractValidator<MatchResultDTO>
 	{

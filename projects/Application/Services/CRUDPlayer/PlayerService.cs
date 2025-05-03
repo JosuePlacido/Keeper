@@ -1,18 +1,17 @@
 using AutoMapper;
 using System;
 using System.Threading.Tasks;
-using Keeper.Domain.Repository;
-using Keeper.Application.Contract;
-using Keeper.Domain.Models;
-using Application.Validation;
+using Application.Contract.DAL;
+using Domain.Models;
 using FluentValidation.Results;
-using Keeper.Application.DTO;
-using Keeper.Domain.Core;
+using Application.DTO;
 using System.Collections.Generic;
 using System.Linq;
-using Keeper.Domain.Enum;
+using Domain.Enum;
+using Application.Contract.Repository;
+using Application.Contract;
 
-namespace Keeper.Application.Services
+namespace Application.Services.CRUDPlayer
 {
 	public class PlayerService : IPlayerService
 	{

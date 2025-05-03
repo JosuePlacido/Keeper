@@ -1,15 +1,14 @@
 using AutoMapper;
 using System;
 using System.Threading.Tasks;
-using Keeper.Domain.Repository;
-using Keeper.Application.Contract;
-using Keeper.Domain.Models;
-using Keeper.Application.DTO;
-using Application.Validation;
+using Application.Contract.DAL;
+using Domain.Models;
+using Application.DTO;
 using FluentValidation.Results;
-using Keeper.Domain.Core;
+using Application.Contract.Repository;
+using Application.Contract;
 
-namespace Keeper.Application.Services
+namespace Application.Services.CRUDTeam
 {
 	public class TeamService : ITeamService
 	{

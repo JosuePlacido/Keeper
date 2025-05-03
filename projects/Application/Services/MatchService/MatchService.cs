@@ -1,15 +1,16 @@
 using AutoMapper;
 using System;
 using System.Threading.Tasks;
-using Keeper.Domain.Repository;
 using System.Linq;
 using System.Collections.Generic;
-using Keeper.Application.DTO;
-using Keeper.Domain.Models;
-using Keeper.Application.Contract;
+using Application.DTO;
+using Application.Contract.DAL;
 using FluentValidation.Results;
+using Application.Contract.Repository;
+using Application.Contract;
+using Domain.Models;
 
-namespace Keeper.Application.Services.MatchService
+namespace Application.Services.MatchService
 {
 	public class MatchService : IMatchService
 	{
@@ -20,7 +21,7 @@ namespace Keeper.Application.Services.MatchService
 		{
 			_mapper = mapper;
 			_uow = uow;
-			_repo = ((IRepositoryMatch)_uow.GetDAO(typeof(IRepositoryMatch)));
+			_repo = (IRepositoryMatch)_uow.GetDAO(typeof(IRepositoryMatch));
 		}
 
 		public MatchEditsScope CheckMatches(MatchEditsScope dto)

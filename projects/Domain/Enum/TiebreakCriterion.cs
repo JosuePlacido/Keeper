@@ -1,13 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
 using Domain.Models;
-using Keeper.Domain.Core;
-using Keeper.Domain.Models;
+using Domain.Core;
 
-namespace Keeper.Domain.Enum
+namespace Domain.Enum
 {
 	public class TiebreackCriterion : Enumeration
 	{
@@ -53,7 +50,8 @@ namespace Keeper.Domain.Enum
 								teamsDirectRank.Where(td => td.TeamSubscribeId == match.AwayId)
 									.FirstOrDefault().RegisterResult(
 										(int)match.GoalsAway, (int)match.GoalsHome);
-							};
+							}
+							;
 
 							teamsDirectRank = teamsDirectRank
 								.OrderByDescending(v => v.Points)
@@ -117,7 +115,8 @@ namespace Keeper.Domain.Enum
 					foreach (var match in matches)
 					{
 						teamsDirectRank[match.AwayId] += (int)match.GoalsAway;
-					};
+					}
+					;
 					string[] orderedTeams = teamsDirectRank
 						.OrderByDescending(tdr => tdr.Value).Select(tdr => tdr.Key).ToArray();
 

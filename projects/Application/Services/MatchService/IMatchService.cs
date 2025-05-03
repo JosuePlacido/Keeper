@@ -1,9 +1,9 @@
 using System;
 using System.Threading.Tasks;
-using Keeper.Application.Contract;
-using Keeper.Application.DTO;
+using Application.Contract;
+using Application.DTO;
 
-namespace Keeper.Application.Services.MatchService
+namespace Application.Services.MatchService
 {
 	public interface IMatchService : IDisposable
 	{

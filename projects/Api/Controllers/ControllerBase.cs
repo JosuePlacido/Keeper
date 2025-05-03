@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using FluentValidation.Results;
-using Keeper.Application.Contract;
+using Application.Contract;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace Keeper.Api.Controllers
+namespace Api.Controllers
 {
 	[ApiController]
 	public abstract class ApiController : ControllerBase

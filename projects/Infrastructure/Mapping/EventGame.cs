@@ -1,8 +1,8 @@
-using Keeper.Domain.Models;
+using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Keeper.Infrastructure.Mapping
+namespace Infrastructure.Mapping
 {
 	public class EventGameMap : IEntityTypeConfiguration<EventGame>
 	{

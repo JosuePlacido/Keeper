@@ -1,7 +1,6 @@
 using System.Threading.Tasks;
-using Keeper.Application.DTO;
 
-namespace Keeper.Application.Contract
+namespace Application.Contract.DAL
 {
 	public interface IDAOMatch : IDAO
 	{

@@ -3,12 +3,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentValidation.Results;
-using Keeper.Application.Contract;
-using Keeper.Application.DTO;
-using Keeper.Domain.Models;
-using Keeper.Domain.Repository;
+using Application.Contract.DAL;
+using Application.DTO;
+using Domain.Models;
+using Application.Contract.Repository;
+using Application.Contract;
 
-namespace Keeper.Application.Services.RegisterResult
+namespace Application.Services.RegisterResult
 {
 	public class RegisterResultService : IRegisterResultService
 	{
@@ -19,7 +20,7 @@ namespace Keeper.Application.Services.RegisterResult
 		{
 			_mapper = mapper;
 			_uow = uow;
-			_repo = ((IRepositoryMatch)_uow.GetDAO(typeof(IRepositoryMatch)));
+			_repo = (IRepositoryMatch)_uow.GetDAO(typeof(IRepositoryMatch));
 		}
 		public void Dispose()
 		{

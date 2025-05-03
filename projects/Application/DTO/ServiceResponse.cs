@@ -1,7 +1,7 @@
 using FluentValidation.Results;
-using Keeper.Application.Contract;
+using Application.Contract;
 
-namespace Keeper.Application.DTO
+namespace Application.DTO
 {
 	public class ServiceResponse : IServiceResponse
 	{

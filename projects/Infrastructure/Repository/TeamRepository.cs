@@ -1,16 +1,13 @@
 using System;
-using System.Reflection;
 using System.Threading.Tasks;
-using Keeper.Domain.Repository;
-using Keeper.Domain.Models;
-using Keeper.Infrastructure.Data;
+using Domain.Models;
+using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
-using Keeper.Domain.Utils;
-using System.Collections.Generic;
-using System.Linq.Expressions;
+using Domain.Utils;
+using Application.Contract.Repository;
 
-namespace Keeper.Infrastructure.Repository
+namespace Infrastructure.Repository
 {
 	public class TeamRepository : RepositoryBase<Team>, IRepositoryTeam
 	{

@@ -1,10 +1,9 @@
 using System.Threading.Tasks;
-using Keeper.Application.DTO;
-using Keeper.Application.Contract;
-using Keeper.Domain.Models;
+using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
+using Application.Services.CRUDPlayer;
 
-namespace Keeper.Api.Controllers
+namespace Api.Controllers
 {
 	//[Authorize]
 	[Route("[controller]")]

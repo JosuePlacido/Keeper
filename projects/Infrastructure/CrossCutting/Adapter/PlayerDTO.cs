@@ -1,8 +1,8 @@
 using AutoMapper;
-using Keeper.Domain.Models;
-using Keeper.Application.DTO;
+using Domain.Models;
+using Application.Services.CRUDPlayer;
 
-namespace Keeper.Infrastructure.CrossCutting.Adapter
+namespace Infrastructure.CrossCutting.Adapter
 {
 	public class PlayerDTOProfile : Profile
 	{

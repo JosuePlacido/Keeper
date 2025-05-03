@@ -1,12 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.FeatureManagement;
-using Api.Modules.FeatureFlags;
-using Keeper.Infrastructure.Data;
-using System;
+using Infrastructure.Data;
 
-namespace Keeper.Api.Modules
+namespace Api.Modules
 {
 	public static class SQLServerExtensions
 	{

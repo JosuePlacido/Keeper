@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 
-namespace Keeper.Infrastructure.Data
+namespace Infrastructure.Data
 {
 	public sealed class ContextFactory : IDesignTimeDbContextFactory<ApplicationContext>
 	{

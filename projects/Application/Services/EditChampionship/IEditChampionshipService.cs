@@ -1,8 +1,9 @@
 using System;
 using System.Threading.Tasks;
-using Keeper.Application.Contract;
+using Application.Contract;
+using Application.Contract.DAL;
 
-namespace Keeper.Application.Services.EditChampionship
+namespace Application.Services.EditChampionship
 {
 	public interface IEditChampionshipService : IDisposable
 	{

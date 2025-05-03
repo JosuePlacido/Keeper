@@ -1,10 +1,7 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using Keeper.Domain.Enum;
-using Keeper.Domain.Core;
+using Domain.Core;
 
-namespace Keeper.Domain.Models
+namespace Domain.Models
 {
 	public class Championship : Entity, IAggregateRoot
 	{

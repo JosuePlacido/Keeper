@@ -1,7 +1,6 @@
-using System.ComponentModel.DataAnnotations;
-using Keeper.Domain.Models;
+using Domain.Models;
 
-namespace Keeper.Application.Services.EditChampionship
+namespace Application.Services.EditChampionship
 {
 	public class SquadEditDTO
 	{

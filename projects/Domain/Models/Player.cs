@@ -1,9 +1,6 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using Keeper.Domain.Core;
+﻿using Domain.Core;
 
-namespace Keeper.Domain.Models
+namespace Domain.Models
 {
 	public class Player : Entity, IAggregateRoot
 	{

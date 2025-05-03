@@ -1,8 +1,8 @@
 using System.Linq;
 using FluentValidation;
-using Keeper.Domain.Models;
+using Domain.Models;
 
-namespace Keeper.Application.Services.CreateChampionship
+namespace Application.Services.CreateChampionship
 {
 	public class CreateChampionshipValidation : AbstractValidator<Championship>
 	{

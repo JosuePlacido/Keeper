@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
-using Keeper.Domain.Enum;
+using Domain.Enum;
 
-namespace Keeper.Application.Services.RegisterResult
+namespace Application.Services.RegisterResult
 {
 	public class MatchResultDTO
 	{

@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-namespace Keeper.Domain.Enum
+namespace Domain.Enum
 {
 	public enum Classifieds
 	{

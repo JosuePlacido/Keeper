@@ -1,15 +1,15 @@
 using AutoMapper;
 using System;
 using System.Threading.Tasks;
-using Keeper.Domain.Repository;
 using System.Linq;
-using Keeper.Application.DTO;
-using Keeper.Domain.Models;
-using Keeper.Application.Contract;
+using Application.DTO;
+using Domain.Models;
+using Application.Contract;
+using Application.Contract.DAL;
 using FluentValidation.Results;
-using Keeper.Domain.Core;
+using Application.Contract.Repository;
 
-namespace Keeper.Application.Services.CreateChampionship
+namespace Application.Services.CreateChampionship
 {
 	public class ChampionshipService : IChampionshipService
 	{
@@ -20,7 +20,7 @@ namespace Keeper.Application.Services.CreateChampionship
 		{
 			_mapper = mapper;
 			_uow = uow;
-			_repoChamp = ((IRepositoryChampionship)_uow.GetDAO(typeof(IRepositoryChampionship)));
+			_repoChamp = (IRepositoryChampionship)_uow.GetDAO(typeof(IRepositoryChampionship));
 		}
 		public async Task<IServiceResponse> Create(ChampionshipCreateDTO dto)
 		{

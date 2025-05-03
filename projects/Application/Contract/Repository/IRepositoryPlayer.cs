@@ -1,8 +1,8 @@
 
 using System.Threading.Tasks;
-using Keeper.Domain.Core;
-using Keeper.Domain.Models;
-namespace Keeper.Domain.Repository
+using Domain.Core;
+using Domain.Models;
+namespace Application.Contract.Repository
 {
 	public interface IRepositoryPlayer : IRepositoryBase<Player>
 	{

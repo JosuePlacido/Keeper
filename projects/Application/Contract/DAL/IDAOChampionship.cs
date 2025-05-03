@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
-using Keeper.Application.Services.EditChampionship;
+using Application.Services.EditChampionship;
 
-namespace Keeper.Application.Contract
+namespace Application.Contract.DAL
 {
 	public interface IDAOChampionship : IDAO
 	{

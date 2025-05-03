@@ -1,7 +1,6 @@
 using FluentValidation;
-using Keeper.Application.DTO;
 
-namespace Application.Validation
+namespace Application.Services.CRUDPlayer
 {
 	public class PlayerDeleteValidation : AbstractValidator<PlayerViewDTO>
 	{

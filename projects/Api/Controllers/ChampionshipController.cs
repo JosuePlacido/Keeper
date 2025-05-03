@@ -1,10 +1,9 @@
 using System.Threading.Tasks;
-using Keeper.Application.Services.CreateChampionship;
-using Keeper.Application.DTO;
+using Application.Services.CreateChampionship;
 using Microsoft.AspNetCore.Mvc;
-using Keeper.Application.Services.EditChampionship;
+using Application.Services.EditChampionship;
 
-namespace Keeper.Api.Controllers
+namespace Api.Controllers
 {
 	//[Authorize]
 	[Route("[controller]")]

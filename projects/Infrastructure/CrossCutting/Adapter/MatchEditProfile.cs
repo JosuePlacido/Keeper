@@ -1,9 +1,9 @@
 using AutoMapper;
-using Keeper.Domain.Models;
-using Keeper.Application.DTO;
+using Domain.Models;
+using Application.DTO;
 using System.Linq;
 
-namespace Keeper.Infrastructure.CrossCutting.Adapter
+namespace Infrastructure.CrossCutting.Adapter
 {
 	public class MatchEditProfile : Profile
 	{

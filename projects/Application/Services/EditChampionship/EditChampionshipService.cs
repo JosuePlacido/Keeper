@@ -1,16 +1,17 @@
 using AutoMapper;
 using System;
 using System.Threading.Tasks;
-using Keeper.Domain.Repository;
 using System.Linq;
 using System.Collections.Generic;
-using Keeper.Application.DTO;
-using Keeper.Domain.Models;
-using Keeper.Application.Contract;
+using Application.DTO;
+using Domain.Models;
+using Application.Contract.DAL;
 using FluentValidation.Results;
-using Keeper.Domain.Enum;
+using Domain.Enum;
+using Application.Contract.Repository;
+using Application.Contract;
 
-namespace Keeper.Application.Services.EditChampionship
+namespace Application.Services.EditChampionship
 {
 	public class EditChampionshipService : IEditChampionshipService
 	{
@@ -21,7 +22,7 @@ namespace Keeper.Application.Services.EditChampionship
 		{
 			_mapper = mapper;
 			_uow = uow;
-			_repoChamp = ((IRepositoryChampionship)_uow.GetDAO(typeof(IRepositoryChampionship)));
+			_repoChamp = (IRepositoryChampionship)_uow.GetDAO(typeof(IRepositoryChampionship));
 		}
 
 		public void Dispose()

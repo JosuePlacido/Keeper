@@ -1,8 +1,4 @@
-using System.ComponentModel.DataAnnotations;
-using Keeper.Domain.Core;
-using Keeper.Domain.Models;
-
-namespace Keeper.Application.Services.EditChampionship
+namespace Application.Services.EditChampionship
 {
 	public class TeamStatisticDTO
 	{

@@ -1,8 +1,8 @@
 using System.Threading.Tasks;
-using Keeper.Application.DTO;
-using Keeper.Domain.Models;
+using Application.DTO;
+using Domain.Models;
 
-namespace Keeper.Application.Contract
+namespace Application.Contract.DAL
 {
 	public interface IDAOPlayer : IDAO
 	{

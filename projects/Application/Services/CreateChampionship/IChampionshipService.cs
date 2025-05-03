@@ -1,8 +1,8 @@
 using System;
 using System.Threading.Tasks;
-using Keeper.Application.Contract;
+using Application.Contract;
 
-namespace Keeper.Application.Services.CreateChampionship
+namespace Application.Services.CreateChampionship
 {
 	public interface IChampionshipService : IDisposable
 	{

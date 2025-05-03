@@ -1,8 +1,8 @@
 using System;
-using Keeper.Infrastructure.CrossCutting.IoC;
+using Infrastructure.CrossCutting.IoC;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Keeper.Api.Modules
+namespace Api.Modules
 {
 	public static class DependencyInjectionConfig
 	{

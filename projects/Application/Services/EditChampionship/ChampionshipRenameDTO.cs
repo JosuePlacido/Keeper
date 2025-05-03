@@ -1,6 +1,4 @@
-using Keeper.Domain.Core;
-
-namespace Keeper.Application.Services.EditChampionship
+namespace Application.Services.EditChampionship
 {
 	public class ObjectRenameDTO
 	{

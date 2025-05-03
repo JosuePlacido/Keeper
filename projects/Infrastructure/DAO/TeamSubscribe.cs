@@ -1,18 +1,12 @@
-using Keeper.Domain.Models;
-using Keeper.Application.DTO;
-using Keeper.Infrastructure.DAO;
-using Keeper.Infrastructure.Data;
+using Domain.Models;
+using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
-using Keeper.Application.Contract;
-using System.Linq.Expressions;
+using Application.Contract.DAL;
 using System;
-using Keeper.Domain.Utils;
-using Keeper.Domain.Core;
-using System.Collections.Generic;
 
-namespace Keeper.Infrastructure.DAO
+namespace Infrastructure.DAO
 {
 	public class DAOTeamSubscribe : DAO, IDAOTeamSubscribe
 	{

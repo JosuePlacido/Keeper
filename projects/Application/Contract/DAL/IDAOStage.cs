@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
-using Keeper.Domain.Models;
+using Domain.Models;
 
-namespace Keeper.Application.Contract
+namespace Application.Contract.DAL
 {
 	public interface IDAOStage : IDAO
 	{

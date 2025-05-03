@@ -1,9 +1,9 @@
 using System.Linq;
 using System.Threading.Tasks;
-using Keeper.Domain.Core;
+using Domain.Core;
 using MediatR;
 
-namespace Keeper.Infrastructure.Data
+namespace Infrastructure.Data
 {
 
 	static class MediatorExtension

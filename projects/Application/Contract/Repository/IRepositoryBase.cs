@@ -1,7 +1,6 @@
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Keeper.Domain.Core
+namespace Application.Contract.Repository
 {
 	public interface IRepositoryBase<TEntity> where TEntity : class
 	{
