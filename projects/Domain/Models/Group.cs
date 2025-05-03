@@ -34,15 +34,9 @@ namespace Domain.Models
 			}
 			return this;
 		}
-		public void UpdateRank(TiebreackCriterion[] criterionList,
-			Func<string, string[], Match[]> loadMatches = null)
+		public void UpdateRank(string criteriaIds)
 		{
-			Statistic[] statsTemp = criterionList[0].Order(Statistics.ToArray());
-			for (int x = 1; x < criterionList.Length; x++)
-			{
-				statsTemp = criterionList[x].Order(statsTemp, loadMatches);
-			}
-			Statistics = statsTemp;
+			AddDomainEvent(new RankingEvent(this, criteriaIds));
 		}
 
 		public void NextRound(int round)
