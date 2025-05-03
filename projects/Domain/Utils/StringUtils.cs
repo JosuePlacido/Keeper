@@ -1,7 +1,7 @@
 using System.Globalization;
 using System.Text;
 
-namespace Keeper.Domain.Utils
+namespace Domain.Utils
 {
 	public static class StringUtils
 	{

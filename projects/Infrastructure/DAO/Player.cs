@@ -1,14 +1,13 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Domain.Models;
-using Application.DTO;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Application.Contract.DAL;
 using Domain.Utils;
 using System.Collections.Generic;
 using Domain.Enum;
-using Domain.Core;
+using Application.Services.CRUDPlayer;
 
 namespace Infrastructure.DAO
 {

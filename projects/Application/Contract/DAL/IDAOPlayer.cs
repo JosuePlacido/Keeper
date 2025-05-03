@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using Application.DTO;
+using Application.Services.CRUDPlayer;
 using Domain.Models;
 
 namespace Application.Contract.DAL
