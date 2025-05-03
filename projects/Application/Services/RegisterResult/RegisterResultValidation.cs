@@ -1,13 +1,15 @@
+using Domain.Models;
 using FluentValidation;
 
 namespace Application.Services.RegisterResult
 {
 	public class RegisterResultValidation : AbstractValidator<MatchResultDTO>
 	{
-		public RegisterResultValidation()
+		public RegisterResultValidation(Match match)
 		{
 			ValidateGoals();
 			ValidateEvents();
+			ValidatePenaltiesIfRequired(match);
 		}
 		protected void ValidateGoals()
 		{
@@ -17,6 +19,19 @@ namespace Application.Services.RegisterResult
 		protected void ValidateEvents()
 		{
 			RuleForEach(m => m.Events).SetValidator(new EventGameValidator());
+		}
+		protected void ValidatePenaltiesIfRequired(Match match)
+		{
+			if (match.FinalGame && match.Penalty &&
+				match.AggregateGoalsHome == match.AggregateGoalsAway)
+			{
+				RuleFor(m => m.GoalsPenaltyHome)
+					.NotNull().WithMessage("Gols em penaltis do mandante são obrigatórios");
+				RuleFor(m => m.GoalsPenaltyAway)
+					.NotNull().WithMessage("Gols em penaltis do visitante são obrigatórios");
+				RuleFor(m => m).Must(m => m.GoalsPenaltyHome != m.GoalsPenaltyAway)
+					.NotNull().WithMessage("Gols em penaltis so times precisam ser diferentes");
+			}
 		}
 	}
 	public class EventGameValidator : AbstractValidator<EventGameDTO>

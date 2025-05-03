@@ -3,11 +3,11 @@ using MediatR;
 
 namespace Domain.Events
 {
-	public class RegisterResultEvent : INotification
+	public class PersistStatisticsMatchResultEvent : INotification
 	{
 		public Match Match { get; set; }
 
-		public RegisterResultEvent(Match match)
+		public PersistStatisticsMatchResultEvent(Match match)
 		{
 			Match = match;
 		}

@@ -39,9 +39,9 @@ namespace Domain.Models
 			AddDomainEvent(new RankingEvent(this, criteriaIds));
 		}
 
-		public void NextRound(int round)
+		public void NextRound()
 		{
-			CurrentRound = round;
+			CurrentRound++;
 		}
 
 		public IList<Match> RoundRobinMatches(bool duplicateTurn = false, bool mirrorTurn = false)

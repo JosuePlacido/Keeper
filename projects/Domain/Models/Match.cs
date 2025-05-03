@@ -109,118 +109,93 @@ namespace Domain.Models
 		public void RegisterResult(int homeGoals, int awayGoals,
 			int? homePenalties = null, int? awayPenalties = null, EventGame[] events = null)
 		{
-
 			UpdateTeamsStatistics(homeGoals, awayGoals);
-
 			UpdatePlayerStatistics(events);
+			RegisterEventGame(events);
+			SetScore(homeGoals, awayGoals);
+			SetAggregateScore();
+			SetPenaltyScore(homePenalties, awayPenalties);
+			TriggerDomainEvents();
+		}
 
-			EventGames = new List<EventGame>();
-			if (events != null && events.Length > 0)
-			{
-				((List<EventGame>)EventGames).AddRange(events);
-			}
+		private void TriggerDomainEvents()
+		{
+			AddDomainEvent(new PersistStatisticsMatchResultEvent(this));
+			AddDomainEvent(new AdvanceChampionshipEvent(GroupId, Round));
+		}
 
-			Status = Enum.Status.Finish;
-			GoalsHome = homeGoals;
-			GoalsAway = awayGoals;
-			if (AggregateGame)
-			{
-				AggregateGoalsHome = GoalsHome + (AggregateGoalsHome == null ? 0 : AggregateGoalsHome);
-				AggregateGoalsAway = GoalsAway + (AggregateGoalsAway == null ? 0 : AggregateGoalsAway);
-			}
-			if (Penalty && ((AggregateGame && AggregateGoalsAway == AggregateGoalsHome) ||
-				GoalsPenaltyHome == GoalsPenaltyAway))
+		private void SetPenaltyScore(int? homePenalties, int? awayPenalties)
+		{
+			if (Penalty && (AggregateGame && AggregateGoalsAway == AggregateGoalsHome || !AggregateGame && GoalsAway == GoalsHome))
 			{
 				GoalsPenaltyHome = homePenalties;
 				GoalsPenaltyAway = awayPenalties;
 			}
+		}
 
-			this.AddDomainEvent(new RegisterResultEvent(this));
-			this.AddDomainEvent(new UpdateChampionshipEvent(GroupId, Round));
+		private void SetAggregateScore()
+		{
+			if (AggregateGame)
+			{
+				AggregateGoalsHome = GoalsHome + (AggregateGoalsHome ?? 0);
+				AggregateGoalsAway = GoalsAway + (AggregateGoalsAway ?? 0);
+			}
+		}
+
+		private void SetScore(int homeGoals, int awayGoals)
+		{
+			Status = Enum.Status.Finish;
+			GoalsHome = homeGoals;
+			GoalsAway = awayGoals;
 		}
 
 		private void UpdatePlayerStatistics(EventGame[] events)
 		{
-			int goalsAux;
-			int mvpsAux;
-			int yellowsAux;
-			int redsAux;
-			EventGame[] eventsAux;
-			bool isHome;
-			string[] players;
-			if (events != null)
+			if (events == null || events.Length == 0)
+				return;
+
+			if (Status == Enum.Status.Finish)
 			{
-				int homeYellows = events.Where(ev => ev.IsHomeEvent)
-					.Where(ev => ev.Type == TypeEvent.YellowCard).Count();
-				int homeReds = events.Where(ev => ev.IsHomeEvent)
-					.Where(ev => ev.Type == TypeEvent.RedCard).Count();
-				int awayYellows = events.Where(ev => !ev.IsHomeEvent)
-					.Where(ev => ev.Type == TypeEvent.YellowCard).Count();
-				int awayReds = events.Where(ev => !ev.IsHomeEvent)
-					.Where(ev => ev.Type == TypeEvent.RedCard).Count();
-				if (Status == Enum.Status.Finish)
-				{
-					homeYellows -= EventGames.Where(ev => ev.IsHomeEvent)
-						.Where(ev => ev.Type == TypeEvent.YellowCard).Count();
-					homeReds -= EventGames.Where(ev => ev.IsHomeEvent)
-						.Where(ev => ev.Type == TypeEvent.RedCard).Count();
-					awayYellows -= EventGames.Where(ev => !ev.IsHomeEvent)
-						.Where(ev => ev.Type == TypeEvent.YellowCard).Count();
-					awayReds -= EventGames.Where(ev => !ev.IsHomeEvent)
-						.Where(ev => ev.Type == TypeEvent.RedCard).Count();
+				ApplyStats(EventGames.ToArray(), revert: true);
+			}
 
-					players = events.Select(ev => ev.RegisterPlayerId)
-						.Distinct().ToArray();
+			ApplyStats(events);
 
-					foreach (var player in players)
-					{
-						isHome = Home.Players.Any(ps => ps.Id == player);
-						eventsAux = EventGames.Where(ev => ev.RegisterPlayerId == player).ToArray();
-						goalsAux = eventsAux.Where(ev => ev.Type == TypeEvent.Goal).Count();
-						yellowsAux = eventsAux.Where(ev => ev.Type == TypeEvent.YellowCard).Count();
-						redsAux = eventsAux.Where(ev => ev.Type == TypeEvent.RedCard).Count();
-						mvpsAux = eventsAux.Where(ev => ev.Type == TypeEvent.MVP).Count();
-						if (isHome)
-						{
-							Home.Players.Where(ps => ps.Id == player)
-								.FirstOrDefault().UpdateResult(-goalsAux, -yellowsAux, -redsAux,
-									-mvpsAux, Status == Enum.Status.Finish);
-						}
-						else
-						{
-							Away.Players.Where(ps => ps.Id == player)
-								.FirstOrDefault().UpdateResult(-goalsAux, -yellowsAux, -redsAux,
-									-mvpsAux, Status == Enum.Status.Finish);
-						}
-					}
-				}
-				Home.UpdateCards(homeYellows, homeReds);
-				Away.UpdateCards(awayYellows, awayReds);
+			int homeYellows = events.Count(e => e.IsHomeEvent && e.Type == TypeEvent.YellowCard);
+			int homeReds = events.Count(e => e.IsHomeEvent && e.Type == TypeEvent.RedCard);
+			int awayYellows = events.Count(e => !e.IsHomeEvent && e.Type == TypeEvent.YellowCard);
+			int awayReds = events.Count(e => !e.IsHomeEvent && e.Type == TypeEvent.RedCard);
 
-				players = events.Select(ev => ev.RegisterPlayerId)
-					.Distinct().ToArray();
+			if (Status == Enum.Status.Finish)
+			{
+				homeYellows -= EventGames.Count(e => e.IsHomeEvent && e.Type == TypeEvent.YellowCard);
+				homeReds -= EventGames.Count(e => e.IsHomeEvent && e.Type == TypeEvent.RedCard);
+				awayYellows -= EventGames.Count(e => !e.IsHomeEvent && e.Type == TypeEvent.YellowCard);
+				awayReds -= EventGames.Count(e => !e.IsHomeEvent && e.Type == TypeEvent.RedCard);
+			}
 
-				foreach (var player in players)
-				{
-					isHome = Home.Players.Any(ps => ps.Id == player);
-					eventsAux = events.Where(ev => ev.RegisterPlayerId == player).ToArray();
-					goalsAux = eventsAux.Where(ev => ev.Type == TypeEvent.Goal).Count();
-					yellowsAux = eventsAux.Where(ev => ev.Type == TypeEvent.YellowCard).Count();
-					redsAux = eventsAux.Where(ev => ev.Type == TypeEvent.RedCard).Count();
-					mvpsAux = eventsAux.Where(ev => ev.Type == TypeEvent.MVP).Count();
-					if (isHome)
-					{
-						Home.Players.Where(ps => ps.Id == player)
-							.FirstOrDefault().UpdateResult(goalsAux,
-							yellowsAux, redsAux, mvpsAux, Status == Enum.Status.Finish);
-					}
-					else
-					{
-						Away.Players.Where(ps => ps.Id == player)
-							.FirstOrDefault().UpdateResult(goalsAux, yellowsAux, redsAux,
-								mvpsAux, Status == Enum.Status.Finish);
-					}
-				}
+			Home.UpdateCards(homeYellows, homeReds);
+			Away.UpdateCards(awayYellows, awayReds);
+		}
+
+		private void ApplyStats(EventGame[] eventGames, bool revert = false)
+		{
+			var players = eventGames.Select(ev => ev.RegisterPlayerId).Distinct();
+			foreach (var playerId in players)
+			{
+				bool isHome = Home.Players.Any(p => p.Id == playerId);
+				var playerEvents = eventGames.Where(ev => ev.RegisterPlayerId == playerId);
+
+				int mult = revert ? -1 : 1;
+				int goals = mult * playerEvents.Count(ev => ev.Type == TypeEvent.Goal);
+				int yellows = mult * playerEvents.Count(ev => ev.Type == TypeEvent.YellowCard);
+				int reds = mult * playerEvents.Count(ev => ev.Type == TypeEvent.RedCard);
+				int mvps = mult * playerEvents.Count(ev => ev.Type == TypeEvent.MVP);
+
+				var player = isHome ? Home.Players.First(p => p.Id == playerId)
+									: Away.Players.First(p => p.Id == playerId);
+
+				player.UpdateResult(goals, yellows, reds, mvps, Status == Enum.Status.Finish);
 			}
 		}
 
@@ -245,6 +220,14 @@ namespace Domain.Models
 			}
 		}
 
+		private void RegisterEventGame(EventGame[] events = null)
+		{
+			EventGames = new List<EventGame>();
+			if (events != null && events.Length > 0)
+			{
+				((List<EventGame>)EventGames).AddRange(events);
+			}
+		}
 		public static Match Factory(string id, string name, string groupId, int round,
 			string status = Enum.Status.Created,
 			string vacancyHomeId = null, string vacancyAwayId = null,

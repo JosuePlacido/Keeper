@@ -26,17 +26,17 @@ namespace Domain.Models
 
 			if (goalsScore == goalsAgainst)
 			{
-				Lastfive += ",draw";
+				IncrementLastFive("draw");
 				Points++;
 			}
 			else if (goalsScore > goalsAgainst)
 			{
-				Lastfive += ",win";
+				IncrementLastFive("win");
 				Points += 3;
 			}
 			else
 			{
-				Lastfive += ",lose";
+				IncrementLastFive("lose");
 			}
 
 			string[] lastResults = Lastfive.Split(",");
@@ -45,6 +45,11 @@ namespace Domain.Models
 				Lastfive = string.Join(",", lastResults.Skip(1).ToArray());
 			}
 			return this;
+		}
+
+		private void IncrementLastFive(string result)
+		{
+			Lastfive = string.IsNullOrEmpty(Lastfive) ? result : $"{Lastfive},{result}";
 		}
 
 		public Statistic UpdateResult(int goalsScoredDifference, int goalsAgainstDifference,
@@ -74,7 +79,7 @@ namespace Domain.Models
 
 			return this;
 		}
-		public Statistic UpdateNumbers(int? games = null, int? won = null, int? drowns = null,
+		public Statistic UpdateNumbers(int? games = null, int? won = null, int? draw = null,
 			int? lost = null, int? goalsScores = null, int? goalsAgainst = null,
 			int? goalsDifference = null, int? yellows = null, int? reds = null, int? points = null,
 			int? position = null)
@@ -83,8 +88,8 @@ namespace Domain.Models
 				Games = (int)games;
 			if (won != null)
 				Won = (int)won;
-			if (drowns != null)
-				Drowns = (int)drowns;
+			if (draw != null)
+				Draw = (int)draw;
 			if (lost != null)
 				Lost = (int)lost;
 			if (goalsScores != null)
@@ -121,7 +126,7 @@ namespace Domain.Models
 		}
 
 		public static Statistic Factory(string id, string teamSubscribeId, string groupId = null,
-			 TeamSubscribe teamSubscribe = null, int games = 0, int won = 0, int drowns = 0, int lost = 0,
+			 TeamSubscribe teamSubscribe = null, int games = 0, int won = 0, int draw = 0, int lost = 0,
 			 int goalsScores = 0, int position = 1, int goalsAgainst = 0,
 			 int goalsDifference = 0, int yellows = 0, int reds = 0, int points = 0,
 			 string lastfive = "", int LastPosition = 1, int rankMovement = 0)
@@ -134,7 +139,7 @@ namespace Domain.Models
 				TeamSubscribe = teamSubscribe,
 				Games = games,
 				Won = won,
-				Drowns = drowns,
+				Draw = draw,
 				Lost = lost,
 				GoalsScores = goalsScores,
 				Position = position,

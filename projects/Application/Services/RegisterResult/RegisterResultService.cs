@@ -35,29 +35,13 @@ namespace Application.Services.RegisterResult
 		public async Task<IServiceResponse> RegisterResult(MatchResultDTO dto)
 		{
 			IServiceResponse response = new ServiceResponse();
-			response.ValidationResult = new RegisterResultValidation().Validate(dto);
+			Match match = await _repo.GetByIdWithTeamsAndPlayers(dto.Id);
+			response.ValidationResult = new RegisterResultValidation(match).Validate(dto);
 			if (response.ValidationResult.IsValid)
 			{
-				Match match = await _repo.GetByIdWithTeamsAndPlayers(dto.Id);
 				match.RegisterResult(dto.GoalsHome, dto.GoalsAway, dto.GoalsPenaltyHome, dto.GoalsPenaltyAway,
 					dto.Events.Select((ev, index) => new EventGame(index, ev.Description
 						, ev.Type, ev.IsHomeEvent, ev.MatchId, ev.PlayerId)).ToArray());
-
-				if (match.AggregateGoalsHome == match.AggregateGoalsAway && match.FinalGame
-					&& match.Penalty)
-				{
-					if (match.GoalsPenaltyHome == null)
-					{
-						response.ValidationResult.Errors.Add(new ValidationFailure("GoalsPenaltyHome",
-							"Gols em penaltis do Mandante é obrigatório neste caso"));
-					}
-					if (match.GoalsPenaltyAway == null)
-					{
-						response.ValidationResult.Errors.Add(new ValidationFailure("GoalsPenaltyAway",
-							"Gols em penaltis do Visitante é obrigatório neste caso"));
-					}
-				}
-				if (response.ValidationResult.IsValid)
 				{
 					response.Value = await _repo.RegisterResult(match);
 					await _uow.Commit();
