@@ -24,15 +24,25 @@ namespace Infrastructure.CrossCutting.IoC
 				typeof(PlayerDTOProfile), typeof(RankDTOProfile),
 				typeof(SingleStatisticDTOProfile));
 
-			services.AddScoped<ApplicationContext>();
 			services.AddScoped<IUnitOfWork, UnitOfWork>();
-
 			services.AddScoped<ITeamService, TeamService>();
 			services.AddScoped<IPlayerService, PlayerService>();
 			services.AddScoped<IMatchService, MatchService>();
 			services.AddScoped<IRegisterResultService, RegisterResultService>();
 			services.AddScoped<IEditChampionshipService, EditChampionshipService>();
 			services.AddScoped<IChampionshipService, ChampionshipService>();
+			services.AddScoped<IRankingService, RankingService>();
+
+			services.AddScoped<IMatchDataProvider, MatchDataProvider>();
+
+			services.AddScoped<ITiebreakCriterion, PointsCriterion>();
+			services.AddScoped<ITiebreakCriterion, VictoryCriterion>();
+			services.AddScoped<ITiebreakCriterion, GoalsDifferenceCriterion>();
+			services.AddScoped<ITiebreakCriterion, GoalsScoredCriterion>();
+			services.AddScoped<ITiebreakCriterion, GoalsAgainstCriterion>();
+			services.AddScoped<ITiebreakCriterion, YellowCardCriterion>();
+			services.AddScoped<ITiebreakCriterion, RedCardCriterion>();
+			services.AddScoped<ITiebreakCriterion, DirectMatchCriterion>();
 		}
 	}
 }

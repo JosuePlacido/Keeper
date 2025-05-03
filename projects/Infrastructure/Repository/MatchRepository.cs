@@ -13,10 +13,17 @@ namespace Infrastructure.Repository
 	{
 		public MatchRepository(ApplicationContext Context) : base(Context) { }
 
+		public async Task<Match[]> GetAllMatchesPendingInGroups(string[] groupsId)
+		{
+			return await _context.Matchs.AsNoTracking().Where(m => groupsId.Contains(m.GroupId))
+				.Where(m => m.Status != Status.Finish && m.Status != Status.Canceled)
+				.OrderBy(m => m.Round).ToArrayAsync();
+		}
+
 		public async Task<Match[]> GetByGroupAndTeams(string group, string[] teams)
 		{
 			return await _context.Matchs.AsNoTracking().Where(m => m.GroupId == group)
-				.Where(m => teams.Contains(m.HomeId) && teams.Contains(m.AwayId))
+				.Where(m => teams.Contains(m.HomeId) && teams.Contains(m.AwayId) && m.Status == Status.Finish)
 				.OrderBy(m => m.Round).ToArrayAsync();
 		}
 
