@@ -1,21 +1,13 @@
 using System.Net;
 using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-using Keeper.Api;
-using Keeper.Application.Contract;
-using Keeper.Application.Services.CreateChampionship;
-using Keeper.Domain.Models;
-using Keeper.Application.DTO;
-using Microsoft.AspNetCore.Mvc;
+using Api;
+using Domain.Models;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Newtonsoft.Json;
-using Test.DataExamples;
-using Test.Utils;
 using Xunit;
-using System.Linq;
+using Application.Services.CRUDTeam;
 
-namespace Keeper.Test.EndToEnd
+namespace Test.EndToEnd
 {
 	[Collection("WebApi Collection")]
 	public class TestTeamListAvailablePaginationRequest : IClassFixture<WebApplicationFactory<Startup>>

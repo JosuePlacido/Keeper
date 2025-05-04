@@ -2,14 +2,14 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using Keeper.Api;
-using Keeper.Application.Services.EditChampionship;
-using Keeper.Domain.Models;
+using Api;
+using Application.Services.EditChampionship;
+using Domain.Models;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Newtonsoft.Json;
 using Xunit;
 
-namespace Keeper.Test.EndToEnd
+namespace Test.EndToEnd
 {
 	[Collection("WebApi Collection")]
 	public class TestRenamesRequests : IClassFixture<WebApplicationFactory<Startup>>

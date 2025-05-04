@@ -2,19 +2,21 @@
 using System.Linq;
 using Xunit;
 using Xunit.Abstractions;
-using Keeper.Domain.Models;
-using Keeper.Infrastructure.Data;
-using Keeper.Application.Services.RegisterResult;
-using Keeper.Domain.Enum;
-using Keeper.Application.Contract;
+using Domain.Models;
+using Infrastructure.Data;
+using Application.Services.RegisterResult;
+using Domain.Enum;
 using MediatR;
-using Keeper.Domain.Events;
+using Domain.Events;
 using System.Threading.Tasks;
+using Application.EventHandler;
+using Application.Contract;
 
-namespace Keeper.Test.Integration.Application
+namespace Test.Integration.Application
 {
 	public class TestRegisterResultApplication : IClassFixture<SharedDatabaseFixture>
 	{
+		//TODO Corrigir teste
 		private readonly ITestOutputHelper _output;
 		public SharedDatabaseFixture Fixture { get; }
 		public TestRegisterResultApplication(SharedDatabaseFixture fixture, ITestOutputHelper output)
@@ -98,12 +100,12 @@ namespace Keeper.Test.Integration.Application
 			Assert.Equal(1, player.YellowCard);
 
 			Assert.Equal(1, team[0].Won);
-			Assert.Equal(1, team[0].Drowns);
+			Assert.Equal(1, team[0].Draw);
 			Assert.Equal(2, team[0].Games);
 			Assert.Equal(2, team[0].GoalsScores);
 			Assert.Equal(2, team[0].GoalsDifference);
 			Assert.Equal(1, team[1].Lost);
-			Assert.Equal(1, team[1].Drowns);
+			Assert.Equal(1, team[1].Draw);
 			Assert.Equal(2, team[1].Games);
 			Assert.Equal(2, team[1].GoalsAgainst);
 			Assert.Equal(-2, team[1].GoalsDifference);
@@ -116,14 +118,13 @@ namespace Keeper.Test.Integration.Application
 		{
 			Match match = SeedData.Matches[1];
 			match.RegisterResult(0, 2);
-			RegisterResultDomainEventHandler handler;
-			RegisterResultEvent eventHandler = new RegisterResultEvent(match);
+			PersistMatchResultDomainEventHandler handler;
+			PersistStatisticsMatchResultEvent eventHandler = new PersistStatisticsMatchResultEvent(match);
 			using (var transaction = Fixture.Connection.BeginTransaction())
 			{
-
 				using (var context = Fixture.CreateContext(transaction))
 				{
-					handler = new RegisterResultDomainEventHandler(new UnitOfWork(context, new Moq.Mock<IMediator>().Object));
+					handler = new PersistMatchResultDomainEventHandler(new UnitOfWork(context, new Moq.Mock<IMediator>().Object));
 					var cltToken = new System.Threading.CancellationToken();
 					Task.Run(async () => await handler.Handle(eventHandler, cltToken)).Wait();
 					context.SaveChanges();
@@ -133,7 +134,7 @@ namespace Keeper.Test.Integration.Application
 					Assert.Equal(1, spfc.Position);
 
 					Assert.Equal(1, cru.Lost);
-					Assert.Equal(1, cru.Drowns);
+					Assert.Equal(1, cru.Draw);
 					Assert.Equal(2, cru.Games);
 					Assert.Equal(2, cru.GoalsAgainst);
 					Assert.Equal(-2, cru.GoalsDifference);
@@ -141,7 +142,7 @@ namespace Keeper.Test.Integration.Application
 					Assert.Equal(-1, cru.RankMovement);
 
 					Assert.Equal(1, spfc.Won);
-					Assert.Equal(1, spfc.Drowns);
+					Assert.Equal(1, spfc.Draw);
 					Assert.Equal(2, spfc.Games);
 					Assert.Equal(2, spfc.GoalsScores);
 					Assert.Equal(2, spfc.GoalsDifference);
@@ -160,13 +161,13 @@ namespace Keeper.Test.Integration.Application
 			Group group;
 			Match match = SeedData.Matches[1];
 			match.RegisterResult(0, 2);
-			UpdateChampionshipDomainEventHandler handler;
-			UpdateChampionshipEvent eventHandler = new UpdateChampionshipEvent("g1", 2);
+			AdvanceChampionshipDomainEventHandler handler;
+			AdvanceChampionshipEvent eventHandler = new AdvanceChampionshipEvent("g1", 2);
 			using (var transaction = Fixture.Connection.BeginTransaction())
 			{
 				using (var context = Fixture.CreateContext(transaction))
 				{
-					handler = new UpdateChampionshipDomainEventHandler(new UnitOfWork(context, new Moq.Mock<IMediator>().Object));
+					handler = new AdvanceChampionshipDomainEventHandler(new UnitOfWork(context, new Moq.Mock<IMediator>().Object));
 					var cltToken = new System.Threading.CancellationToken();
 					Task.Run(async () => await handler.Handle(eventHandler, cltToken)).Wait();
 					context.SaveChanges();

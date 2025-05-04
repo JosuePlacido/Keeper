@@ -1,17 +1,17 @@
 using System.Net.Http;
 using System.Text;
-using Keeper.Api;
-using Keeper.Domain.Models;
+using Api;
+using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Newtonsoft.Json;
 using Test.DataExamples;
 using Xunit;
-using Keeper.Domain.Enum;
+using Domain.Enum;
 using Test.Utils;
-using Keeper.Application.Services.EditChampionship;
+using Application.Services.EditChampionship;
 
-namespace Keeper.Test.EndToEnd
+namespace Test.EndToEnd
 {
 	[Collection("WebApi Collection")]
 	public class TestUpdateSquad : IClassFixture<WebApplicationFactory<Startup>>

@@ -1,18 +1,18 @@
 
-using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
-using Keeper.Api;
+using Api;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using System;
 using System.Linq;
-using Keeper.Infrastructure.Data;
+using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Keeper.Domain.Models;
+using Domain.Models;
+using System.IO;
 
-namespace Keeper.Test.EndToEnd
+namespace Test.EndToEnd
 {
 	public sealed class CustomWebApplicationFactory : WebApplicationFactory<Startup>
 	{
@@ -25,10 +25,17 @@ namespace Keeper.Test.EndToEnd
 						typeof(DbContextOptions<ApplicationContext>));
 
 				services.Remove(descriptor);
+				IConfigurationRoot configuration = new ConfigurationBuilder()
+					.SetBasePath(Path.Combine(Directory.GetCurrentDirectory()))
+					.AddJsonFile("appsettings.Test.json", false)
+					.AddEnvironmentVariables()
+					.Build();
+
+				string connectionString = configuration.GetValue<string>("PersistenceModule:DefaultConnection");
 
 				services.AddDbContext<ApplicationContext>(options =>
 				{
-					options.UseSqlServer("Data Source=DESKTOP-LCEM2JV;Initial Catalog=bd_keeper;Integrated Security=True");
+					options.UseSqlServer(connectionString);
 				});
 
 				var sp = services.BuildServiceProvider();

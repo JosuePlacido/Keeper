@@ -41,6 +41,14 @@
   </ItemGroup>
 
   <ItemGroup>
+	<None Update="..\Api\appsettings.development.json">
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  <Link>appsettings.development.json</Link>
+	</None>
+  </ItemGroup>
+
+
+  <ItemGroup>
     <Folder Include="UnitTest\Application\Service\" />
   </ItemGroup>
 

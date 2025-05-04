@@ -1,17 +1,17 @@
 using System.Net;
 using System.Net.Http;
 using System.Text;
-using Keeper.Api;
-using Keeper.Domain.Models;
-using Keeper.Application.DTO;
+using Api;
+using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Newtonsoft.Json;
 using Test.DataExamples;
 using Xunit;
 using Test.Utils;
+using Application.Services.CRUDTeam;
 
-namespace Keeper.Test.EndToEnd
+namespace Test.EndToEnd
 {
 	[Collection("WebApi Collection")]
 	public class TeamCRUDTests : IClassFixture<WebApplicationFactory<Startup>>

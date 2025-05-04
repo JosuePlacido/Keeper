@@ -1,13 +1,12 @@
 using System.Net;
 using System.Net.Http;
-using System.Threading.Tasks;
-using Keeper.Api;
-using Keeper.Application.Services.EditChampionship;
+using Api;
+using Application.Services.EditChampionship;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Newtonsoft.Json;
 using Xunit;
 
-namespace Keeper.Test.EndToEnd
+namespace Test.EndToEnd
 {
 	[Collection("WebApi Collection")]
 	public class GetSquadsRequests : IClassFixture<WebApplicationFactory<Startup>>

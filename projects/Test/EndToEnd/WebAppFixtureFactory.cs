@@ -1,6 +1,6 @@
 using System;
 using Xunit;
-namespace Keeper.Test.EndToEnd
+namespace Test.EndToEnd
 {
 
 	[CollectionDefinition("WebApi Collection")]

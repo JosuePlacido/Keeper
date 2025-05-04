@@ -1,16 +1,16 @@
 using System.Net;
 using System.Net.Http;
 using System.Text;
-using Keeper.Api;
-using Keeper.Application.Services.RegisterResult;
-using Keeper.Domain.Enum;
-using Keeper.Domain.Models;
+using Api;
+using Application.Services.RegisterResult;
+using Domain.Enum;
+using Domain.Models;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Newtonsoft.Json;
 using Test.Utils;
 using Xunit;
 
-namespace Keeper.Test.EndToEnd
+namespace Test.EndToEnd
 {
 	[Collection("WebApi Collection")]
 	public class TestRegisterResultRequests : IClassFixture<WebApplicationFactory<Startup>>

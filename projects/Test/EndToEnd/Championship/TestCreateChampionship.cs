@@ -1,16 +1,16 @@
 using System.Net;
 using System.Net.Http;
 using System.Text;
-using Keeper.Api;
-using Keeper.Application.DTO;
+using Api;
+using Application.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Newtonsoft.Json;
 using Xunit;
-using Keeper.Test.DataExamples;
-using Keeper.Application.Services.CreateChampionship;
+using Test.DataExamples;
+using Application.Services.CreateChampionship;
 
-namespace Keeper.Test.EndToEnd
+namespace Test.EndToEnd
 {
 	[Collection("WebApi Collection")]
 	public class TestCreateChampionship : IClassFixture<WebApplicationFactory<Startup>>
