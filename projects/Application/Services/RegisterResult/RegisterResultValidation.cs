@@ -22,16 +22,27 @@ namespace Application.Services.RegisterResult
 		}
 		protected void ValidatePenaltiesIfRequired(Match match)
 		{
-			if (match.FinalGame && match.Penalty &&
-				match.AggregateGoalsHome == match.AggregateGoalsAway)
+			RuleFor(m => m).Custom((dto, context) =>
 			{
-				RuleFor(m => m.GoalsPenaltyHome)
-					.NotNull().WithMessage("Gols em penaltis do mandante são obrigatórios");
-				RuleFor(m => m.GoalsPenaltyAway)
-					.NotNull().WithMessage("Gols em penaltis do visitante são obrigatórios");
-				RuleFor(m => m).Must(m => m.GoalsPenaltyHome != m.GoalsPenaltyAway)
-					.NotNull().WithMessage("Gols em penaltis so times precisam ser diferentes");
-			}
+				int totalHome = dto.GoalsHome + (match.AggregateGoalsHome ?? 0);
+				int totalAway = dto.GoalsAway + (match.AggregateGoalsAway ?? 0);
+
+				if (match.FinalGame && match.Penalty && totalHome == totalAway)
+				{
+					if (dto.GoalsPenaltyHome == dto.GoalsPenaltyAway &&
+						dto.GoalsPenaltyHome != null)
+					{
+						context.AddFailure("GoalsPenaltyHome", "Gols em penaltis dos times precisam ser diferentes");
+						context.AddFailure("GoalsPenaltyAway", "Gols em penaltis dos times precisam ser diferentes");
+					}
+
+					if (dto.GoalsPenaltyHome == null)
+						context.AddFailure("GoalsPenaltyHome", "Gols em penaltis do mandante são obrigatórios");
+
+					if (dto.GoalsPenaltyAway == null)
+						context.AddFailure("GoalsPenaltyAway", "Gols em penaltis do visitante são obrigatórios");
+				}
+			});
 		}
 	}
 	public class EventGameValidator : AbstractValidator<EventGameDTO>
