@@ -1,9 +1,9 @@
 using Xunit;
 using Xunit.Abstractions;
-using Keeper.Infrastructure.Repository;
-using Keeper.Domain.Models;
+using Infrastructure.Repository;
+using Domain.Models;
 
-namespace Keeper.Test.UnitTest.Infra.Repositorys
+namespace Test.UnitTest.Infra.Repositorys
 {
 	public class GetMatchForRegisterResult : IClassFixture<SharedDatabaseFixture>
 	{

@@ -1,15 +1,14 @@
 
 using System.Linq;
-using Keeper.Application.Services;
 using AutoMapper;
 using Xunit;
 using Xunit.Abstractions;
-using Keeper.Infrastructure.Repository;
-using Keeper.Infrastructure.CrossCutting.Adapter;
-using Keeper.Infrastructure.Data;
-using Keeper.Application.Services.EditChampionship;
+using Infrastructure.Repository;
+using Infrastructure.CrossCutting.Adapter;
+using Infrastructure.Data;
+using Application.Services.EditChampionship;
 
-namespace Keeper.Test.Integration.Application
+namespace Test.Integration.Application
 {
 	public class PlayerSubscribeServiceList : IClassFixture<SharedDatabaseFixture>
 	{
@@ -22,7 +21,8 @@ namespace Keeper.Test.Integration.Application
 		public void Get_PlayerList_ReturnList()
 		{
 			SquadEditDTO[] result = null;
-			using (var context = Fixture.CreateContext())
+
+			Fixture.RunInTransaction(context =>
 			{
 				ChampionshipRepository repo = new ChampionshipRepository(context);
 				MapperConfiguration config = new MapperConfiguration(cfg =>
@@ -34,19 +34,19 @@ namespace Keeper.Test.Integration.Application
 					.FirstOrDefault().Id;
 				result = new EditChampionshipService(mapper, new UnitOfWork(context, null))
 					.GetSquads(champ).Result;
-			}
-			Assert.Equal(2, result.Length);
-			Assert.Equal(6, result.SelectMany(ts => ts.Players).Count());
+				Assert.Equal(2, result.Length);
+				Assert.Equal(6, result.SelectMany(ts => ts.Players).Count());
+			});
 		}
 		[Fact]
 		public void Get_PlayerListINvalidChampionchip_ReturnErrors()
 		{
-			using (var context = Fixture.CreateContext())
+			Fixture.RunInTransaction(context =>
 			{
 				SquadEditDTO[] result = new EditChampionshipService(null, new UnitOfWork(context, null))
 					.GetSquads("player").Result;
 				Assert.Empty(result);
-			}
+			});
 		}
 	}
 }

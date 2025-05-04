@@ -1,10 +1,10 @@
 using Xunit;
 using Xunit.Abstractions;
-using Keeper.Domain.Models;
-using Keeper.Infrastructure.DAO;
+using Domain.Models;
+using Infrastructure.DAO;
 using System.Linq;
 
-namespace Keeper.Test.UnitTest.Infra.DAO
+namespace Test.UnitTest.Infra.DAO
 {
 	public class TestGetStatisticForTeam : IClassFixture<SharedDatabaseFixture>
 	{

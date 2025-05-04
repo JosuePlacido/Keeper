@@ -2,13 +2,13 @@ using System.Linq;
 using Xunit;
 using Newtonsoft.Json;
 using Xunit.Abstractions;
-using Keeper.Infrastructure.Repository;
-using Keeper.Domain.Models;
-using Keeper.Application.Contract;
-using Keeper.Infrastructure.DAO;
-using Keeper.Domain.Enum;
+using Infrastructure.Repository;
+using Domain.Models;
+using Application.Contract.DAL;
+using Infrastructure.DAO;
+using Domain.Enum;
 
-namespace Keeper.Test.UnitTest.Infra.DAO
+namespace Test.UnitTest.Infra.DAO
 {
 	public class TestUpdateTeamSubscribe : IClassFixture<SharedDatabaseFixture>
 	{

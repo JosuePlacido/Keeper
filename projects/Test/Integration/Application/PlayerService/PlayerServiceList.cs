@@ -1,18 +1,16 @@
 
 using System.Linq;
-using Keeper.Application.Services;
-using AutoMapper;
 using Xunit;
 using Xunit.Abstractions;
-using Keeper.Infrastructure.Repository;
-using Keeper.Infrastructure.DAO;
+using Infrastructure.Repository;
+using Infrastructure.DAO;
 using System.Collections.Generic;
-using Keeper.Domain.Models;
-using Keeper.Application.DTO;
+using Domain.Models;
 using Newtonsoft.Json;
-using Keeper.Infrastructure.Data;
+using Infrastructure.Data;
+using Application.Services.CRUDPlayer;
 
-namespace Keeper.Test.Integration.Application
+namespace Test.Integration.Application
 {
 	public class PlayerAvailableServiceList : IClassFixture<SharedDatabaseFixture>
 	{
@@ -24,7 +22,7 @@ namespace Keeper.Test.Integration.Application
 		[Fact]
 		public void Get_PlayerList_PageAndTakes()
 		{
-			using (var context = Fixture.CreateContext())
+			Fixture.RunInTransaction(context =>
 			{
 				PlayerRepository repo = new PlayerRepository(context);
 				Player[] expected = repo.GetAll().Result;
@@ -49,12 +47,12 @@ namespace Keeper.Test.Integration.Application
 				finalList.AddRange(result.Players.Select(ts => ts.Player));
 				Assert.Equal(expected.Length, finalList.Count);
 				Assert.All(finalList, item => expected.Contains(item));
-			}
+			});
 		}
 		[Fact]
 		public void Get_PlayerList_WithTerms()
 		{
-			using (var context = Fixture.CreateContext())
+			Fixture.RunInTransaction(context =>
 			{
 				var result = new PlayerService(null, new UnitOfWork(context, null))
 					.GetAvailables("player").Result;
@@ -63,7 +61,7 @@ namespace Keeper.Test.Integration.Application
 				Assert.True(result.Terms == "player");
 				Assert.True(result.Players.Length == expected.Count());
 				Assert.All(result.Players.Select(ps => ps.Player), item => expected.Contains(item));
-			}
+			});
 		}
 		[Fact]
 		public void Get_PlayerList_NotInChampionship()
@@ -71,18 +69,18 @@ namespace Keeper.Test.Integration.Application
 			PlayerAvailablePaginationDTO result = null;
 			var expected = SeedData.Players;
 			string championship = "c1";
-			using (var context = Fixture.CreateContext())
-			{
-				var prayers = new PlayerRepository(context).GetAll().Result;
-				_output.WriteLine(JsonConvert.SerializeObject(prayers, Formatting.Indented));
-				result = new PlayerService(null, new UnitOfWork(context, null))
-					.GetAvailables(championship: championship).Result;
-			}
-			Assert.Equal(5, result.Total);
-			Assert.Equal(result.ExcludeFromChampionship, championship);
-			Assert.Equal(5, result.Players.Length);
-			Assert.All(result.Players.Select(PlayerService => PlayerService.Player),
-				 item => expected.Contains(item));
+			Fixture.RunInTransaction(context =>
+				{
+					var prayers = new PlayerRepository(context).GetAll().Result;
+					_output.WriteLine(JsonConvert.SerializeObject(prayers, Formatting.Indented));
+					result = new PlayerService(null, new UnitOfWork(context, null))
+						.GetAvailables(championship: championship).Result;
+					Assert.Equal(5, result.Total);
+					Assert.Equal(result.ExcludeFromChampionship, championship);
+					Assert.Equal(5, result.Players.Length);
+					Assert.All(result.Players.Select(PlayerService => PlayerService.Player),
+						 item => expected.Contains(item));
+				});
 		}
 	}
 }

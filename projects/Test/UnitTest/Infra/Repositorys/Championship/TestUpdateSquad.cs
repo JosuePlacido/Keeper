@@ -1,13 +1,11 @@
-using System.Linq;
 using Xunit;
 using Newtonsoft.Json;
 using Xunit.Abstractions;
-using Keeper.Infrastructure.Repository;
-using Keeper.Domain.Models;
-using Keeper.Domain.Enum;
-using System.Threading.Tasks;
+using Infrastructure.Repository;
+using Domain.Models;
+using Domain.Enum;
 
-namespace Keeper.Test.UnitTest.Infra.Repositorys
+namespace Test.UnitTest.Infra.Repositorys
 {
 	public class TestUpdateSquad : IClassFixture<SharedDatabaseFixture>
 	{

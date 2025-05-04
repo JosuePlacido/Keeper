@@ -1,20 +1,14 @@
 
 using System.Linq;
-using Keeper.Application.Services;
-using AutoMapper;
 using Xunit;
 using Xunit.Abstractions;
-using Keeper.Infrastructure.Repository;
-using Keeper.Infrastructure.DAO;
+using Infrastructure.Repository;
 using System.Collections.Generic;
-using Keeper.Domain.Models;
-using Keeper.Application.DTO;
-using Microsoft.AspNetCore.Mvc;
-using Keeper.Infrastructure.CrossCutting.Adapter;
-using Newtonsoft.Json;
-using Keeper.Infrastructure.Data;
+using Domain.Models;
+using Infrastructure.Data;
+using Application.Services.CRUDTeam;
 
-namespace Keeper.Test.Integration.Application
+namespace Test.Integration.Application
 {
 	public class TestTeamsAvailableForChampionship : IClassFixture<SharedDatabaseFixture>
 	{
@@ -29,7 +23,9 @@ namespace Keeper.Test.Integration.Application
 			Team[] expected = SeedData.Teams.Skip(4).Take(2).ToArray();
 			TeamPaginationDTO result = null;
 			string champ = SeedData.Championship.Id;
-			using (var context = Fixture.CreateContext())
+
+			using (var transaction = Fixture.Connection.BeginTransaction())
+			using (var context = Fixture.CreateContext(transaction))
 			{
 				result = new TeamService(null, new UnitOfWork(context, null))
 					.GetTeamsAvailablesForChampionship("", champ, 1, 30).Result;
@@ -41,7 +37,9 @@ namespace Keeper.Test.Integration.Application
 		{
 			Team[] expected = SeedData.Teams.OrderBy(t => t.Name).ToArray();
 			TeamPaginationDTO result = null;
-			using (var context = Fixture.CreateContext())
+
+			using (var transaction = Fixture.Connection.BeginTransaction())
+			using (var context = Fixture.CreateContext(transaction))
 			{
 				result = new TeamService(null, new UnitOfWork(context, null))
 					.GetTeamsAvailablesForChampionship("", "", 1, 30).Result;
@@ -56,7 +54,9 @@ namespace Keeper.Test.Integration.Application
 			int LastPage = expected.Length % 2;
 			TeamPaginationDTO result = null;
 			List<Team> finalList = new List<Team>();
-			using (var context = Fixture.CreateContext())
+
+			using (var transaction = Fixture.Connection.BeginTransaction())
+			using (var context = Fixture.CreateContext(transaction))
 			{
 				var service = new TeamService(null, new UnitOfWork(context, null));
 				for (int p = 1; p <= pages; p++)
@@ -80,7 +80,9 @@ namespace Keeper.Test.Integration.Application
 		[Fact]
 		public void Get_TeamList_WithTerms()
 		{
-			using (var context = Fixture.CreateContext())
+
+			using (var transaction = Fixture.Connection.BeginTransaction())
+			using (var context = Fixture.CreateContext(transaction))
 			{
 				TeamRepository repo = new TeamRepository(context);
 				var result = new TeamService(null, new UnitOfWork(context, null))

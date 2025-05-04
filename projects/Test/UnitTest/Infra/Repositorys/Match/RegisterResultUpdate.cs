@@ -1,12 +1,11 @@
 using System.Linq;
-using Keeper.Domain.Enum;
-using Keeper.Domain.Models;
-using Keeper.Infrastructure.Repository;
-using Keeper.Test;
+using Domain.Enum;
+using Domain.Models;
+using Infrastructure.Repository;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Keeper.Test.UnitTest.Infra.Repositorys
+namespace Test.UnitTest.Infra.Repositorys
 {
 	public class RegisterResultUpdate : IClassFixture<SharedDatabaseFixture>
 	{

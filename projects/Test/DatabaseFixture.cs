@@ -1,14 +1,12 @@
-using Keeper.Domain.Models;
-using Keeper.Infrastructure.Data;
-using Keeper.Test;
+using Domain.Models;
+using Infrastructure.Data;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualBasic;
 using System;
 using System.Data.Common;
-using System.Linq;
+using System.Threading.Tasks;
 
-namespace Keeper.Test
+namespace Test
 {
 	public class SharedDatabaseFixture : IDisposable
 	{
@@ -34,6 +32,20 @@ namespace Keeper.Test
 
 			return context;
 		}
+		public async Task RunInTransactionAsync(Func<ApplicationContext, Task> testLogic)
+		{
+			using var transaction = Connection.BeginTransaction();
+			using var context = CreateContext(transaction);
+			await testLogic(context);
+		}
+		public void RunInTransaction(Action<ApplicationContext> testLogic)
+		{
+			using var transaction = Connection.BeginTransaction();
+			using var context = CreateContext(transaction);
+			testLogic(context);
+		}
+
+
 
 		private void Seed(ApplicationContext context)
 		{

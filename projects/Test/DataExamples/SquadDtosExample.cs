@@ -1,5 +1,5 @@
-using Keeper.Application.Services.EditChampionship;
-using Keeper.Domain.Enum;
+using Application.Services.EditChampionship;
+using Domain.Enum;
 
 namespace Test.DataExamples
 {

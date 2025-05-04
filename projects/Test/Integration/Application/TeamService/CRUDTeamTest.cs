@@ -1,19 +1,17 @@
 using System.Linq;
-using Keeper.Application.Services;
 using AutoMapper;
-using Keeper.Domain.Models;
-using Keeper.Infrastructure.CrossCutting.Adapter;
-using Keeper.Application.DTO;
-using Keeper.Infrastructure.Repository;
-using Keeper.Test;
+using Domain.Models;
+using Infrastructure.CrossCutting.Adapter;
+using Infrastructure.Repository;
 using Test.DataExamples;
 using Xunit;
 using Xunit.Abstractions;
-using Keeper.Infrastructure.DAO;
-using Keeper.Infrastructure.Data;
-using Keeper.Application.Contract;
+using Infrastructure.Data;
 
-namespace Keeper.Test.Integration.Application
+using Application.Services.CRUDTeam;
+using Application.Contract;
+
+namespace Test.Integration.Application
 {
 	public class CRUDTeamTest : IClassFixture<SharedDatabaseFixture>
 	{
@@ -97,34 +95,34 @@ namespace Keeper.Test.Integration.Application
 		[Fact]
 		public void GetTeam()
 		{
-			using (var context = Fixture.CreateContext())
-			{
-				TeamRepository repo = new TeamRepository(context);
-				MapperConfiguration config = new MapperConfiguration(cfg =>
+			Fixture.RunInTransaction(context =>
 				{
-					cfg.AddProfile<TeamDTOProfile>();
+					TeamRepository repo = new TeamRepository(context);
+					MapperConfiguration config = new MapperConfiguration(cfg =>
+					{
+						cfg.AddProfile<TeamDTOProfile>();
+					});
+					IMapper mapper = config.CreateMapper();
+					Team test = SeedData.Teams[0];
+					Team result = new TeamService(mapper, new UnitOfWork(context, null)).Get(test.Id).Result;
+					Assert.NotNull(result);
+					Assert.Equal(test, result);
 				});
-				IMapper mapper = config.CreateMapper();
-				Team test = SeedData.Teams[0];
-				Team result = new TeamService(mapper, new UnitOfWork(context, null)).Get(test.Id).Result;
-				Assert.NotNull(result);
-				Assert.Equal(test, result);
-			}
 		}
 		[Fact]
 		public void ListTeam()
 		{
-			using (var context = Fixture.CreateContext())
-			{
-				TeamRepository repo = new TeamRepository(context);
-				MapperConfiguration config = new MapperConfiguration(cfg =>
+			Fixture.RunInTransaction(context =>
 				{
-					cfg.AddProfile<TeamDTOProfile>();
+					TeamRepository repo = new TeamRepository(context);
+					MapperConfiguration config = new MapperConfiguration(cfg =>
+					{
+						cfg.AddProfile<TeamDTOProfile>();
+					});
+					IMapper mapper = config.CreateMapper();
+					Team[] result = new TeamService(mapper, new UnitOfWork(context, null)).List().Result;
+					Assert.NotEmpty(result);
 				});
-				IMapper mapper = config.CreateMapper();
-				Team[] result = new TeamService(mapper, new UnitOfWork(context, null)).List().Result;
-				Assert.NotEmpty(result);
-			}
 		}
 	}
 }

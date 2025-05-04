@@ -1,15 +1,14 @@
 using System.Linq;
-using Keeper.Application.Services;
 using AutoMapper;
-using Keeper.Domain.Models;
-using Keeper.Infrastructure.CrossCutting.Adapter;
-using Keeper.Application.DTO;
+using Domain.Models;
+using Infrastructure.CrossCutting.Adapter;
 using Test.DataExamples;
 using Xunit;
 using Xunit.Abstractions;
-using Keeper.Infrastructure.Data;
+using Infrastructure.Data;
+using Application.Services.CRUDPlayer;
 
-namespace Keeper.Test.Integration.Application
+namespace Test.Integration.Application
 {
 	public class CRUDPlayerTest : IClassFixture<SharedDatabaseFixture>
 	{
@@ -22,9 +21,9 @@ namespace Keeper.Test.Integration.Application
 		public void TestCreatePlayer()
 		{
 			Player result = null;
-			using (var context = Fixture.CreateContext())
+			using (var transaction = Fixture.Connection.BeginTransaction())
 			{
-				using (var transaction = context.Database.BeginTransaction())
+				using (var context = Fixture.CreateContext(transaction))
 				{
 					var config = new MapperConfiguration(cfg =>
 					{
@@ -44,9 +43,9 @@ namespace Keeper.Test.Integration.Application
 		[Fact]
 		public void UpdatePlayer()
 		{
-			using (var context = Fixture.CreateContext())
+			using (var transaction = Fixture.Connection.BeginTransaction())
 			{
-				using (var transaction = context.Database.BeginTransaction())
+				using (var context = Fixture.CreateContext(transaction))
 				{
 					PlayerUpdateDTO test = PlayerDTODataExample.PlayerUpdateNameOnly;
 					test.Id = SeedData.Players[4].Id;
@@ -68,9 +67,9 @@ namespace Keeper.Test.Integration.Application
 		[Fact]
 		public void DeletePlayer()
 		{
-			using (var context = Fixture.CreateContext())
+			using (var transaction = Fixture.Connection.BeginTransaction())
 			{
-				using (var transaction = context.Database.BeginTransaction())
+				using (var context = Fixture.CreateContext(transaction))
 				{
 					MapperConfiguration config = new MapperConfiguration(cfg =>
 					{
@@ -91,24 +90,26 @@ namespace Keeper.Test.Integration.Application
 		[Fact]
 		public void GetPlayer()
 		{
-			using (var context = Fixture.CreateContext())
+			Fixture.RunInTransaction(context =>
 			{
-				MapperConfiguration config = new MapperConfiguration(cfg =>
 				{
-					cfg.AddProfile<PlayerDTOProfile>();
-				});
-				IMapper mapper = config.CreateMapper();
-				Player test = SeedData.Players[0];
-				Player result = new PlayerService(mapper, new UnitOfWork(context, null))
-					.Get(test.Id).Result;
-				Assert.NotNull(result);
-				Assert.Equal(test, result);
-			}
+					MapperConfiguration config = new MapperConfiguration(cfg =>
+					{
+						cfg.AddProfile<PlayerDTOProfile>();
+					});
+					IMapper mapper = config.CreateMapper();
+					Player test = SeedData.Players[0];
+					Player result = new PlayerService(mapper, new UnitOfWork(context, null))
+						.Get(test.Id).Result;
+					Assert.NotNull(result);
+					Assert.Equal(test, result);
+				}
+			});
 		}
 		[Fact]
 		public void ListPlayer()
 		{
-			using (var context = Fixture.CreateContext())
+			Fixture.RunInTransaction(context =>
 			{
 				MapperConfiguration config = new MapperConfiguration(cfg =>
 				{
@@ -118,7 +119,7 @@ namespace Keeper.Test.Integration.Application
 				PlayerSubscribe[] result = new PlayerService(mapper, new UnitOfWork(context, null))
 					.GetAvailables().Result.Players;
 				Assert.NotEmpty(result);
-			}
+			});
 		}
 	}
 }

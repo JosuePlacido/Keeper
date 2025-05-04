@@ -1,10 +1,9 @@
 using System.Linq;
-using Keeper.Domain.Enum;
-using Keeper.Domain.Models;
-using Keeper.Test;
+using Domain.Enum;
+using Domain.Models;
 using Xunit;
 
-namespace Keeper.Test.UnitTest.Infra.Repositorys
+namespace Test.UnitTest.Infra.Repositorys
 {
 	internal class ValidChampionshipSetup : TheoryData<Championship>
 	{

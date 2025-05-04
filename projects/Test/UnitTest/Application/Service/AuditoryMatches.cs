@@ -1,14 +1,11 @@
 
 using System.Linq;
-using Keeper.Application.Services;
-using AutoMapper;
 using Xunit;
 using Xunit.Abstractions;
-using Keeper.Infrastructure.Data;
-using Keeper.Application.Services.CreateChampionship;
-using Keeper.Application.Services.MatchService;
+using Infrastructure.Data;
+using Application.Services.MatchService;
 
-namespace Keeper.Test.UnitTest.Application.Service
+namespace Test.UnitTest.Application.Service
 {
 	public class TestAuditoryMatches
 	{

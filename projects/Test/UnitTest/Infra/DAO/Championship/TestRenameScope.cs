@@ -2,12 +2,12 @@ using System.Linq;
 using Xunit;
 using Newtonsoft.Json;
 using Xunit.Abstractions;
-using Keeper.Domain.Models;
-using Keeper.Infrastructure.DAO;
+using Domain.Models;
+using Infrastructure.DAO;
 using Microsoft.EntityFrameworkCore;
-using Keeper.Application.Services.EditChampionship;
+using Application.Services.EditChampionship;
 
-namespace Keeper.Test.UnitTest.Infra.DAO
+namespace Test.UnitTest.Infra.DAO
 {
 	public class TestRenameScope : IClassFixture<SharedDatabaseFixture>
 	{

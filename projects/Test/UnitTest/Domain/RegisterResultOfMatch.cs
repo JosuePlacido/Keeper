@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
-using Keeper.Domain.Enum;
-using Keeper.Domain.Models;
-using Keeper.Test;
+using Domain.Enum;
+using Domain.Models;
+using Test;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Keeper.Test.UnitTest.Domain
+namespace Test.UnitTest.Domain
 {
 	public class RegisterResultOfMatch
 	{
@@ -79,7 +79,7 @@ namespace Keeper.Test.UnitTest.Domain
 
 			Assert.Equal(1, match.Home.Games);
 			Assert.Equal(1, match.Home.Won);
-			Assert.Equal(0, match.Home.Drowns);
+			Assert.Equal(0, match.Home.Draw);
 			Assert.Equal(0, match.Home.Lost);
 			Assert.Equal(3, match.Home.GoalsScores);
 			Assert.Equal(2, match.Home.GoalsAgainst);
@@ -88,7 +88,7 @@ namespace Keeper.Test.UnitTest.Domain
 			Assert.Equal(1, match.Home.Reds);
 			Assert.Equal(1, match.Away.Games);
 			Assert.Equal(0, match.Away.Won);
-			Assert.Equal(0, match.Away.Drowns);
+			Assert.Equal(0, match.Away.Draw);
 			Assert.Equal(1, match.Away.Lost);
 			Assert.Equal(2, match.Away.GoalsScores);
 			Assert.Equal(3, match.Away.GoalsAgainst);

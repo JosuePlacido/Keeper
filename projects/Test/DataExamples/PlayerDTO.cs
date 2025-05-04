@@ -1,4 +1,4 @@
-using Keeper.Application.DTO;
+using Application.Services.CRUDPlayer;
 
 namespace Test.DataExamples
 {

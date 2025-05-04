@@ -1,16 +1,16 @@
 
 using System.Linq;
-using Keeper.Application.Services;
+using Application.Services;
 using AutoMapper;
 using Xunit;
 using Xunit.Abstractions;
-using Keeper.Domain.Models;
-using Keeper.Domain.Enum;
-using Keeper.Test.DataExamples;
-using Keeper.Infrastructure.CrossCutting.Adapter;
-using Keeper.Application.Services.CreateChampionship;
+using Domain.Models;
+using Domain.Enum;
+using Test.DataExamples;
+using Infrastructure.CrossCutting.Adapter;
+using Application.Services.CreateChampionship;
 
-namespace Keeper.Test.UnitTest.Application.Validation
+namespace Test.UnitTest.Application.Validation
 {
 	public class CreateChampionshipValidationTest
 	{

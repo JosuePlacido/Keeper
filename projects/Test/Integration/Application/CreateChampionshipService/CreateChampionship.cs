@@ -2,19 +2,14 @@ using Xunit;
 using Xunit.Abstractions;
 using AutoMapper;
 using Newtonsoft.Json;
-using System.Linq;
-using Keeper.Application.DTO;
-using Keeper.Infrastructure.Repository;
-using Keeper.Infrastructure.CrossCutting.Adapter;
-using Keeper.Test.DataExamples;
-using Keeper.Application.Services;
-using FluentValidation.Results;
-using Keeper.Infrastructure.DAO;
-using Keeper.Application.Contract;
-using Keeper.Application.Services.CreateChampionship;
-using Keeper.Infrastructure.Data;
+using Infrastructure.Repository;
+using Infrastructure.CrossCutting.Adapter;
+using Test.DataExamples;
+using Application.Services.CreateChampionship;
+using Infrastructure.Data;
+using Application.Contract;
 
-namespace Keeper.Test.Integration.Application
+namespace Test.Integration.Application
 {
 	public class CreateChampionship : IClassFixture<SharedDatabaseFixture>
 	{

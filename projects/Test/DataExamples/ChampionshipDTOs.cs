@@ -1,8 +1,8 @@
-using Keeper.Application.Services.CreateChampionship;
-using Keeper.Domain.Enum;
+using Application.Services.CreateChampionship;
+using Domain.Enum;
 using System.Linq;
 
-namespace Keeper.Test.DataExamples
+namespace Test.DataExamples
 {
 	public static class ChampionshipCreateDTODataExamples
 	{

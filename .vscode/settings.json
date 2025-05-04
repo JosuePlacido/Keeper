@@ -4,5 +4,6 @@
 		"**/bin": true,
 		".vs": true,
 		"**/obj": true
-	}
+	},
+	"dotnet-test-explorer.testProjectPath": "Test/Test.csproj"
 }

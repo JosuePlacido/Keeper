@@ -1,9 +1,8 @@
 using System;
-using System.Linq;
-using Keeper.Domain.Enum;
-using Keeper.Domain.Models;
+using Domain.Enum;
+using Domain.Models;
 
-namespace Keeper.Test
+namespace Test
 {
 	public static class SeedData
 	{
@@ -28,13 +27,13 @@ namespace Keeper.Test
 						{
 					TeamSubscribe.Factory("ts1",Teams[4].Id,
 							championshipId:Championship.Id,
-							drowns: 2,
+							draw: 2,
 							games: 2,
 							yellows: 4,
 							status: Status.Champion),
 					TeamSubscribe.Factory("ts2",Teams[5].Id,
 							championshipId:Championship.Id,
-							drowns: 2,
+							draw: 2,
 							games: 2,
 							yellows: 2,
 							status: Status.Eliminated)
@@ -96,7 +95,7 @@ namespace Keeper.Test
 										TeamsSubscribes[0].Id,
 										groupId:Groups[0].Id,
 										reds: 0,
-										drowns: 2,
+										draw: 2,
 										games: 2,
 										yellows:4,
 										goalsAgainst: 0,
@@ -114,7 +113,7 @@ namespace Keeper.Test
 										TeamsSubscribes[1].Id,
 										groupId:Groups[0].Id,
 										reds: 0,
-										drowns: 2,
+										draw: 2,
 										games: 2,
 										goalsAgainst: 0,
 										goalsDifference: 0,

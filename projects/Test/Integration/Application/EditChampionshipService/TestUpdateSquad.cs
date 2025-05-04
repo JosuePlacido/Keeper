@@ -1,21 +1,15 @@
-using System.Linq;
-using Keeper.Application.Services;
+
 using AutoMapper;
-using Keeper.Domain.Models;
-using Keeper.Infrastructure.CrossCutting.Adapter;
-using Keeper.Application.DTO;
-using Keeper.Infrastructure.Repository;
-using Keeper.Test;
+using Infrastructure.CrossCutting.Adapter;
+using Infrastructure.Repository;
 using Test.DataExamples;
 using Xunit;
 using Xunit.Abstractions;
-using Keeper.Infrastructure.DAO;
-using Keeper.Infrastructure.Data;
-using Keeper.Domain.Enum;
-using Keeper.Application.Contract;
-using Keeper.Application.Services.EditChampionship;
+using Infrastructure.Data;
+using Application.Services.EditChampionship;
+using Application.Contract;
 
-namespace Keeper.Test.Integration.Application
+namespace Test.Integration.Application
 {
 	public class TestUpdateSquadApplication : IClassFixture<SharedDatabaseFixture>
 	{
@@ -37,27 +31,29 @@ namespace Keeper.Test.Integration.Application
 		{
 			IServiceResponse result;
 			PLayerSquadPostDTO[] squad = PlayerSquadPostDTOExample.Valids;
-			using (var context = Fixture.CreateContext())
+
+			Fixture.RunInTransaction(context =>
 			{
 				ChampionshipRepository repo = new ChampionshipRepository(context);
 				result = new EditChampionshipService(_mapper, new UnitOfWork(context, null))
 					.UpdateSquad(squad).Result;
-			}
-			Assert.True(result.ValidationResult.IsValid);
+				Assert.True(result.ValidationResult.IsValid);
+			});
 		}
 		[Fact]
 		public void TestInvalidSquad()
 		{
 			IServiceResponse result;
 			PLayerSquadPostDTO[] squad = PlayerSquadPostDTOExample.Invalids;
-			using (var context = Fixture.CreateContext())
+
+			Fixture.RunInTransaction(context =>
 			{
 				ChampionshipRepository repo = new ChampionshipRepository(context);
 				result = new EditChampionshipService(_mapper, new UnitOfWork(context, null))
 					.UpdateSquad(squad).Result;
-			}
-			Assert.False(result.ValidationResult.IsValid);
-			Assert.Equal(4, result.ValidationResult.Errors.Count);
+				Assert.False(result.ValidationResult.IsValid);
+				Assert.Equal(4, result.ValidationResult.Errors.Count);
+			});
 		}
 	}
 }

@@ -1,7 +1,7 @@
-using Keeper.Application.DTO;
+using Application.DTO;
 using Xunit;
 
-namespace Keeper.Test.UnitTest.Application.Service
+namespace Test.UnitTest.Application.Service
 {
 	public class AuditoryMatchesTestModel
 	{

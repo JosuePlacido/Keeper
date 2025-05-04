@@ -1,12 +1,12 @@
 using System;
 using System.Linq;
-using Keeper.Domain.Models;
-using Keeper.Test.Domain;
+using Domain.Models;
+using Test.Domain;
 using Newtonsoft.Json;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Keeper.Domain
+namespace Domain
 {
 	public class RoundRobinTest
 	{
