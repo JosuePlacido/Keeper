@@ -1,12 +1,7 @@
-using System.Linq;
 using Xunit;
-using Newtonsoft.Json;
 using Xunit.Abstractions;
-using Infrastructure.Repository;
 using Domain.Models;
-using Application.Contract.DAL;
 using Infrastructure.DAO;
-using Domain.Enum;
 
 namespace Test.UnitTest.Infra.DAO
 {
@@ -17,11 +12,6 @@ namespace Test.UnitTest.Infra.DAO
 		public TestValidationSquad(SharedDatabaseFixture fixture, ITestOutputHelper output)
 			=> (Fixture, _output) = (fixture, output);
 
-		private void Print(object item) => _output.WriteLine(JsonConvert.SerializeObject(item, Formatting.Indented,
-				new JsonSerializerSettings
-				{
-					ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-				}));
 		[Theory]
 		[ClassData(typeof(SquadValidationSetup))]
 		public void TestSquadValidation(PlayerSubscribe test, bool expected)
@@ -38,14 +28,14 @@ namespace Test.UnitTest.Infra.DAO
 	{
 		public SquadValidationSetup()
 		{
-			Add(PlayerSubscribe.Factory("noexist", "p1", "false", status: Status.Matching), false);
-			Add(PlayerSubscribe.Factory("noexist", "p1", "ts1", status: Status.Matching), true);
-			Add(PlayerSubscribe.Factory("ps4", "noexist", "ts1", status: Status.Matching), false);
-			Add(PlayerSubscribe.Factory("noexist", "p6", "ts1", status: Status.Matching), false);
-			Add(PlayerSubscribe.Factory("ps2", "p11", "ts1", status: Status.FreeAgent), false);
-			Add(PlayerSubscribe.Factory("noexist", "p11", "ts1", status: Status.Matching), true);
-			Add(PlayerSubscribe.Factory("ps1", "p5", "ts1", status: Status.FreeAgent), true);
-			Add(PlayerSubscribe.Factory("ps1", "p5", "ts2", status: Status.Matching), true);
+			Add(PlayerSubscribe.Factory("noexist", "p1", "false"), false);
+			Add(PlayerSubscribe.Factory("noexist", "p1", "ts1"), true);
+			Add(PlayerSubscribe.Factory("ps4", "noexist", "ts1"), false);
+			Add(PlayerSubscribe.Factory("noexist", "p6", "ts1"), false);
+			Add(PlayerSubscribe.Factory("ps2", "p11", "ts1"), false);
+			Add(PlayerSubscribe.Factory("noexist", "p11", "ts1"), true);
+			Add(PlayerSubscribe.Factory("ps1", "p5", "ts1"), true);
+			Add(PlayerSubscribe.Factory("ps1", "p5", "ts2"), true);
 		}
 	}
 }

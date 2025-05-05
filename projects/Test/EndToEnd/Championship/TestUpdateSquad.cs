@@ -57,7 +57,7 @@ namespace Test.EndToEnd
 			{
 				ContractResolver = new PrivateResolver()
 			});
-			Assert.Equal(Status.FreeAgent, result[0].Status);
+			Assert.True(result[0].IsFreeAgent);
 		}
 		[Fact]
 		public void Post_InvalidSquads_ReturnBadRequest()

@@ -23,9 +23,9 @@ namespace Test.UnitTest.Infra.Repositorys
 		public void TestUpdateValidSquad()
 		{
 			PlayerSubscribe[] squad = new PlayerSubscribe[]{
-				PlayerSubscribe.Factory("new", "p11", "ts1", status: Status.Matching),
-				PlayerSubscribe.Factory("ps1", "p5", "ts1", status: Status.FreeAgent),
-				PlayerSubscribe.Factory("ps2", "p6", "ts2", status: Status.Matching),
+				PlayerSubscribe.Factory("new", "p11", "ts1"),
+				PlayerSubscribe.Factory("ps1", "p5", "ts1"),
+				PlayerSubscribe.Factory("ps2", "p6", "ts2"),
 			};
 			using (var transaction = Fixture.Connection.BeginTransaction())
 			{
@@ -39,7 +39,6 @@ namespace Test.UnitTest.Infra.Repositorys
 						context.SaveChanges();
 						Assert.NotNull(result);
 						Assert.Equal(test.TeamSubscribeId, result.TeamSubscribeId);
-						Assert.Equal(test.Status, result.Status);
 					}
 					transaction.Rollback();
 				}

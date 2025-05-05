@@ -2,19 +2,18 @@ using System;
 using Domain.Enum;
 using Domain.Models;
 
-namespace Test
+namespace Test;
+public static class SeedData
 {
-	public static class SeedData
-	{
-		public static Category[] Categorys = new Category[] {
+	public static Category[] Categorys = new Category[] {
 							new Category("player1"),
 							new Category("player2"),
 							new Category("Profissional")
 						};
-		public static Championship Championship = Championship.Factory("c1",
-				"Recopa Sulamericana", "1993", Categorys[2],
-				Status.Finish);
-		public static Team[] Teams = new Team[] {
+	public static Championship Championship = Championship.Factory("c1",
+			"Recopa Sulamericana", "1993", Categorys[2],
+			Status.Finish);
+	public static Team[] Teams = new Team[] {
 							Team.Factory("t1","time1"),
 							Team.Factory("t2","time2"),
 							Team.Factory("t3","time3"),
@@ -23,8 +22,8 @@ namespace Test
 							Team.Factory("t6","Cruzeiro"),
 							Team.Factory("t7","Delete"),
 		};
-		public static TeamSubscribe[] TeamsSubscribes = new TeamSubscribe[]
-						{
+	public static TeamSubscribe[] TeamsSubscribes = new TeamSubscribe[]
+					{
 					TeamSubscribe.Factory("ts1",Teams[4].Id,
 							championshipId:Championship.Id,
 							draw: 2,
@@ -37,8 +36,8 @@ namespace Test
 							games: 2,
 							yellows: 2,
 							status: Status.Eliminated)
-						};
-		public static Player[] Players = new Player[] {
+					};
+	public static Player[] Players = new Player[] {
 							Player.Factory("p1","player1"),
 							Player.Factory("p2","player2"),
 							Player.Factory("p3","player3"),
@@ -51,22 +50,23 @@ namespace Test
 							Player.Factory("p10","Rogério Lage"),
 							Player.Factory("p11","Delete"),
 						};
-		public static PlayerSubscribe[] PlayersSubscribe = new PlayerSubscribe[]{
-				PlayerSubscribe.Factory("ps1",Players[4].Id,
+	public static PlayerSubscribe[] PlayersSubscribe = new PlayerSubscribe[]{
+				PlayerSubscribe.Factory("ps1",Players[4].Id,championshipId:Championship.Id,
 					TeamsSubscribes[0].Id, games:2, yellowCard:1),
-				PlayerSubscribe.Factory("ps2",Players[5].Id,
+				PlayerSubscribe.Factory("ps2",Players[5].Id,championshipId:Championship.Id,
 					TeamsSubscribes[0].Id,games:2, yellowCard:1),
-				PlayerSubscribe.Factory("ps3",Players[6].Id,
+				PlayerSubscribe.Factory("ps3",Players[6].Id,championshipId:Championship.Id,
 					TeamsSubscribes[0].Id,games:2, yellowCard:1),
-				PlayerSubscribe.Factory("ps4",Players[7].Id,
+				PlayerSubscribe.Factory("ps4",Players[7].Id,championshipId:Championship.Id,
 					TeamsSubscribes[0].Id,games:2, yellowCard:1),
-				PlayerSubscribe.Factory("ps5",Players[8].Id,
+				PlayerSubscribe.Factory("ps5",Players[8].Id,championshipId:Championship.Id,
 					TeamsSubscribes[1].Id,games:2, yellowCard:1),
-				PlayerSubscribe.Factory("ps6",Players[9].Id,
+				PlayerSubscribe.Factory("ps6",Players[9].Id,championshipId:Championship.Id,
 					TeamsSubscribes[1].Id,games:2, yellowCard:1),
+				PlayerSubscribe.Factory("ps7",Players[3].Id,championshipId:Championship.Id)
 			};
-		public static Stage[] Stages = new Stage[]
-				{
+	public static Stage[] Stages = new Stage[]
+			{
 					Stage.Factory(
 						"s1",
 						Championship.Id,
@@ -77,19 +77,19 @@ namespace Test
 						typeStage: TypeStage.Knockout,
 						regulation: Classifieds.Configured
 					)
-				};
+			};
 
-		public static Group[] Groups = new Group[]
-		{
+	public static Group[] Groups = new Group[]
+	{
 			Group.Factory("g1","Final", Stages[0].Id,currentRound: 2)
-		};
+	};
 
-		public static Vacancy[] Vacancys = new Vacancy[] {
+	public static Vacancy[] Vacancys = new Vacancy[] {
 				Vacancy.Factory("v1","Campeão da Libertadores 1993",Groups[0].Id, Classifieds.Configured),
 				Vacancy.Factory("v2","Campeão da Supercopa 1993",Groups[0].Id, Classifieds.Configured),
 			};
-		public static Statistic[] Statistics = new Statistic[]
-								{
+	public static Statistic[] Statistics = new Statistic[]
+							{
 									Statistic.Factory(
 										"s1",
 										TeamsSubscribes[0].Id,
@@ -126,9 +126,9 @@ namespace Test
 										rankMovement: 0,
 										points: 2
 									),
-								};
+							};
 
-		public static Match[] Matches = new Match[]{
+	public static Match[] Matches = new Match[]{
 			Match.Factory("m1", round: 1, status: Status.Finish,groupId:Groups[0].Id, name: "Final Ida"
 				, date: new DateTime(1993, 9, 26, 21, 00, 00), address: "Morumbi - São Paulo/SP",
 				aggregateGame: true, homeId: TeamsSubscribes[0].Id, vacancyHomeId: Vacancys[0].Id,
@@ -141,7 +141,7 @@ namespace Test
 				penalty: true, aggregateGoalsAway:0,aggregateGoalsHome:0,goalsHome:0,
 				goalsAway:0,goalsPenaltyHome:2,goalsPenaltyAway:4),
 		};
-		public static EventGame[] EventGames = new EventGame[] {
+	public static EventGame[] EventGames = new EventGame[] {
 					EventGame.Factory("e1",0,"Cartão Amarelo",
 						TypeEvent.YellowCard,true,
 						Matches[0].Id,
@@ -173,5 +173,4 @@ namespace Test
 						PlayersSubscribe[5].Id
 					)};
 
-	}
 }
