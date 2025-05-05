@@ -5,102 +5,76 @@ using Application.Contract.DAL;
 using Domain.Models;
 using FluentValidation.Results;
 using Application.DTO;
-using System.Collections.Generic;
-using System.Linq;
-using Domain.Enum;
 using Application.Contract.Repository;
-using Application.Contract;
 
-namespace Application.Services.CRUDPlayer
+namespace Application.Services.CRUDPlayer;
+public class PlayerService : IPlayerService
 {
-	public class PlayerService : IPlayerService
+	private readonly IUnitOfWork _uow;
+	private readonly IMapper _mapper;
+	public PlayerService(IMapper mapper, IUnitOfWork uow)
 	{
-		private readonly IUnitOfWork _uow;
-		private readonly IMapper _mapper;
-		public PlayerService(IMapper mapper, IUnitOfWork uow)
+		_mapper = mapper;
+		_uow = uow;
+	}
+	public async Task<Player> Create(PlayerCreateDTO dto)
+	{
+		Player Player = _mapper.Map<Player>(dto);
+		var result = await ((IRepositoryPlayer)_uow.GetDAO(typeof(IRepositoryPlayer)))
+			.Add(Player);
+		await _uow.Commit();
+		return result;
+	}
+
+	public async Task<Player> Delete(string id)
+	{
+		Player player = await ((IRepositoryPlayer)_uow.GetDAO(typeof(IRepositoryPlayer)))
+			.GetById(id) ?? throw new ValidationException("Falha ao excluir jogador",
+				new ValidationFailure[1] { new("Id", "Jogador não encontrado") });
+
+		if (await ((IDAOPlayer)_uow.GetDAO(typeof(IDAOPlayer))).IsDeletable(id))
 		{
-			_mapper = mapper;
-			_uow = uow;
-		}
-		public async Task<Player> Create(PlayerCreateDTO dto)
-		{
-			Player Player = _mapper.Map<Player>(dto);
-			var result = await ((IRepositoryPlayer)_uow.GetDAO(typeof(IRepositoryPlayer)))
-				.Add(Player);
+			player = await ((IRepositoryPlayer)_uow.GetDAO(typeof(IRepositoryPlayer)))
+				.Remove(player);
 			await _uow.Commit();
-			return result;
+			return player;
 		}
+		throw new ValidationException("Não é possivel excluir jogador",
+			new ValidationFailure[1] { new("Id", "Jogador inscrito em campeonato") });
+	}
 
-		public async Task<IServiceResponse> Delete(string id)
+	public void Dispose()
+	{
+		GC.SuppressFinalize(this);
+	}
+
+	public async Task<Player> Get(string id)
+	{
+		return await ((IRepositoryPlayer)_uow.GetDAO(typeof(IRepositoryPlayer))).GetById(id);
+	}
+
+	public async Task<PaginationDTO<Player>> List(string terms = "", int page = 1, int take = 10)
+	{
+		return await ((IDAOPlayer)_uow.GetDAO(typeof(IDAOPlayer)))
+			.List(terms, page, 10);
+	}
+
+	public async Task<PaginationDTO<Player>> GetAvailables(string terms = "",
+		string championship = "", int page = 1, int take = 10) =>
+		await ((IDAOPlayer)_uow.GetDAO(typeof(IDAOPlayer)))
+			.GetAvailables(terms, championship, page, take);
+
+
+	public async Task<Player> Update(PlayerUpdateDTO dto)
+	{
+		if (await ((IRepositoryPlayer)_uow.GetDAO(typeof(IRepositoryPlayer))).GetById(dto.Id) != null)
 		{
-			ServiceResponse response = new ServiceResponse();
-			PlayerViewDTO dto = (PlayerViewDTO)await ((IDAOPlayer)_uow.GetDAO(typeof(IDAOPlayer)))
-				.GetByIdView(id);
-
-			response.ValidationResult = new PlayerDeleteValidation().Validate(dto);
-			if (response.ValidationResult.IsValid)
-			{
-				Player player = _mapper.Map<Player>(dto);
-				response.Value = await ((IRepositoryPlayer)_uow.GetDAO(typeof(IRepositoryPlayer)))
-					.Remove(player);
-				await _uow.Commit();
-			}
-			return response;
+			Player player = _mapper.Map<Player>(dto);
+			player = await ((IRepositoryPlayer)_uow.GetDAO(typeof(IRepositoryPlayer))).Update(player);
+			await _uow.Commit();
+			return player;
 		}
-
-		public void Dispose()
-		{
-			GC.SuppressFinalize(this);
-		}
-
-		public async Task<Player> Get(string id)
-		{
-			return await ((IRepositoryPlayer)_uow.GetDAO(typeof(IRepositoryPlayer))).GetById(id);
-		}
-
-		public async Task<Player[]> Get()
-		{
-			return await ((IRepositoryPlayer)_uow.GetDAO(typeof(IRepositoryPlayer))).GetAll();
-		}
-
-		public async Task<PlayerAvailablePaginationDTO> GetAvailables(string terms = "", string championship = "",
-			int page = 1, int take = 10)
-		{
-			Player[] availables = await ((IRepositoryPlayer)_uow.GetDAO(typeof(IRepositoryPlayer))).GetAvailables(terms, championship, page, take);
-			List<PlayerSubscribe> freeAgents = new List<PlayerSubscribe>(
-				await ((IDAOPlayer)_uow.GetDAO(typeof(IDAOPlayer))).GetFreeAgentsInChampionship(championship));
-
-			freeAgents.AddRange(availables.Select(p => new PlayerSubscribe(p.Id, Status.FreeAgent)));
-			PlayerAvailablePaginationDTO view = new PlayerAvailablePaginationDTO
-			{
-				ExcludeFromChampionship = championship,
-				Take = take,
-				Page = page,
-				Terms = terms,
-				Players = freeAgents.ToArray(),
-				Total = await ((IDAOPlayer)_uow.GetDAO(typeof(IDAOPlayer)))
-					.GetTotalFromSearch(terms, championship)
-			};
-			return view;
-		}
-
-		public async Task<IServiceResponse> Update(PlayerUpdateDTO dto)
-		{
-			ServiceResponse response = new ServiceResponse();
-
-			response.ValidationResult = new ValidationResult();
-			if (await ((IRepositoryPlayer)_uow.GetDAO(typeof(IRepositoryPlayer))).GetById(dto.Id) != null)
-			{
-				Player player = _mapper.Map<Player>(dto);
-				response.Value = await ((IRepositoryPlayer)_uow.GetDAO(typeof(IRepositoryPlayer))).Update(player);
-				await _uow.Commit();
-			}
-			else
-			{
-				response.ValidationResult.Errors.Add(new ValidationFailure("Id"
-					, "Jogador não encontrado"));
-			}
-			return response;
-		}
+		throw new ValidationException("Falha ao alterar jogador",
+			new ValidationFailure[1] { new("Id", "Jogador não encontrado") });
 	}
 }

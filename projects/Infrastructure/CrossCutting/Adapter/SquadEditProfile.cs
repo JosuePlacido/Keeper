@@ -2,21 +2,19 @@ using AutoMapper;
 using Domain.Models;
 using Application.Services.EditChampionship;
 
-namespace Infrastructure.CrossCutting.Adapter
+namespace Infrastructure.CrossCutting.Adapter;
+public class SquadEditDTOProfile : Profile
 {
-	public class SquadEditDTOProfile : Profile
+	public SquadEditDTOProfile()
 	{
-		public SquadEditDTOProfile()
-		{
-			CreateMap<TeamSubscribe, SquadEditDTO>();
-			CreateMap<PlayerSubscribe, PLayerSquadEditDTO>()
-				.ForMember(dst => dst.PlayerName, opt => opt.MapFrom(src =>
-					   src.Player.Name))
-				.ForMember(dst => dst.PlayerNick, opt => opt.MapFrom(src =>
-					   src.Player.Nickname));
-			CreateMap<PLayerSquadPostDTO, PlayerSubscribe>()
-				.ConstructUsing(src => new PlayerSubscribe(src.PlayerId,
-					src.TeamSubscribeId, src.Status));
-		}
+		CreateMap<TeamSubscribe, SquadEditDTO>();
+		CreateMap<PlayerSubscribe, PLayerSquadEditDTO>()
+			.ForMember(dst => dst.PlayerName, opt => opt.MapFrom(src =>
+				   src.Player.Name))
+			.ForMember(dst => dst.PlayerNick, opt => opt.MapFrom(src =>
+				   src.Player.Nickname));
+		CreateMap<PLayerSquadPostDTO, PlayerSubscribe>()
+			.ConstructUsing(src => new PlayerSubscribe(src.PlayerId,
+				src.TeamSubscribeId));
 	}
 }

@@ -14,11 +14,6 @@ namespace Infrastructure.Mapping
 				.HasColumnName("Id")
 				.IsRequired();
 			builder.HasOne(player_subscribe => player_subscribe.Player);
-			builder.Property(player_subscribe => player_subscribe.Status)
-				.HasColumnType("varchar(15)")
-				.HasMaxLength(15)
-				.HasDefaultValue(Status.Matching)
-				.IsRequired();
 		}
 	}
 }

@@ -97,13 +97,13 @@ namespace Infrastructure.Repository
 			if (temp == null)
 			{
 				await _context.PlayerSubscribe.AddAsync(
-					new PlayerSubscribe(player.PlayerId, player.TeamSubscribeId, player.Status));
+					new PlayerSubscribe(player.PlayerId, player.TeamSubscribeId));
 			}
 			else if (!await _context.PlayerSubscribe.AnyAsync(psi =>
 				psi.Id == player.Id && psi.PlayerId == player.PlayerId &&
-				psi.TeamSubscribeId == player.TeamSubscribeId && psi.Status == player.Status))
+				psi.TeamSubscribeId == player.TeamSubscribeId))
 			{
-				temp.TransferTeam(player.TeamSubscribeId, player.Status);
+				temp.TransferTeam(player.TeamSubscribeId);
 				_context.Entry(temp).State = EntityState.Modified;
 			}
 			return player;

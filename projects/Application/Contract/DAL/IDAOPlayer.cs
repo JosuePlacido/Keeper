@@ -1,14 +1,13 @@
 using System.Threading.Tasks;
-using Application.Services.CRUDPlayer;
+using Application.DTO;
 using Domain.Models;
 
-namespace Application.Contract.DAL
+namespace Application.Contract.DAL;
+public interface IDAOPlayer : IDAO
 {
-	public interface IDAOPlayer : IDAO
-	{
-		Task<PlayerViewDTO> GetByIdView(string id);
-		Task<int> GetTotalFromSearch(string terms, string notInChampionship);
-		Task<PlayerSubscribe[]> GetFreeAgentsInChampionship(string championship);
-		Task<string[]> Exists(string[] vs);
-	}
+	Task<bool> IsDeletable(string id);
+	Task<string[]> Exists(string[] vs);
+	Task<PaginationDTO<Player>> GetAvailables(string terms, string championship, int page, int take);
+	Task<PaginationDTO<Player>> List(string terms, int page, int take);
 }
+
