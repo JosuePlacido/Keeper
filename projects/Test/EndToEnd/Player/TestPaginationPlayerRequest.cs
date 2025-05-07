@@ -4,7 +4,7 @@ using Domain.Models;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Newtonsoft.Json;
 using Xunit;
-using Application.Services.CRUDPlayer;
+using Application.DTO;
 
 namespace Test.EndToEnd
 {
@@ -25,14 +25,12 @@ namespace Test.EndToEnd
 			HttpResponseMessage actualResponse = client
 				.GetAsync("/Player/Availables?terms=test").Result;
 
-			var result = JsonConvert.DeserializeObject<PlayerAvailablePaginationDTO>(
+			var result = JsonConvert.DeserializeObject<PaginationDTO<Player>>(
 				actualResponse.Content.ReadAsStringAsync().Result);
 			actualResponse.EnsureSuccessStatusCode();
 			Assert.Equal(1, result.Page);
 			Assert.Equal(10, result.Take);
-			Assert.Equal("test", result.Terms);
-			Assert.Null(result.ExcludeFromChampionship);
-			Assert.IsType<PlayerSubscribe[]>(result.Players);
+			Assert.IsType<PlayerSubscribe[]>(result.Items);
 		}
 	}
 }

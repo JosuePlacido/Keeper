@@ -5,7 +5,7 @@ using Domain.Models;
 using Infrastructure.DAO;
 using Application.DTO;
 
-namespace Test.UnitTest.Infra.DAO;
+namespace Test.UnitTest.Infra.DAO.Players;
 
 public class TestGetAvailables : IClassFixture<SharedDatabaseFixture>
 {

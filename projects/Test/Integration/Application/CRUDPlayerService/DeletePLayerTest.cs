@@ -66,7 +66,7 @@ public class DeletePlayerTest : IClassFixture<SharedDatabaseFixture>
 			ValidationException ex = await Assert.ThrowsAsync<ValidationException>(() =>
 				new PlayerService(mapper, new UnitOfWork(context, null))
 				.Delete(SeedData.Players[4].Id));
-			Assert.Equal("Não é possivel excluir jogador", ex.Message);
+			Assert.Equal("Falha ao excluir jogador", ex.Message);
 			Assert.Equal("Id", ex.Errors[0].PropertyName);
 			Assert.Equal("Jogador inscrito em campeonato", ex.Errors[0].ErrorMessage);
 		});
