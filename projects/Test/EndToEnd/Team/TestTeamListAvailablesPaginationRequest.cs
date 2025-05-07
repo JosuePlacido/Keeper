@@ -5,7 +5,7 @@ using Domain.Models;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Newtonsoft.Json;
 using Xunit;
-using Application.Services.CRUDTeam;
+using Application.DTO;
 
 namespace Test.EndToEnd
 {
@@ -25,15 +25,13 @@ namespace Test.EndToEnd
 			HttpResponseMessage actualResponse = client
 				.GetAsync("Team/Availables?terms=sao").Result;
 
-			var result = JsonConvert.DeserializeObject<TeamPaginationDTO>(
+			var result = JsonConvert.DeserializeObject<PaginationDTO<Team>>(
 				actualResponse.Content.ReadAsStringAsync().Result);
 			actualResponse.EnsureSuccessStatusCode();
 			Assert.Equal(HttpStatusCode.OK, actualResponse.StatusCode);
 			Assert.Equal(1, result.Page);
 			Assert.Equal(30, result.Take);
-			Assert.Equal("sao", result.Terms);
-			Assert.True(string.IsNullOrEmpty(result.NotInChampionship));
-			Assert.IsType<Team[]>(result.Teams);
+			Assert.IsType<Team[]>(result.Items);
 		}
 	}
 }

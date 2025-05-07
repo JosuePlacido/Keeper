@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using Domain.Models;
 using Infrastructure.Data;
 using Application.Services.CRUDTeam;
+using Application.DTO;
 
 namespace Test.Integration.Application
 {
@@ -21,7 +22,7 @@ namespace Test.Integration.Application
 		public void Get_TeamList_NotInChampionship()
 		{
 			Team[] expected = SeedData.Teams.Skip(4).Take(2).ToArray();
-			TeamPaginationDTO result = null;
+			PaginationDTO<Team> result = null;
 			string champ = SeedData.Championship.Id;
 
 			using (var transaction = Fixture.Connection.BeginTransaction())
@@ -30,13 +31,13 @@ namespace Test.Integration.Application
 				result = new TeamService(null, new UnitOfWork(context, null))
 					.GetTeamsAvailablesForChampionship("", champ, 1, 30).Result;
 			}
-			Assert.All(expected, item => Assert.DoesNotContain(item, result.Teams));
+			Assert.All(expected, item => Assert.DoesNotContain(item, result.Items));
 		}
 		[Fact]
 		public void Get_TeamList_WithNullChampionship_ReturnAllTeams()
 		{
 			Team[] expected = SeedData.Teams.OrderBy(t => t.Name).ToArray();
-			TeamPaginationDTO result = null;
+			PaginationDTO<Team> result = null;
 
 			using (var transaction = Fixture.Connection.BeginTransaction())
 			using (var context = Fixture.CreateContext(transaction))
@@ -44,7 +45,7 @@ namespace Test.Integration.Application
 				result = new TeamService(null, new UnitOfWork(context, null))
 					.GetTeamsAvailablesForChampionship("", "", 1, 30).Result;
 			}
-			Assert.Equal(expected, result.Teams);
+			Assert.Equal(expected, result.Items);
 		}
 		[Fact]
 		public void Get_TeamList_PageAndTakes()
@@ -52,7 +53,7 @@ namespace Test.Integration.Application
 			Team[] expected = SeedData.Teams.OrderBy(t => t.Name).ToArray();
 			int pages = expected.Length / 2;
 			int LastPage = expected.Length % 2;
-			TeamPaginationDTO result = null;
+			PaginationDTO<Team> result = null;
 			List<Team> finalList = new List<Team>();
 
 			using (var transaction = Fixture.Connection.BeginTransaction())
@@ -64,18 +65,18 @@ namespace Test.Integration.Application
 					result = service.GetTeamsAvailablesForChampionship("", "", page: p, take: 2).Result;
 					Assert.Equal(expected.Length, result.Total);
 					Assert.Equal(p, result.Page);
-					Assert.Equal(2, result.Teams.Length);
-					finalList.AddRange(result.Teams);
+					Assert.Equal(2, result.Items.Length);
+					finalList.AddRange(result.Items);
 				}
 				result = service.GetTeamsAvailablesForChampionship("", "", page: pages + 1, take: 2).Result;
 			}
 			Assert.Equal(expected.Length, result.Total);
 			Assert.Equal(pages + 1, result.Page);
-			Assert.Equal(LastPage, result.Teams.Length);
-			finalList.AddRange(result.Teams);
+			Assert.Equal(LastPage, result.Items.Length);
+			finalList.AddRange(result.Items);
 			Assert.Equal(expected.Length, finalList.Count);
-			Assert.All(result.Teams, item => expected.Contains(item));
-			Assert.All(result.Teams, item => expected.Contains(item));
+			Assert.All(result.Items, item => expected.Contains(item));
+			Assert.All(result.Items, item => expected.Contains(item));
 		}
 		[Fact]
 		public void Get_TeamList_WithTerms()
@@ -89,9 +90,8 @@ namespace Test.Integration.Application
 					.GetTeamsAvailablesForChampionship("TImÉ", "", 1, 10).Result;
 				var expected = SeedData.Teams.Take(4);
 				Assert.Equal(expected.Count(), result.Total);
-				Assert.Equal("TImÉ", result.Terms);
-				Assert.Equal(expected.Count(), result.Teams.Length);
-				Assert.All(result.Teams, item => expected.Contains(item));
+				Assert.Equal(expected.Count(), result.Items.Length);
+				Assert.All(result.Items, item => expected.Contains(item));
 			}
 		}
 	}
