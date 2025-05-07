@@ -4,6 +4,7 @@ using Xunit.Abstractions;
 using Domain.Models;
 using Infrastructure.DAO;
 using Application.DTO;
+using System;
 
 namespace Test.UnitTest.Infra.DAO.Players;
 
@@ -60,12 +61,20 @@ internal class ListFilteredPaginationSetup : TheoryData<PaginationDTO<Player>, s
 			Items = players.Skip(5).Take(5).ToArray(),
 			Total = 11
 		}, "");
-		// get full players page 3 take 5
+		// get full players on a empty page 3 take 5
 		Add(new PaginationDTO<Player>
 		{
 			Take = 5,
 			Page = 3,
 			Items = players.Skip(10).ToArray(),
+			Total = 11
+		}, "");
+		// get full players page 4 take 5
+		Add(new PaginationDTO<Player>
+		{
+			Take = 5,
+			Page = 4,
+			Items = Array.Empty<Player>(),
 			Total = 11
 		}, "");
 		// Get All Page 2
