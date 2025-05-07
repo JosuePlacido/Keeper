@@ -28,19 +28,21 @@ public class PlayerService : IPlayerService
 
 	public async Task<Player> Delete(string id)
 	{
-		Player player = await ((IRepositoryPlayer)_uow.GetDAO(typeof(IRepositoryPlayer)))
-			.GetById(id) ?? throw new ValidationException("Falha ao excluir jogador",
-				new ValidationFailure[1] { new("Id", "Jogador não encontrado") });
+		var (player, isDeletable) = await ((IDAOPlayer)_uow.GetDAO(typeof(IDAOPlayer)))
+			.GetByIdDeletable(id);
 
-		if (await ((IDAOPlayer)_uow.GetDAO(typeof(IDAOPlayer))).IsDeletable(id))
+		if (player != null && isDeletable)
 		{
 			player = await ((IRepositoryPlayer)_uow.GetDAO(typeof(IRepositoryPlayer)))
 				.Remove(player);
 			await _uow.Commit();
 			return player;
 		}
-		throw new ValidationException("Não é possivel excluir jogador",
-			new ValidationFailure[1] { new("Id", "Jogador inscrito em campeonato") });
+
+		throw new ValidationException("Falha ao excluir jogador",
+			new ValidationFailure[1] {
+				new("Id", player != null?"Jogador inscrito em campeonato":"Jogador não encontrado")
+			});
 	}
 
 	public void Dispose()

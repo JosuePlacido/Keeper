@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Application.Contract.DAL;
 using System.Collections.Generic;
 using Application.DTO;
+using Domain.Utils;
 
 namespace Infrastructure.DAO;
 public class DAOPlayer : DAO, IDAOPlayer
@@ -30,14 +31,16 @@ public class DAOPlayer : DAO, IDAOPlayer
 
 	public async Task<PaginationDTO<Player>> GetAvailables(string terms, string championship, int page, int take)
 	{
+		string termsNormalized = StringUtils.NormalizeLower(terms);
+
 		string[] playersSubscribedId = _context.PlayerSubscribe.AsNoTracking()
 			.Where(ps => ps.ChampionshipId == championship && !ps.IsFreeAgent)
 			.Select(ts => ts.PlayerId).ToArray();
 
 		IQueryable<Player> query = _context.Players.AsNoTracking()
 			.Where(p => !playersSubscribedId.Contains(p.Id))
-			.Where(p => EF.Property<string>(p, "NormalizedName").Contains(terms)
-				|| EF.Property<string>(p, "NormalizedNick").Contains(terms));
+			.Where(p => EF.Property<string>(p, "NormalizedName").Contains(termsNormalized)
+				|| EF.Property<string>(p, "NormalizedNick").Contains(termsNormalized));
 		int total = await query.CountAsync();
 		Player[] playersAvailable = await query.OrderBy(t => EF.Property<string>(t, "NormalizedName"))
 			.Skip((page - 1) * take)
@@ -51,19 +54,22 @@ public class DAOPlayer : DAO, IDAOPlayer
 		};
 	}
 
-	public async Task<bool> IsDeletable(string id)
+	public async Task<(Player, bool)> GetByIdDeletable(string id)
 	{
-		var player = await _context.Players.AsNoTracking()
+		Player player = await _context.Players.AsNoTracking()
 			.Where(t => t.Id == id).FirstOrDefaultAsync();
-		return player != null &&
-			_context.PlayerSubscribe.Where(ts => ts.PlayerId == id).Count() == 0;
+		bool isDeletable = player != null &&
+			!await _context.PlayerSubscribe.Where(ts => ts.PlayerId == id).AnyAsync();
+		return (player, isDeletable);
 	}
 
 	public async Task<PaginationDTO<Player>> List(string terms, int page, int take)
 	{
+		string termsNormalized = StringUtils.NormalizeLower(terms);
+
 		IQueryable<Player> query = _context.Players.AsNoTracking()
-			.Where(p => EF.Property<string>(p, "NormalizedName").Contains(terms)
-				|| EF.Property<string>(p, "NormalizedNick").Contains(terms));
+			.Where(p => EF.Property<string>(p, "NormalizedName").Contains(termsNormalized)
+				|| EF.Property<string>(p, "NormalizedNick").Contains(termsNormalized));
 		int total = await query.CountAsync();
 		Player[] playersAvailable = await query.OrderBy(t => EF.Property<string>(t, "NormalizedName"))
 			.Skip((page - 1) * take)
@@ -76,5 +82,4 @@ public class DAOPlayer : DAO, IDAOPlayer
 			Total = total
 		};
 	}
-
 }

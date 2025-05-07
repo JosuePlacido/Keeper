@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using Domain.Models;
 
 namespace Application.Services.CRUDPlayer;
 public class PlayerCreateDTO
@@ -27,18 +26,4 @@ public class PlayerViewDTO
 	public string Name { get; set; }
 	public string Nickname { get; set; }
 	public bool IsDeletable { get; set; }
-}
-public class PlayerAvailablePaginationDTO
-{
-	public Player[] Players { get; set; }
-	public string Terms { get; set; }
-	public string ExcludeFromChampionship { get; set; }
-	public int Page { get; set; }
-	public int Take { get; set; }
-	public int Total { get; set; }
-
-	public override string ToString()
-	{
-		return $"Terms: {Terms}, ExcludeFromChampionship: {ExcludeFromChampionship}, Page: {Page}, Total: {Total}";
-	}
 }
