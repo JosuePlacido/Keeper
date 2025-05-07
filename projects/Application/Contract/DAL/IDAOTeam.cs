@@ -1,12 +1,12 @@
 using System.Threading.Tasks;
-using Application.Services.CRUDTeam;
+using Application.DTO;
+using Domain.Models;
 
-namespace Application.Contract.DAL
+namespace Application.Contract.DAL;
+public interface IDAOTeam : IDAO
 {
-	public interface IDAOTeam : IDAO
-	{
-		Task<TeamViewDTO> GetByIdView(string id);
-		Task<int> GetTotalFromSearch(string terms, string championship);
-		Task<string[]> Exists(string[] ids);
-	}
+	Task<string[]> Exists(string[] ids);
+	Task<PaginationDTO<Team>> GetsNotInChampionship(string terms, string championshipId, int page, int take);
+	Task<PaginationDTO<Team>> List(string terms, int page, int take);
+	Task<(Team team, bool isDeletable)> GetByIdDeletable(string id);
 }
