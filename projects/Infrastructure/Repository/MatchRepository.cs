@@ -1,0 +1,73 @@
+using System;
+using System.Threading.Tasks;
+using Domain.Models;
+using Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using Domain.Enum;
+using Application.Contract.Repository;
+
+namespace Infrastructure.Repository
+{
+	public class MatchRepository : RepositoryBase<Match>, IRepositoryMatch
+	{
+		public MatchRepository(ApplicationContext Context) : base(Context) { }
+
+		public async Task<Match[]> GetAllMatchesPendingInGroups(string[] groupsId)
+		{
+			return await _context.Matchs.AsNoTracking().Where(m => groupsId.Contains(m.GroupId))
+				.Where(m => m.Status != Status.Finish && m.Status != Status.Canceled)
+				.OrderBy(m => m.Round).ToArrayAsync();
+		}
+
+		public async Task<Match[]> GetByGroupAndTeams(string group, string[] teams)
+		{
+			return await _context.Matchs.AsNoTracking().Where(m => m.GroupId == group)
+				.Where(m => teams.Contains(m.HomeId) && teams.Contains(m.AwayId) && m.Status == Status.Finish)
+				.OrderBy(m => m.Round).ToArrayAsync();
+		}
+
+		public async Task<Match> GetByIdWithTeamsAndPlayers(string id)
+		{
+			return await _context.Matchs.AsNoTracking().Where(m => m.Id == id)
+				.Include(m => m.Home)
+					.ThenInclude(ts => ts.Team)
+				.Include(m => m.Home)
+					.ThenInclude(ts => ts.Players)
+						.ThenInclude(ps => ps.Player)
+				.Include(m => m.Away)
+					.ThenInclude(ts => ts.Team)
+				.Include(m => m.Away)
+					.ThenInclude(ts => ts.Players)
+						.ThenInclude(ps => ps.Player)
+				.Include(m => m.EventGames)
+						.ThenInclude(ev => ev.RegisterPlayer)
+							.ThenInclude(ps => ps.Player)
+				.FirstOrDefaultAsync();
+		}
+
+		public async Task<bool> HasPendentMatches(string id)
+		{
+			return await _context.Matchs.AsNoTracking().AnyAsync(m => m.GroupId == id && m.Status
+				!= Status.Finish);
+		}
+
+		public async Task<Match> RegisterResult(Match match)
+		{
+			_context.EventGames.RemoveRange(_context.EventGames.Where(ev => match.Id == ev.MatchId));
+			await _context.EventGames.AddRangeAsync(match.EventGames);
+			_context.Entry(match).State = EntityState.Modified;
+			_context.Entry(match.Home).State = EntityState.Modified;
+			_context.Entry(match.Away).State = EntityState.Modified;
+			foreach (var player in match.Home.Players)
+			{
+				_context.Entry(player).State = EntityState.Modified;
+			}
+			foreach (var player in match.Away.Players)
+			{
+				_context.Entry(player).State = EntityState.Modified;
+			}
+			return match;
+		}
+	}
+}

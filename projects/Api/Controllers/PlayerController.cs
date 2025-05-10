@@ -1,0 +1,39 @@
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Application.Services.CRUDPlayer;
+
+namespace Api.Controllers;
+//[Authorize]
+[Route("[controller]")]
+public class PlayerController : ApiController
+{
+	private readonly IPlayerService _PlayerAppService;
+
+	public PlayerController(IPlayerService PlayerAppService)
+	{
+		_PlayerAppService = PlayerAppService;
+	}
+	[HttpGet("Availables")]
+	public async Task<IActionResult> Availables(string terms = null,
+		string notInChampinship = null, int page = 1, int take = 10) =>
+		await CallApplicationAsync(_PlayerAppService.GetAvailables(terms, notInChampinship, page, take));
+
+	public async Task<IActionResult> Get(string terms = null, int page = 1, int take = 10) =>
+		await CallApplicationAsync(_PlayerAppService.List(terms, page, take));
+
+	[HttpGet("{id}")]
+	public async Task<IActionResult> Get(string id) =>
+		await CallApplicationAsync(_PlayerAppService.Get(id));
+	[HttpPost]
+	public async Task<IActionResult> Post(PlayerCreateDTO PlayerViewModel) =>
+		await CallApplicationAsync(_PlayerAppService.Create(PlayerViewModel));
+
+	[HttpPut]
+	public async Task<IActionResult> Put(PlayerUpdateDTO PlayerViewModel) =>
+		await CallApplicationAsync(_PlayerAppService.Update(PlayerViewModel));
+
+
+	[HttpDelete("{id}")]
+	public async Task<IActionResult> Delete(string id) =>
+		await CallApplicationAsync(_PlayerAppService.Delete(id));
+}

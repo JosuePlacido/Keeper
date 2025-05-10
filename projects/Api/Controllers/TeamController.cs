@@ -1,0 +1,41 @@
+using System.Threading.Tasks;
+using Application.Services.CRUDTeam;
+using Microsoft.AspNetCore.Mvc;
+
+namespace Api.Controllers;
+//[Authorize]
+[Route("[controller]")]
+public class TeamController : ApiController
+{
+	private readonly ITeamService _TeamAppService;
+
+	public TeamController(ITeamService TeamAppService)
+	{
+		_TeamAppService = TeamAppService;
+	}
+
+	public async Task<IActionResult> Get(string terms = null, int page = 1, int take = 10) =>
+		await CallApplicationAsync(_TeamAppService.List(terms, page, take));
+
+	[HttpGet("{id}")]
+	public async Task<IActionResult> Get(string id) =>
+		await CallApplicationAsync(_TeamAppService.Get(id));
+
+	[HttpPost]
+	public async Task<IActionResult> Post(TeamCreateDTO TeamViewModel) =>
+		await CallApplicationAsync(_TeamAppService.Create(TeamViewModel));
+
+	[HttpPut]
+	public async Task<IActionResult> Put(TeamUpdateDTO TeamViewModel) =>
+		await CallApplicationAsync(_TeamAppService.Update(TeamViewModel));
+
+	[HttpDelete("{id}")]
+	public async Task<IActionResult> Delete(string id) =>
+		await CallApplicationAsync(_TeamAppService.Delete(id));
+
+	[HttpGet("Availables")]
+	public async Task<IActionResult> Availables(string terms = null,
+		string notInChampinship = null, int page = 1, int take = 30) =>
+		await CallApplicationAsync(_TeamAppService
+			.GetTeamsAvailablesForChampionship(terms, notInChampinship, page, take));
+}

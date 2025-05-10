@@ -1,0 +1,36 @@
+using System.Linq;
+using Xunit;
+using Newtonsoft.Json;
+using Xunit.Abstractions;
+using Infrastructure.Repository;
+using Domain.Models;
+using Application.Contract.DAL;
+using Infrastructure.DAO;
+using Domain.Enum;
+
+namespace Test.UnitTest.Infra.DAO
+{
+	public class TestUpdateTeamSubscribe : IClassFixture<SharedDatabaseFixture>
+	{
+		public SharedDatabaseFixture Fixture { get; }
+		private readonly ITestOutputHelper _output;
+		public TestUpdateTeamSubscribe(SharedDatabaseFixture fixture, ITestOutputHelper output)
+			=> (Fixture, _output) = (fixture, output);
+
+		[Fact]
+		public void TestUpdateTeam()
+		{
+			TeamSubscribe[] expected = SeedData.TeamsSubscribes;
+			foreach (var item in expected)
+			{
+				item.UpdateNumbers(games: 5);
+			}
+			using (var context = Fixture.CreateContext())
+			{
+				var dao = new DAOTeamSubscribe(context);
+				dao.UpdateAll(expected);
+			}
+			Assert.All(expected, i => Assert.Equal(5, i.Games));
+		}
+	}
+}
